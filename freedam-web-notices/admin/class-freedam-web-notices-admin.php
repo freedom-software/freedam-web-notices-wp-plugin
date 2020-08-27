@@ -142,6 +142,38 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function register_settings() {
 
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_apikey',
+			array(
+				'type' => 'string',
+				'description' => 'API Key used by the plugin to authenticate with and identify the DB to retrieve the web-notices from',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_apikey' )
+			)
+		);
+
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_pagesize',
+			array(
+				'type' => 'integer',
+				'description' => 'Number of notices to show per page',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_pagesize' ),
+				'default' => 100
+			)
+		);
+
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_nulls',
+			array(
+				'type' => 'boolean',
+				'description' => 'Whether notices that don\'t have a funeral date/time should be included in results',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
+				'default' => false
+			)
+		);
+
 		/**
 		 * Name of the genral section the admin setting are in
 		 *
@@ -167,16 +199,6 @@ class Freedam_Web_Notices_Admin {
 			array( 'label_for' => $this->option_name . '_apikey' )
 		);
 
-		register_setting(
-			$this->plugin_name,
-			$this->option_name . '_apikey',
-			array(
-				'type' => 'string',
-				'description' => 'API Key used by the plugin to authenticate with and identify the DB to retrieve the web-notices from',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_apikey' )
-			)
-		);
-
 		// Add setting for page size
 		add_settings_field(
 			$this->option_name . '_pagesize',
@@ -187,17 +209,6 @@ class Freedam_Web_Notices_Admin {
 			array( 'label_for' => $this->option_name . '_pagesize' )
 		);
 
-		register_setting(
-			$this->plugin_name,
-			$this->option_name . '_pagesize',
-			array(
-				'type' => 'integer',
-				'description' => 'Number of notices to show per page',
-				'sanitize_callback' => 'intval',
-				'default' => 100
-			)
-		);
-
 		// Add setting for nulls
 		add_settings_field(
 			$this->option_name . '_nulls',
@@ -206,17 +217,6 @@ class Freedam_Web_Notices_Admin {
 			$this->plugin_name,
 			$section_name,
 			array( 'label_for' => $this->option_name . '_nulls' )
-		);
-
-		register_setting(
-			$this->plugin_name,
-			$this->option_name . '_nulls',
-			array(
-				'type' => 'boolean',
-				'description' => 'Whether notices that don\'t have a funeral date/time should be included in results',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
-				'default' => false
-			)
 		);
 
 	}
