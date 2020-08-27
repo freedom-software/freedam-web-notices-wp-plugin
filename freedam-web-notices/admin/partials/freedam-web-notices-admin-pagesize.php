@@ -13,7 +13,4 @@
  */
 ?>
 
-<label>
-  <input type="number" name="<?php echo $this->option_name . '_pagesize' ?>" id="<?php echo $this->option_name . '_pagesize' ?>">
-  <?php _e( 'Page Size', 'freedam-web-notices' ); ?>
-</label>
+<input type="number" name="<?php echo $this->option_name . '_pagesize' ?>" id="<?php echo $this->option_name . '_pagesize' ?>">

@@ -13,7 +13,4 @@
  */
 ?>
 
-<label>
-  <input type="text" name="<?php echo $this->option_name . '_apikey' ?>" id="<?php echo $this->option_name . '_apikey' ?>">
-  <?php _e( 'API Key', 'freedam-web-notices' ); ?>
-</label>
+<input type="text" name="<?php echo $this->option_name . '_apikey' ?>" id="<?php echo $this->option_name . '_apikey' ?>">

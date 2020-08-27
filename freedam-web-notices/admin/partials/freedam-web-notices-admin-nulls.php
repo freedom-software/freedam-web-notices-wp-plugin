@@ -13,7 +13,4 @@
  */
 ?>
 
-<label>
-  <input type="checkbox" name="<?php echo $this->option_name . '_nulls' ?>" id="<?php echo $this->option_name . '_nulls' ?>">
-  <?php _e( 'Include notices without date & time', 'freedam-web-notices' ); ?>
-</label>
+<input type="checkbox" name="<?php echo $this->option_name . '_nulls' ?>" id="<?php echo $this->option_name . '_nulls' ?>">
