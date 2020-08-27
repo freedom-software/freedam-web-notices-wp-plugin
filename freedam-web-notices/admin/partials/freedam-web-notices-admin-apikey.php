@@ -17,6 +17,6 @@
   type="text"
   name="<?php echo $this->option_name . '_apikey' ?>"
   id="<?php echo esc_attr( $args['label_for'] ); ?>"
-  title="API Key used by the plugin to authenticate with and identify the DB to retrieve the web-notices from"
+  title="API Key used by the plugin to authenticate with and identify the database to retrieve the web-notices from"
   value="<?php echo get_option( $this->option_name . '_apikey' ) ?>"
 >
