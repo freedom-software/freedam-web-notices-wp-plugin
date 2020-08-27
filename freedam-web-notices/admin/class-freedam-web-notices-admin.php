@@ -184,7 +184,7 @@ class Freedam_Web_Notices_Admin {
 		// Add a General section
 		add_settings_section(
 			$section_name,
-			__( 'General', 'freedam-web-notices' ),
+			__( 'General', $this->$plugin_name ),
 			array( $this, $this->option_name . '_general_cb' ),
 			$this->plugin_name
 		);
@@ -192,7 +192,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for API Key
 		add_settings_field(
 			$this->option_name . '_apikey',
-			__( 'API Key', 'freedam-web-notices' ),
+			__( 'API Key', $this->$plugin_name ),
 			array( $this, $this->option_name . '_apikey_cb' ),
 			$this->plugin_name,
 			$section_name,
@@ -202,7 +202,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for page size
 		add_settings_field(
 			$this->option_name . '_pagesize',
-			__( 'Page Size', 'freedam-web-notices' ),
+			__( 'Page Size', $this->$plugin_name ),
 			array( $this, $this->option_name . '_pagesize_cb' ),
 			$this->plugin_name,
 			$section_name,
@@ -212,7 +212,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for nulls
 		add_settings_field(
 			$this->option_name . '_nulls',
-			__( 'Include notices without date & time', 'freedam-web-notices' ),
+			__( 'Include notices without date & time', $this->$plugin_name ),
 			array( $this, $this->option_name . '_nulls_cb' ),
 			$this->plugin_name,
 			$section_name,
