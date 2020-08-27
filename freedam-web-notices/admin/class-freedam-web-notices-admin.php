@@ -142,11 +142,18 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function register_settings() {
 
+		/**
+		 * Name of the genral section the admin setting are in
+		 *
+		 * @since  1.0.0
+		 */
+		$section_name = $this->option_name . '_general';
+
 		// Add a General section
 		add_settings_section(
-			$this->option_name . '_general',
+			$section_name,
 			__( 'General', 'freedam-web-notices' ),
-			array( $this, $this->option_name . '_general_cb' ),
+			'freedam_web_notices_general_cb',
 			$this->plugin_name
 		);
 
@@ -156,7 +163,7 @@ class Freedam_Web_Notices_Admin {
 			__( 'API Key', 'freedam-web-notices' ),
 			array( $this, $this->option_name . '_apikey_cb' ),
 			$this->plugin_name,
-			$this->option_name . '_apikey',
+			$section_name,
 			array( 'label_for' => $this->option_name . '_apikey' )
 		);
 
@@ -176,7 +183,7 @@ class Freedam_Web_Notices_Admin {
 			__( 'Page Size', 'freedam-web-notices' ),
 			array( $this, $this->option_name . '_pagesize_cb' ),
 			$this->plugin_name,
-			$this->option_name . '_general',
+			$section_name,
 			array( 'label_for' => $this->option_name . '_pagesize' )
 		);
 
@@ -197,7 +204,7 @@ class Freedam_Web_Notices_Admin {
 			__( 'Include notices without date & time', 'freedam-web-notices' ),
 			array( $this, $this->option_name . '_nulls_cb' ),
 			$this->plugin_name,
-			$this->option_name . '_general',
+			$section_name,
 			array( 'label_for' => $this->option_name . '_nulls' )
 		);
 
