@@ -66,6 +66,7 @@ class Freedam_Web_Notices {
 		'page' => 1 // Page number of results to return
 	);
 
+	protected $web_notice_template = '';
 
 	/**
 	 * Define the core functionality of the plugin.
