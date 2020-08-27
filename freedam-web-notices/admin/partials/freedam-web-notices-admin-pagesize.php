@@ -20,4 +20,7 @@
   title="Number of notices to show per page"
   value="<?php echo get_option( $this->option_name . '_pagesize' ) ?>"
   class="small-text"
+  min="1"
+  max="100"
+  step="1"
 >
