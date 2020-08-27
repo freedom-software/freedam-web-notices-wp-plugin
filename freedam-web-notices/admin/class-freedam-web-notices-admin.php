@@ -160,6 +160,20 @@ class Freedam_Web_Notices_Admin {
 			array( 'label_for' => $this->option_name . '_apikey' )
 		);
 
+		register_setting( $this->plugin_name, $this->option_name . '_apikey', array( $this, $this->option_name . '_sanitize_apikey' ) );
+
+		// Add setting for page size
+		add_settings_field(
+			$this->option_name . '_pagesize',
+			__( 'Page Size', 'freedam-web-notices' ),
+			array( $this, $this->option_name . '_pagesize_cb' ),
+			$this->plugin_name,
+			$this->option_name . '_general',
+			array( 'label_for' => $this->option_name . '_pagesize' )
+		);
+
+		register_setting( $this->plugin_name, $this->option_name . '_pagesize', 'intval' );
+
 	}
 
 	/**
@@ -178,6 +192,28 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_apikey_cb() {
 		include_once 'partials/freedam-web-notices-admin-apikey.php';
+	}
+
+	/**
+	 * Sanitize the api key value before being saved to database
+	 *
+	 * @param  string $apikey $_POST value
+	 * @since  1.0.0
+	 * @return string           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_apikey( $apikey ) {
+		if ( strlen($apikey) === 128 && !preg_match('/^([a-z0-9]+)$/', $apikey) ) {
+	    return $apikey;
+	  }
+	}
+
+	/**
+	 * Render the number input field for page size
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_pagesize_cb() {
+		include_once 'partials/freedam-web-notices-admin-pagesize.php';
 	}
 
 }
