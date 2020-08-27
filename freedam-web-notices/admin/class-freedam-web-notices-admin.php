@@ -150,6 +150,16 @@ class Freedam_Web_Notices_Admin {
 			$this->plugin_name
 		);
 
+		// Add setting for API Key
+		add_settings_field(
+			$this->option_name . '_apikey',
+			__( 'API Key', 'freedam-bew-notices' ),
+			array( $this, $this->option_name . '_apikey_cb' ),
+			$this->plugin_name,
+			$this->option_name . '_apikey',
+			array( 'label_for' => $this->option_name . '_apikey' )
+		);
+
 	}
 
 	/**
@@ -159,6 +169,15 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_general_cb() {
 		echo '<p>' . __( 'Please change the settings accordingly.', 'freedam-web-notices' ) . '</p>';
+	}
+
+	/**
+	 * Render the text input field for api key
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_apikey_cb() {
+		include_once 'partials/freedam-web-notices-admin-apikey.php';
 	}
 
 }
