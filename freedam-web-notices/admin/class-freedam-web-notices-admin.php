@@ -153,7 +153,7 @@ class Freedam_Web_Notices_Admin {
 		add_settings_section(
 			$section_name,
 			__( 'General', 'freedam-web-notices' ),
-			'freedam_web_notices_general_cb',
+			array( $this, $this->option_name . '_general_cb' ),
 			$this->plugin_name
 		);
 
