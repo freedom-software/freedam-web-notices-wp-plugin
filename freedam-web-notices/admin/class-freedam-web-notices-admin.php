@@ -214,7 +214,7 @@ class Freedam_Web_Notices_Admin {
 			array(
 				'type' => 'boolean',
 				'description' => 'Whether notices that don\'t have a funeral date/time should be included in results',
-				'sanitize_callback' => array( $this, $this->option_name . 'sanitize_boolean' ),
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
 				'default' => false
 			)
 		);
