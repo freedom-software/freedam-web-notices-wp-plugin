@@ -198,7 +198,7 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
-		// Add setting for page size
+		// Add setting for nulls
 		add_settings_field(
 			$this->option_name . '_nulls',
 			__( 'Include notices without date & time', 'freedam-web-notices' ),
