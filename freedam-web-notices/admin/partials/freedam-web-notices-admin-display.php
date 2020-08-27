@@ -15,18 +15,13 @@
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
-<form action="/wp-admin/admin-post.php" method="POST">
-  <input type="hidden" name="action" value="freedam-web-notices-settings">
-  <p>
-    <label for="freedam-api-key">API Key</label>
-    <input id="freedam-api-key" type="text" name="apiKey" value="<?php echo $freedam_api_params['apiKey']; ?>">
-  </p>
-  <p>
-    <label for="freedam-api-page-size">Page Size</label>
-    <input id="freedam-api-page-size" type="number" name="pageSize" value="<?php echo $freedam_api_params['pageSize']; ?>">
-  </p>
-  <p>
-    <label for="freedam-api-nulls">Include notices without date & time</label>
-    <input id="freedam-api-nulls" type="checkbox" name="nulls" value="<?php echo $freedam_api_params['nulls']; ?>">
-  </p>
-</form>
+<div class="wrap">
+  <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+  <form action="options.php" method="post">
+    <?php
+      settings_fields( $this->plugin_name );
+      do_settings_sections( $this->plugin_name );
+      submit_button();
+    ?>
+  </form>
+</div>
