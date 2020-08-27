@@ -197,6 +197,8 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Sanitize the api key value before being saved to database
 	 *
+	 * Checks if value is a 128 length string and only contains alpha-numerics
+	 *
 	 * @param  string $apikey $_POST value
 	 * @since  1.0.0
 	 * @return string           Sanitized value
