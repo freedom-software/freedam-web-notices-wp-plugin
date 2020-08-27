@@ -17,5 +17,6 @@
   type="number"
   name="<?php echo $this->option_name . '_pagesize' ?>"
   id="<?php echo $this->option_name . '_pagesize' ?>"
+  title="Number of notices to show per page"
   value="<?php echo get_option( $this->option_name . '_pagesize' ) ?>"
 >
