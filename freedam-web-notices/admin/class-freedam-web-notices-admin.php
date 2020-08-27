@@ -153,7 +153,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for API Key
 		add_settings_field(
 			$this->option_name . '_apikey',
-			__( 'API Key', 'freedam-bew-notices' ),
+			__( 'API Key', 'freedam-web-notices' ),
 			array( $this, $this->option_name . '_apikey_cb' ),
 			$this->plugin_name,
 			$this->option_name . '_apikey',
