@@ -13,4 +13,9 @@
  */
 ?>
 
-<input type="text" name="<?php echo $this->option_name . '_apikey' ?>" id="<?php echo $this->option_name . '_apikey' ?>">
+<input
+  type="text"
+  name="<?php echo $this->option_name . '_apikey' ?>"
+  id="<?php echo $this->option_name . '_apikey' ?>"
+  value="<?php echo get_option( $this->option_name . '_apikey' ) ?>"
+>

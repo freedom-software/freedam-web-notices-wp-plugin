@@ -13,4 +13,9 @@
  */
 ?>
 
-<input type="number" name="<?php echo $this->option_name . '_pagesize' ?>" id="<?php echo $this->option_name . '_pagesize' ?>">
+<input
+  type="number"
+  name="<?php echo $this->option_name . '_pagesize' ?>"
+  id="<?php echo $this->option_name . '_pagesize' ?>"
+  value="<?php echo get_option( $this->option_name . '_pagesize' ) ?>"
+>

@@ -13,4 +13,9 @@
  */
 ?>
 
-<input type="checkbox" name="<?php echo $this->option_name . '_nulls' ?>" id="<?php echo $this->option_name . '_nulls' ?>">
+<input
+  type="checkbox"
+  name="<?php echo $this->option_name . '_nulls' ?>"
+  id="<?php echo $this->option_name . '_nulls' ?>"
+  <?php checked( get_option( $this->option_name . '_nulls' ), true ) ?>
+>
