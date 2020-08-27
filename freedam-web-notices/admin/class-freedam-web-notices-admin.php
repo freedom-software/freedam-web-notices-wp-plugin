@@ -174,6 +174,18 @@ class Freedam_Web_Notices_Admin {
 
 		register_setting( $this->plugin_name, $this->option_name . '_pagesize', 'intval' );
 
+		// Add setting for page size
+		add_settings_field(
+			$this->option_name . '_nulls',
+			__( 'Include notices without date & time', 'freedam-web-notices' ),
+			array( $this, $this->option_name . '_nulls_cb' ),
+			$this->plugin_name,
+			$this->option_name . '_general',
+			array( 'label_for' => $this->option_name . '_nulls' )
+		);
+
+		register_setting( $this->plugin_name, $this->option_name . '_nulls', array( $this, $this->option_name . 'sanitize_boolean' ) );
+
 	}
 
 	/**
@@ -216,6 +228,30 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_pagesize_cb() {
 		include_once 'partials/freedam-web-notices-admin-pagesize.php';
+	}
+
+	/**
+	 * Render the checkbox input field for nulls
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_nulls_cb() {
+		include_once 'partials/freedam-web-notices-admin-nulls.php';
+	}
+
+	/**
+	 * Sanitize the boolean value before being saved to database
+	 *
+	 * Checks if value is a boolean value
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.0.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_boolean( $var ) {
+		if ( is_bool( $var ) ) {
+			return $var;
+		}
 	}
 
 }
