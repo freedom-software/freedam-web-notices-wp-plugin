@@ -16,7 +16,7 @@
 <input
   type="checkbox"
   name="<?php echo $this->option_name . '_nulls' ?>"
-  id="<?php echo $this->option_name . '_nulls' ?>"
+  id="<?php echo esc_attr( $args['label_for'] ); ?>"
   title="Whether notices that don\'t have a funeral date/time should be included in results"
   <?php checked( get_option( $this->option_name . '_nulls' ), true ) ?>
 >

@@ -235,7 +235,7 @@ class Freedam_Web_Notices_Admin {
 	 *
 	 * @since  1.0.0
 	 */
-	public function freedam_web_notices_apikey_cb() {
+	public function freedam_web_notices_apikey_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-apikey.php';
 	}
 
@@ -259,7 +259,7 @@ class Freedam_Web_Notices_Admin {
 	 *
 	 * @since  1.0.0
 	 */
-	public function freedam_web_notices_pagesize_cb() {
+	public function freedam_web_notices_pagesize_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-pagesize.php';
 	}
 
@@ -268,7 +268,7 @@ class Freedam_Web_Notices_Admin {
 	 *
 	 * @since  1.0.0
 	 */
-	public function freedam_web_notices_nulls_cb() {
+	public function freedam_web_notices_nulls_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-nulls.php';
 	}
 

@@ -16,7 +16,7 @@
 <input
   type="number"
   name="<?php echo $this->option_name . '_pagesize' ?>"
-  id="<?php echo $this->option_name . '_pagesize' ?>"
+  id="<?php echo esc_attr( $args['label_for'] ); ?>"
   title="Number of notices to show per page"
   value="<?php echo get_option( $this->option_name . '_pagesize' ) ?>"
 >
