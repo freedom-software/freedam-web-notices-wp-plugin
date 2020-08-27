@@ -41,6 +41,16 @@ class Freedam_Web_Notices_Public {
 	private $version;
 
 	/**
+	 * Address to the FreeDAM API
+	 */
+	protected $freedam_api_address = 'https://api.freedam.co.nz';
+
+	/**
+	 * Endpoint in FreeDAM API to retrieve web notices
+	 */
+	protected $freedam_api_endpoint = '/web-notices';
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0

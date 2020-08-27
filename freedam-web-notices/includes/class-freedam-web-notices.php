@@ -58,16 +58,6 @@ class Freedam_Web_Notices {
 	protected $version;
 
 	/**
-	 * Address to the FreeDAM API
-	 */
-	protected $freedam_api_address = 'https://api.freedam.co.nz';
-
-	/**
-	 * Endpoint in FreeDAM API to retrieve web notices
-	 */
-	protected $freedam_api_endpoint = '/web-notices';
-
-	/**
 	 * Array of params to use with the request to endpoint
 	 */
 	protected $freedam_api_params = Array(
