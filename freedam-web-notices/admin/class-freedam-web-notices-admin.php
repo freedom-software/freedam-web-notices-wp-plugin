@@ -23,6 +23,15 @@
 class Freedam_Web_Notices_Admin {
 
 	/**
+	 * The options name to be used in this plugin
+	 *
+	 * @since  	1.0.0
+	 * @access 	private
+	 * @var  	string 		$option_name 	Option name of this plugin
+	 */
+	private $option_name = 'freedam_web_notices';
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    1.0.0
@@ -124,6 +133,32 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function display_options_page() {
 		include_once 'partials/freedam-web-notices-admin-display.php';
+	}
+
+	/**
+	 * Register the settings with WP
+	 *
+	 * @since  1.0.0
+	 */
+	public function register_settings() {
+
+		// Add a General section
+		add_settings_section(
+			$this->option_name . '_general',
+			__( 'General', 'freedam-web-notices' ),
+			array( $this, $this->option_name . '_general_cb' ),
+			$this->plugin_name
+		);
+
+	}
+
+	/**
+	 * Render the text for the general section
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_general_cb() {
+		echo '<p>' . __( 'Please change the settings accordingly.', 'freedam-web-notices' ) . '</p>';
 	}
 
 }
