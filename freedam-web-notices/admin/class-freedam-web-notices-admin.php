@@ -249,8 +249,63 @@ class Freedam_Web_Notices_Admin {
 	 * @return string           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_apikey( $apikey ) {
-		if ( strlen($apikey) === 128 && !preg_match('/^([a-z0-9]+)$/', $apikey) ) {
+		$invalid_length = !(strlen($apikey) === 0 || strlen($apikey) === 128);
+		$invalid_content = preg_match('/[^a-z0-9]/', $apikey);
+
+		if ( !$invalid_length && !$invalid_content ) {
 	    return $apikey;
+	  } else {
+
+			if ( $invalid_length ) {
+		  	add_settings_error(
+		  		$this->option_name . '_apikey',
+		  		'apikey_length',
+		  		__( 'API Key must be 128 characters', $this->$plugin_name )
+	  		);
+			}
+
+			if ( $invalid_content ) {
+		  	add_settings_error(
+		  		$this->option_name . '_apikey',
+		  		'apikey_content',
+		  		__( 'API Key may only contain lowercase alpha-numeric characters', $this->$plugin_name )
+	  		);
+			}
+	  }
+	}
+
+	/**
+	 * Sanitize the page size value before being saved to database
+	 *
+	 * Checks if value is an integer greater than zero
+	 *
+	 * @param  string $pagesize $_POST value
+	 * @since  1.0.0
+	 * @return string           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_pagesize( $pagesize ) {
+		$invalid_type = is_integer($pagesize);
+		$invalid_size = $pagesize < 1 || $pagesize > 100;
+
+		if ( !$invalid_type && !$invalid_size ) {
+	    return $pagesize;
+	  } else {
+
+			if ( $invalid_type ) {
+		  	add_settings_error(
+		  		$this->option_name . '_pagesize',
+		  		'pagesize_type',
+		  		__( 'Page Size must be a whole number', $this->$plugin_name )
+	  		);
+			}
+
+			if ( $invalid_content ) {
+		  	add_settings_error(
+		  		$this->option_name . '_pagesize',
+		  		'pagesize_content',
+		  		__( 'Page Size must be over 0 but less than 100', $this->$plugin_name )
+	  		);
+			}
 	  }
 	}
 
@@ -282,9 +337,19 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_boolean( $var ) {
-		if ( is_bool( $var ) ) {
-			return $var;
-		}
+		return $this->is_true( $var );
+	}
+
+	/**
+	 * Determines the truithyness of $val
+	 *
+	 * @param  any  $val         Value to test
+	 * @param  boolean $return_null The value nulls should return
+	 * @return boolean              The boolean result
+	 */
+	public function is_true($val, $return_null=false){
+    $boolval = ( is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool) $val );
+    return ( $boolval===null && !$return_null ? false : $boolval );
 	}
 
 }
