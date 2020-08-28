@@ -50,16 +50,26 @@ class Freedam_Web_Notices_Admin {
 	private $version;
 
 	/**
+	 * The default HTML used by notices
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $default_template    The default HTML used by notices
+	 */
+	protected $default_template;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $default_template ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->default_template = $default_template;
 
 	}
 
@@ -174,6 +184,17 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_template',
+			array(
+				'type' => 'string',
+				'description' => 'Custom template for individual web notices',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_template' ),
+				'default' => $this->default_template
+			)
+		);
+
 		/**
 		 * Name of the genral section the admin setting are in
 		 *
@@ -217,6 +238,16 @@ class Freedam_Web_Notices_Admin {
 			$this->plugin_name,
 			$section_name,
 			array( 'label_for' => $this->option_name . '_nulls' )
+		);
+
+		// Add setting for template
+		add_settings_field(
+			$this->option_name . '_template',
+			__( 'Notice Template', $this->$plugin_name ),
+			array( $this, $this->option_name . '_template_cb' ),
+			$this->plugin_name,
+			$section_name,
+			array( 'label_for' => $this->option_name . '_template' )
 		);
 
 	}
@@ -328,6 +359,15 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
+	 * Render the checkbox input field for nulls
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_template_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-template.php';
+	}
+
+	/**
 	 * Sanitize the boolean value before being saved to database
 	 *
 	 * Checks if value is a boolean value
@@ -338,6 +378,17 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_boolean( $var ) {
 		return $this->is_true( $var );
+	}
+
+	/**
+	 * Sanitize the html template before being saved to database
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.0.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_template( $var ) {
+		return esc_html( $var );
 	}
 
 	/**

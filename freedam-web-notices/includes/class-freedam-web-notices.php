@@ -58,15 +58,13 @@ class Freedam_Web_Notices {
 	protected $version;
 
 	/**
-	 * Array of params to use with the request to endpoint
+	 * The default HTML used by notices
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $default_template    The default HTML used by notices
 	 */
-	protected $freedam_api_params = Array(
-		'apiKey' => '', // Key for web-notices endpoint to identify your database with
-		'pageSize' => 10, // Number of ntoices to return per page
-		'page' => 1 // Page number of results to return
-	);
-
-	protected $web_notice_template = '';
+	protected $default_template;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -84,6 +82,7 @@ class Freedam_Web_Notices {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'freedam-web-notices';
+		$this->default_template = file_get_contents(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/freedam-web-notices-template-default.html');
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -163,7 +162,7 @@ class Freedam_Web_Notices {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version(), $this->default_template );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
