@@ -120,4 +120,14 @@ class Freedam_Web_Notices_Public {
 
 	}
 
+	public function register_shortcode( $atts = [], $content = '', $shortcode_tag ) {
+		// do something to $content
+		ob_start(); // begin collecting output
+
+		include 'partials/freedam-web-notices-public-display.php';
+
+		// always return
+		return ob_get_clean(); // retrieve output from myfile.php, stop buffering
+	}
+
 }
