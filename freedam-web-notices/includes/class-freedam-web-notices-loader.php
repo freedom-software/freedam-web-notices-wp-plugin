@@ -50,6 +50,7 @@ class Freedam_Web_Notices_Loader {
 
 		$this->actions = array();
 		$this->filters = array();
+		$this->shortcodes = array();
 
 	}
 
@@ -79,6 +80,22 @@ class Freedam_Web_Notices_Loader {
 	 */
 	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
+	}
+
+	/**
+	 * Add a new shortcode to the collection to be registered with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @param    string               $tag              The tag of the shortcode that is being registered.
+	 * @param    object               $component        A reference to the instance of the object on which the filter is defined.
+	 * @param    string               $callback         The name of the function definition on the $component.
+	 */
+	public function add_shortcode( $tag, $component, $callback ) {
+		$this->shortcodes[] = array(
+			'tag'       => $tag,
+			'component' => $component,
+			'callback'  => $callback
+		);
 	}
 
 	/**
@@ -122,6 +139,10 @@ class Freedam_Web_Notices_Loader {
 
 		foreach ( $this->actions as $hook ) {
 			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
+		}
+
+		foreach ( $this->shortcodes as $hook ) {
+			add_shortcode( $hook['tag'], array( $hook['component'], $hook['callback'] ) );
 		}
 
 	}
