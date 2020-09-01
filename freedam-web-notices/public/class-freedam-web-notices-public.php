@@ -41,6 +41,15 @@ class Freedam_Web_Notices_Public {
 	private $version;
 
 	/**
+	 * The default HTML used by notices
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $default_template    The default HTML used by notices
+	 */
+	protected $default_template;
+
+	/**
 	 * Address to the FreeDAM API
 	 */
 	protected $freedam_api_address = 'https://api.freedam.co.nz';
@@ -57,10 +66,11 @@ class Freedam_Web_Notices_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $default_template ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->default_template = $default_template;
 
 	}
 
