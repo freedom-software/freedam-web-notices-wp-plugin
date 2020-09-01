@@ -30,20 +30,22 @@
     }
 
     const url = new URL('<?php echo $this->freedam_api_address . $this->freedam_api_endpoint ?>');
+    const apiKey = '<?php echo $api_key ?>';
+    const nulls<?php if ( $nulls ) echo ' = ' . $nulls ?>;
+    const pageSize<?php if ( $page_size ) echo ' = ' . $page_size ?>;
+    const template = `<?php echo $template ?>`;
 
     // Add params to address
-    url.searchParams.set('apiKey', '<?php echo $api_key ?>');
-    <?php if ( $nulls ) echo "url.searchParams.set('nulls', " . $nulls . ");"; ?>
-    <?php if ( $page_size ) echo "url.searchParams.set('pageSize', " . $page_size . ");"; ?>
+    url.searchParams.set('apiKey', );
+    if ( nulls !== undefined ) url.searchParams.set('nulls', nulls );
+    if ( pageSize !== undefined ) url.searchParams.set('pageSize', pageSize );
 
-    // begin fetch request
     try {
 
+      // begin fetch request for web notices
       fetch( url )
         .then( response => response.json() )
         .then( data => {
-
-          const template = `<?php echo $template ?>`;
 
           // Find or create container for fetch result
           let outputContainer = container.querySelector('ul.freedam-web-notices');
@@ -51,8 +53,9 @@
             outputContainer = document.createElement('ul');
             outputContainer.classList.add('freedam-web-notices');
             container.appendChild(outputContainer);
-          } else outputContainer.innerHTML = '';
+          } else outputContainer.innerHTML = ''; // clear out the container if it aleady exists
 
+          // loop through notices, replacing template tokens and adding resulting HTML to DOM
           if ( Array.isArray(data) && !!data.length ) data.forEach( notice => {
 
             const open = '{{';
@@ -62,24 +65,25 @@
             const matches = template.matchAll(regexp);
             let output = template;
 
-            // Iterate over string backwards as to not mess up indexes when replacing
+            // Iterate over template token matches backwards as to not mess up indexes when replacing
             for ( const match of Array.from(matches).reverse() ) {
-              // found token
+              /** @type {string} found token */
               const token = match[0];
-              // find value in notice matching requested date (deceased.name.last)
+              /** @type {string[]} token split into notice object path */
               const path = token.split('.');
+              /** @type {any} Value for template token from notice data */
               let value = notice;
+              // update value until reached value at end of token path
               for (let i in path) value = value[path[i]];
-              // Value for template token from notice data
-              // convert to a string for use in the HTML
+              // convert value to a string for use in HTML
               value = typeof(value) === 'string' ? value : (value ?? '').toString();
-              // Insert notice data, replacing token and encapsulating mostache ('{{'&'}}')
+              // Insert value, replacing token and encapsulating mostache ('{{'&'}}')
               const beforeToken = output.substring(0,match.index-2);
               const afterToken = output.substring(match.index + token.length + 2);
               output = beforeToken + value + afterToken;
             }
 
-            // Add notice to container
+            // Add converted template with notice data to container
             const item = document.createElement('li');
             item.classList.add('freedam-web-notice');
             item.innerHTML = output;
