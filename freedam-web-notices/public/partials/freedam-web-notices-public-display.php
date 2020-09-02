@@ -16,6 +16,9 @@
   $nulls = get_option( 'freedam_web_notices_nulls', $defaults['nulls'] );
   $page_size = get_option( 'freedam_web_notices_pagesize', $defaults['pagesize'] );
   $template = html_entity_decode(get_option( 'freedam_web_notices_template', htmlentities($defaults['template']) ));
+  $locale = get_user_locale();
+  $days_past = get_option( 'freedam_web_notices_past' );
+  $days_future = get_option( 'freedam_web_notices_future' );
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
@@ -34,8 +37,15 @@
     const nulls = <?php if ( $nulls ) { echo $nulls; } else { echo 'undefined'; } ?>;
     const pageSize = <?php if ( $page_size ) { echo $page_size; } else { echo 'undefined'; } ?>;
     const template = `<?php echo $template; ?>`;
+    const locale = navigator.language //(Netscape - Browser Localization)
+     || navigator.browserLanguage //(IE-Specific - Browser Localized Language)
+     || navigator.systemLanguage //(IE-Specific - Windows OS - Localized Language)
+     || navigator.userLanguage
+     || '<?php if( $locale ) { echo str_replace('_', '-', $locale); } else { echo 'en-NZ'; } ?>';
+    const past = <?php if ( $days_past ) { echo $days_past; } else { echo 'null'; } ?>;
+    const future = <?php if ( $days_future ) { echo $days_future; } else { echo 'null'; } ?>;
 
-    freedamWebNoticesGetNotices( template, url, apiKey, 1, pageSize, nulls );
+    freedamWebNoticesGetNotices( template, url, apiKey, 1, pageSize, nulls, locale, past, future );
 
   </script>
 

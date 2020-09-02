@@ -472,8 +472,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return string           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_days( $days ) {
-		if ( is_integer($days) ) return $days;
-	  else return null;
+		$value = intval($days);
+		if ( $value === 0 ) return null;
+	  else return $value;
 	}
 
 	/**
