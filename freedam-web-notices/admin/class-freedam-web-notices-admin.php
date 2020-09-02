@@ -208,6 +208,17 @@ class Freedam_Web_Notices_Admin {
 
 		register_setting(
 			$this->plugin_name,
+			$this->option_name . '_ascending',
+			array(
+				'type' => 'boolean',
+				'description' => 'Whether notices results should be ordered by oldest first',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
+				'default' => $this->defaults['ascending']
+			)
+		);
+
+		register_setting(
+			$this->plugin_name,
 			$this->option_name . '_template',
 			array(
 				'type' => 'string',
@@ -297,6 +308,19 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for nulls
+		add_settings_field(
+			$this->option_name . '_ascending',
+			__( 'Order notices ascending', $this->$plugin_name ),
+			array( $this, $this->option_name . '_ascending_cb' ),
+			$this->plugin_name,
+			$section_name,
+			array(
+				'label_for' => $this->option_name . '_ascending',
+				'title' => 'Whether notices results should be ordered by oldest first'
+			)
+		);
+
 		// Add setting for template
 		add_settings_field(
 			$this->option_name . '_template',
@@ -373,6 +397,15 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_future_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-before-future.php';
+	}
+
+	/**
+	 * Render the checkbox input field for ascending
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_ascending_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-ascending.php';
 	}
 
 	/**

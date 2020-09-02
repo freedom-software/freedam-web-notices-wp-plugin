@@ -87,7 +87,8 @@ class Freedam_Web_Notices {
 			'nulls' => false,
 			'pagesize' => 10,
 			'past' => null,
-			'future' => null
+			'future' => null,
+			'ascending' => false
 		);
 
 		$this->load_dependencies();

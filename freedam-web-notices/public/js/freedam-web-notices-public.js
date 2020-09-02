@@ -32,6 +32,7 @@
 })( jQuery );
 
 function freedamWebNoticesGetNotices(
+	container,
 	template,
 	url,
 	apiKey,
@@ -40,11 +41,13 @@ function freedamWebNoticesGetNotices(
 	nulls = false,
 	locale = 'en-NZ',
 	past = null,
-	future = null
+	future = null,
+	ascending = false
 ) {
   // Add params to address
   url.searchParams.set('apiKey', apiKey);
   url.searchParams.set('page', page);
+  url.searchParams.set('ascending', ascending);
   if ( pageSize !== undefined ) url.searchParams.set('pageSize', pageSize );
   if ( nulls !== undefined ) url.searchParams.set('nulls', nulls );
   if ( !!past ) {
@@ -135,7 +138,7 @@ function freedamWebNoticesGetNotices(
   		const previousPageElement = document.createElement('button');
   		previousPageElement.classList.add('previous');
   		previousPageElement.textContent = 'Previous';
-  		previousPageElement.onclick = () => freedamWebNoticesGetNotices(template, url, apiKey, page - 1, pageSize, nulls, locale, past, future);
+  		previousPageElement.onclick = () => freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, locale, past, future, ascending );
   		paginationContainer.appendChild(previousPageElement);
   	}
 
@@ -151,7 +154,7 @@ function freedamWebNoticesGetNotices(
   		const previousPageElement = document.createElement('button');
   		previousPageElement.classList.add('next');
   		previousPageElement.textContent = 'Next';
-  		previousPageElement.onclick = () => freedamWebNoticesGetNotices(template, url, apiKey, page + 1, pageSize, nulls, locale, past, future);
+  		previousPageElement.onclick = () => freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, locale, past, future, ascending );
   		paginationContainer.appendChild(previousPageElement);
   	}
 
