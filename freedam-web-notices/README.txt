@@ -43,13 +43,17 @@ you put the stable version, in order to eliminate any doubt.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How do I style the web-notices =
 
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
+1. Add the custom css to your themes "Aditional CSS".
+2. From the Admin section, navigate to Appearance > Themes
+3. Click "Customize" on your active theme
+4. Select "Additional CSS"
+5. Write your styles. The main elements that can be targeted are:
+  - freedam-web-notices-container
+  - ul.freedam-web-notices
+  - li.freedam-web-notice
+  Any other elements are from your own custom template, specified in the plugin's settings
 
 == Screenshots ==
 
