@@ -90,6 +90,51 @@ function freedamWebNoticesGetNotices( template, url, apiKey, page = 1, pageSize 
 
         } );
 
+      // Add pagination
+      // Find or create container for result pagination
+      let paginationContainer = container.querySelector('div.paginator');
+      if ( !paginationContainer ) {
+        paginationContainer = document.createElement('div');
+        paginationContainer.classList.add('paginator');
+        container.appendChild(paginationContainer);
+      } else paginationContainer.innerHTML = ''; // clear out the paginator if it aleady exists
+
+      if ( !Array.isArray(data) ) data = [];
+
+      if ( page < 2 && !data.length ) {
+      	// Remove paginator if there is no data and we are on the first page
+      	paginationContainer.remove();
+      	return;
+      }
+
+    	if ( page > 1 ) {
+    		// There was data before hand
+    		// Add the "previous" button
+    		const previousPageElement = document.createElement('button');
+    		previousPageElement.classList.add('previous');
+    		previousPageElement.textContent = 'Previous';
+    		previousPageElement.onclick = () => freedamWebNoticesGetNotices(template, url, apiKey, page - 1, pageSize, nulls);
+    		paginationContainer.appendChild(previousPageElement);
+    	}
+
+    	// Add the current page
+    	const currentPageElement = document.createElement('span');
+    	currentPageElement.classList.add('current');
+    	currentPageElement.textContent = 'Page ' + page;
+    	paginationContainer.appendChild(currentPageElement);
+
+    	if ( data.length === pageSize ) {
+    		// Assume there is more data to show
+    		// Add the "next" button
+    		const previousPageElement = document.createElement('button');
+    		previousPageElement.classList.add('next');
+    		previousPageElement.textContent = 'Next';
+    		previousPageElement.onclick = () => freedamWebNoticesGetNotices(template, url, apiKey, page + 1, pageSize, nulls);
+    		paginationContainer.appendChild(previousPageElement);
+    	}
+
+    container.scrollIntoView(true, { behavior: 'smooth' });
+
     } );
 
   } catch (err) {

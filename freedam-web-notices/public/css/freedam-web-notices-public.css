@@ -19,3 +19,15 @@ ul.freedam-web-notices {
 li.freedam-web-notice {
   flex: 0 0 50rem;
 }
+
+div.paginator {
+  text-align: center;
+}
+
+div.paginator > * {
+  margin: 0 0.8rem;
+}
+
+div.paginator > span.current {
+  font-weight: bold;
+}
