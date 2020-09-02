@@ -11,13 +11,20 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
-
-  $value = get_option( $this->option_name . '_template', $this->default_template )
+  $option_name = $args['label_for'];
+  $value = get_option( $option_name, $this->defaults['template'] );
 ?>
 
 <textarea
-  name="<?php echo $this->option_name . '_template' ?>"
-  id="<?php echo esc_attr( $args['label_for'] ); ?>"
-  title="Customize the layout of individual web notices"
+  name="<?php echo esc_attr( $option_name ); ?>"
+  id="<?php echo esc_attr( $option_name ); ?>"
   class="large-text"
-><?php echo (strlen($value) > 0 ? $value : $this->default_template) ?></textarea>
+  aria-describedby="template-description"
+  rows="6"
+  wrap="off"
+  spellcheck="false"
+><?php echo (strlen($value) > 0 ? $value : $this->defaults['template']); ?></textarea>
+<p
+  class="description"
+  id="template-description"
+><?php echo esc_html( $args['title'] ); ?></p>

@@ -50,13 +50,13 @@ class Freedam_Web_Notices_Admin {
 	private $version;
 
 	/**
-	 * The default HTML used by notices
+	 * The defaults used by the plugin
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $default_template    The default HTML used by notices
+	 * @var      array    $defaults    The defaults used by the plugin
 	 */
-	protected $default_template;
+	protected $defaults;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -65,11 +65,11 @@ class Freedam_Web_Notices_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $default_template ) {
+	public function __construct( $plugin_name, $version, $defaults ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$this->default_template = $default_template;
+		$this->defaults = $defaults;
 
 	}
 
@@ -169,7 +169,29 @@ class Freedam_Web_Notices_Admin {
 				'type' => 'integer',
 				'description' => 'Number of notices to show per page',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_pagesize' ),
-				'default' => 100
+				'default' => $this->defaults['pagesize']
+			)
+		);
+
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_past',
+			array(
+				'type' => 'integer',
+				'description' => 'Limits how old web-notices can be to be included',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
+				'default' => $this->defaults['past']
+			)
+		);
+
+		register_setting(
+			$this->plugin_name,
+			$this->option_name . '_future',
+			array(
+				'type' => 'integer',
+				'description' => 'Limits how new web-notices can be to be included',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
+				'default' => $this->defaults['future']
 			)
 		);
 
@@ -180,7 +202,7 @@ class Freedam_Web_Notices_Admin {
 				'type' => 'boolean',
 				'description' => 'Whether notices that don\'t have a funeral date/time should be included in results',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
-				'default' => false
+				'default' => $this->defaults['nulls']
 			)
 		);
 
@@ -191,7 +213,7 @@ class Freedam_Web_Notices_Admin {
 				'type' => 'string',
 				'description' => 'Custom template for individual web notices',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_template' ),
-				'default' => $this->default_template
+				'default' => $this->defaults['template']
 			)
 		);
 
@@ -217,7 +239,10 @@ class Freedam_Web_Notices_Admin {
 			array( $this, $this->option_name . '_apikey_cb' ),
 			$this->plugin_name,
 			$section_name,
-			array( 'label_for' => $this->option_name . '_apikey' )
+			array(
+				'label_for' => $this->option_name . '_apikey',
+				'title' => 'Used by the plugin to authenticate with and identify the database to retrieve the web-notices from'
+			)
 		);
 
 		// Add setting for page size
@@ -227,7 +252,36 @@ class Freedam_Web_Notices_Admin {
 			array( $this, $this->option_name . '_pagesize_cb' ),
 			$this->plugin_name,
 			$section_name,
-			array( 'label_for' => $this->option_name . '_pagesize' )
+			array(
+				'label_for' => $this->option_name . '_pagesize',
+				'title' => 'Number of notices to show per page'
+			)
+		);
+
+		// Add setting for after past
+		add_settings_field(
+			$this->option_name . '_past',
+			__( 'Limit by days in the past', $this->$plugin_name ),
+			array( $this, $this->option_name . '_past_cb' ),
+			$this->plugin_name,
+			$section_name,
+			array(
+				'label_for' => $this->option_name . '_past',
+				'title' => 'Only show notices with funeral dates after this many days in the past'
+			)
+		);
+
+		// Add setting for before future
+		add_settings_field(
+			$this->option_name . '_future',
+			__( 'Limit by day in the future', $this->$plugin_name ),
+			array( $this, $this->option_name . '_future_cb' ),
+			$this->plugin_name,
+			$section_name,
+			array(
+				'label_for' => $this->option_name . '_future',
+				'title' => 'Only show notices with funeral dates before this many days in the future'
+			)
 		);
 
 		// Add setting for nulls
@@ -237,7 +291,10 @@ class Freedam_Web_Notices_Admin {
 			array( $this, $this->option_name . '_nulls_cb' ),
 			$this->plugin_name,
 			$section_name,
-			array( 'label_for' => $this->option_name . '_nulls' )
+			array(
+				'label_for' => $this->option_name . '_nulls',
+				'title' => 'Whether notices that don\'t have a funeral date/time should be included in results'
+			)
 		);
 
 		// Add setting for template
@@ -247,7 +304,10 @@ class Freedam_Web_Notices_Admin {
 			array( $this, $this->option_name . '_template_cb' ),
 			$this->plugin_name,
 			$section_name,
-			array( 'label_for' => $this->option_name . '_template' )
+			array(
+				'label_for' => $this->option_name . '_template',
+				'title' => 'Customize the layout of individual notices'
+			)
 		);
 
 	}
@@ -271,76 +331,6 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
-	 * Sanitize the api key value before being saved to database
-	 *
-	 * Checks if value is a 128 length string and only contains alpha-numerics
-	 *
-	 * @param  string $apikey $_POST value
-	 * @since  1.0.0
-	 * @return string           Sanitized value
-	 */
-	public function freedam_web_notices_sanitize_apikey( $apikey ) {
-		$invalid_length = !(strlen($apikey) === 0 || strlen($apikey) === 128);
-		$invalid_content = preg_match('/[^a-z0-9]/', $apikey);
-
-		if ( !$invalid_length && !$invalid_content ) {
-	    return $apikey;
-	  } else {
-
-			if ( $invalid_length ) {
-		  	add_settings_error(
-		  		$this->option_name . '_apikey',
-		  		'apikey_length',
-		  		__( 'API Key must be 128 characters', $this->$plugin_name )
-	  		);
-			}
-
-			if ( $invalid_content ) {
-		  	add_settings_error(
-		  		$this->option_name . '_apikey',
-		  		'apikey_content',
-		  		__( 'API Key may only contain lowercase alpha-numeric characters', $this->$plugin_name )
-	  		);
-			}
-	  }
-	}
-
-	/**
-	 * Sanitize the page size value before being saved to database
-	 *
-	 * Checks if value is an integer greater than zero
-	 *
-	 * @param  string $pagesize $_POST value
-	 * @since  1.0.0
-	 * @return string           Sanitized value
-	 */
-	public function freedam_web_notices_sanitize_pagesize( $pagesize ) {
-		$invalid_type = is_integer($pagesize);
-		$invalid_size = $pagesize < 1 || $pagesize > 100;
-
-		if ( !$invalid_type && !$invalid_size ) {
-	    return $pagesize;
-	  } else {
-
-			if ( $invalid_type ) {
-		  	add_settings_error(
-		  		$this->option_name . '_pagesize',
-		  		'pagesize_type',
-		  		__( 'Page Size must be a whole number', $this->$plugin_name )
-	  		);
-			}
-
-			if ( $invalid_content ) {
-		  	add_settings_error(
-		  		$this->option_name . '_pagesize',
-		  		'pagesize_content',
-		  		__( 'Page Size must be over 0 but less than 100', $this->$plugin_name )
-	  		);
-			}
-	  }
-	}
-
-	/**
 	 * Render the number input field for page size
 	 *
 	 * @since  1.0.0
@@ -359,12 +349,93 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
-	 * Render the checkbox input field for nulls
+	 * Render the textarea field for template
 	 *
 	 * @since  1.0.0
 	 */
 	public function freedam_web_notices_template_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-template.php';
+	}
+
+	/**
+	 * Render the number input field for after past
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_past_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-after-past.php';
+	}
+
+	/**
+	 * Render the number input field for before future
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_future_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-before-future.php';
+	}
+
+	/**
+	 * Sanitize the api key value before being saved to database
+	 *
+	 * Checks if value is a 128 length string and only contains alpha-numerics
+	 *
+	 * @param  string $apikey $_POST value
+	 * @since  1.0.0
+	 * @return string           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_apikey( $apikey ) {
+		$invalid_length = !(strlen($apikey) === 0 || strlen($apikey) === 128);
+		$invalid_content = preg_match('/[^a-z0-9]/', $apikey);
+
+		if ( $invalid_length || $invalid_content ) {
+
+			if ( $invalid_length ) {
+		  	add_settings_error(
+		  		$this->option_name . '_apikey',
+		  		'apikey_length',
+		  		__( 'API Key must be 128 characters', $this->$plugin_name )
+	  		);
+			}
+
+			if ( $invalid_content ) {
+		  	add_settings_error(
+		  		$this->option_name . '_apikey',
+		  		'apikey_content',
+		  		__( 'API Key may only contain lowercase alpha-numeric characters', $this->$plugin_name )
+	  		);
+			}
+
+			return;
+	  }
+
+	  return $apikey;
+	}
+
+	/**
+	 * Sanitize the page size value before being saved to database
+	 *
+	 * Checks if value is an integer greater than zero
+	 *
+	 * @param  string $pagesize $_POST value
+	 * @since  1.0.0
+	 * @return string           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_pagesize( $pagesize ) {
+		$value = intval($pagesize);
+		$invalid_size = $value < 1 || $value > 100;
+
+		if ( $invalid_size ) {
+			add_settings_error(
+	  		$this->option_name . '_pagesize',
+	  		'pagesize_content',
+	  		__( 'Page Size must between 1 and 100', $this->$plugin_name )
+			);
+			return;
+		}
+
+		return $value;
+
 	}
 
 	/**
@@ -389,6 +460,20 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_template( $var ) {
 		return htmlentities(stripslashes($var));
+	}
+
+	/**
+	 * Sanitize the before & after days value before being saved to database
+	 *
+	 * Checks if value is an integer
+	 *
+	 * @param  string $days $_POST value
+	 * @since  1.0.0
+	 * @return string           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_days( $days ) {
+		if ( is_integer($days) ) return $days;
+	  else return null;
 	}
 
 	/**

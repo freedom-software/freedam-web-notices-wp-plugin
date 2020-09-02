@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Provide a field for entring page size
+ * Provide a field for entring past days
  *
- * This file is used to markup the admin-facing field for the page size
+ * This file is used to markup the admin-facing field for the past days
  *
  * @link       https://github.com/Aidan-Chey
  * @since      1.0.0
@@ -12,21 +12,19 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name, $defaults['pagesize'] );
+  $value = get_option( $option_name, $defaults['past'] );
 ?>
 
 <input
   type="number"
   name="<?php echo esc_attr( $option_name ); ?>"
   id="<?php echo esc_attr( $option_name ); ?>"
-  value="<?php echo esc_attr( $value ); ?>"
+  value="<?php echo esc_attr( $value ) ?>"
   class="small-text"
-  min="1"
-  max="100"
   step="1"
-  aria-describedby="pagesize-description"
+  aria-describedby="past-description"
 >
 <p
   class="description"
-  id="pagesize-description"
-><?php echo esc_html( $args['title'] ); ?></p>
+  id="past-description"
+><?php echo esc_attr( $args['title'] ) ?></p>

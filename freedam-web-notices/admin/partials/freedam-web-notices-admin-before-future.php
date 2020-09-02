@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Provide a field for entring api key
+ * Provide a field for entring future days
  *
- * This file is used to markup the admin-facing field for the api key
+ * This file is used to markup the admin-facing field for the future days
  *
  * @link       https://github.com/Aidan-Chey
  * @since      1.0.0
@@ -12,20 +12,19 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name );
+  $value = get_option( $option_name, $defaults['future'] );
 ?>
 
 <input
-  type="text"
+  type="number"
   name="<?php echo esc_attr( $option_name ); ?>"
   id="<?php echo esc_attr( $option_name ); ?>"
   value="<?php echo esc_attr( $value ); ?>"
-  class="large-text"
-  minlength="128"
-  maxlength="128"
-  aria-describedby="apikey-description"
+  class="small-text"
+  step="1"
+  aria-describedby="future-description"
 >
 <p
   class="description"
-  id="apikey-description"
-><?php echo esc_attr( $args['title'] ); ?></p>
+  id="future-description"
+><?php echo esc_html( $args['title'] ); ?></p>

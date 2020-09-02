@@ -58,13 +58,13 @@ class Freedam_Web_Notices {
 	protected $version;
 
 	/**
-	 * The default HTML used by notices
+	 * The defaults used by the plugin
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $default_template    The default HTML used by notices
+	 * @var      array    $defaults    The defaults used by the plugin
 	 */
-	protected $default_template;
+	protected $defaults;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -82,7 +82,13 @@ class Freedam_Web_Notices {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'freedam-web-notices';
-		$this->default_template = file_get_contents(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/freedam-web-notices-template-default.html');
+		$this->defaults = array(
+			'template' => file_get_contents(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/freedam-web-notices-template-default.html'),
+			'nulls' => false,
+			'pagesize' => 10,
+			'past' => null,
+			'future' => null
+		);
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -162,7 +168,7 @@ class Freedam_Web_Notices {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version(), $this->default_template );
+		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version(), $this->defaults );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -180,7 +186,7 @@ class Freedam_Web_Notices {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Freedam_Web_Notices_Public( $this->get_plugin_name(), $this->get_version(), $this->default_template );
+		$plugin_public = new Freedam_Web_Notices_Public( $this->get_plugin_name(), $this->get_version(), $this->defaults );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

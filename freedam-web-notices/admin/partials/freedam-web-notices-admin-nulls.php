@@ -11,12 +11,18 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
+  $option_name = $args['label_for'];
+  $value = get_option( $option_name , $defaults['nulls']);
 ?>
 
 <input
   type="checkbox"
-  name="<?php echo $this->option_name . '_nulls' ?>"
-  id="<?php echo esc_attr( $args['label_for'] ); ?>"
-  title="Whether notices that don't have a funeral date/time should be included in results"
-  <?php checked( get_option( $this->option_name . '_nulls' ), true ) ?>
+  name="<?php echo esc_attr( $option_name ); ?>"
+  id="<?php echo esc_attr( $option_name ); ?>"
+  <?php checked( $value, true ); ?>
+  aria-describedby="nulls-description"
 >
+<p
+  class="description"
+  id="nulls-description"
+><?php echo esc_html( $args['title'] ); ?></p>
