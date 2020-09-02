@@ -138,7 +138,10 @@ function freedamWebNoticesGetNotices(
   		const previousPageElement = document.createElement('button');
   		previousPageElement.classList.add('previous');
   		previousPageElement.textContent = 'Previous';
-  		previousPageElement.onclick = () => freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, locale, past, future, ascending );
+  		previousPageElement.onclick = () => {
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, locale, past, future, ascending );
+			  container.scrollIntoView(true, { behavior: 'smooth' });
+  		}
   		paginationContainer.appendChild(previousPageElement);
   	}
 
@@ -154,11 +157,12 @@ function freedamWebNoticesGetNotices(
   		const previousPageElement = document.createElement('button');
   		previousPageElement.classList.add('next');
   		previousPageElement.textContent = 'Next';
-  		previousPageElement.onclick = () => freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, locale, past, future, ascending );
+  		previousPageElement.onclick = () => {
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, locale, past, future, ascending );
+			  container.scrollIntoView(true, { behavior: 'smooth' });
+  		}
   		paginationContainer.appendChild(previousPageElement);
   	}
-
-  container.scrollIntoView(true, { behavior: 'smooth' });
 
   } )
 	.catch( err => {
