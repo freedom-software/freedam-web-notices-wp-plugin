@@ -40,20 +40,36 @@ you put the stable version, in order to eliminate any doubt.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Place `[freedam-web-notices]` in your a Shortcode block on a page
   Or in a template `<?php echo do_shortcode("[freedam-web-notices]"); ?>`
+4. Add the ApiKey to the plugin's settings
 
 == Frequently Asked Questions ==
 
+= How do I customize the plugin settings =
+
+1. From the Admin section, navigate to the "settings" sub-menu "FreeDAM Web Notices"
+2. Adjust the listed settings to your liking
+3. Press "Save Changes"
+
 = How do I style the web-notices =
 
-1. Add the custom css to your themes "Aditional CSS".
-2. From the Admin section, navigate to Appearance > Themes
-3. Click "Customize" on your active theme
-4. Select "Additional CSS"
-5. Write your styles. The main elements that can be targeted are:
+Add the custom css to your theme's "Aditional CSS".
+1. From the Admin section, navigate to Appearance > Customize
+2. Navigate to a page with the plugin's shortcode
+3. Select "Additional CSS"
+4. Write your styles. The main elements that can be targeted are:
   - freedam-web-notices-container
   - ul.freedam-web-notices
   - li.freedam-web-notice
-  Any other elements are from your own custom template, specified in the plugin's settings
+Any other elements are from your own custom template, specified in the plugin's settings
+
+= No web notices are displaying where I added the Shortcode block =
+
+Make sure your have an ApiKey added to the plugin's settings. This ApiKey will be sourced by Freedom Software as it's how our API is able to authorize your access and identify which of our clients to pull the data from.
+
+Make sure your FreeDAM Datebase is online and avaliable to the internet. Good way to check this is if you can access your data from the FreeDAM Online Interface (web app).
+
+Make sure there are "published" web-notices in your database. Cases are not automatcially available to the web-notices system. A web-notice needs to be created for a case, this is so you can customize the information that will showen to the public. Finally the web-notice needs to be "published" by enabling the checkbox on the sae page you made the web-notice.
+
 
 == Screenshots ==
 
