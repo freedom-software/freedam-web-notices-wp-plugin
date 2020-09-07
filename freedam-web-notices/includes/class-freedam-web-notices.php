@@ -6,7 +6,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://github.com/Aidan-Chey
+ * @link       https://github.com/freedom-software
  * @since      1.0.0
  *
  * @package    Freedam_Web_Notices

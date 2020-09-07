@@ -3,7 +3,7 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://github.com/Aidan-Chey
+ * @link       https://github.com/freedom-software
  * @since      1.0.0
  *
  * @package    Freedam_Web_Notices

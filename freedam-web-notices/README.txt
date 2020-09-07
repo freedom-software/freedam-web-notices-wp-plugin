@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: aidanchey
-Donate link: https://github.com/Aidan-Chey
+Donate link: https://github.com/freedom-software
 Tags: FreeDAM, funeral, notices
 Requires at least: 3.0.1
 Tested up to: 3.4

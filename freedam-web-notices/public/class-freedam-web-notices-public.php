@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://github.com/Aidan-Chey
+ * @link       https://github.com/freedom-software
  * @since      1.0.0
  *
  * @package    Freedam_Web_Notices

@@ -8,7 +8,7 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://github.com/Aidan-Chey
+ * @link              https://github.com/freedom-software
  * @since             1.0.0
  * @package           Freedam_Web_Notices
  *
@@ -18,7 +18,7 @@
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
  * Version:           1.0.0
  * Author:            Aidan Dunn
- * Author URI:        https://github.com/Aidan-Chey
+ * Author URI:        https://github.com/freedom-software
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       freedam-web-notices

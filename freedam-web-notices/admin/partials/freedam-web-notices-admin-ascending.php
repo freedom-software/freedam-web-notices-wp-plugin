@@ -5,7 +5,7 @@
  *
  * This file is used to markup the admin-facing field for the ascending
  *
- * @link       https://github.com/Aidan-Chey
+ * @link       https://github.com/freedom-software
  * @since      1.0.0
  *
  * @package    Freedam_Web_Notices
