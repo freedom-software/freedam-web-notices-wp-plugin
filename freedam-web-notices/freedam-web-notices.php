@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       FreeDAM Web Notices
- * Plugin URI:        -
+ * Plugin URI:        https://wordpress.org/plugins/freedam-web-notices
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
  * Version:           1.0.0
  * Author:            Aidan Dunn
