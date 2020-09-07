@@ -22,7 +22,7 @@
  * @since      1.0.0
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/includes
- * @author     Aidan Dunn <aidancheyd@gmail.com>
+ * @author     Freedom Software <support@freedomsoftware.co.nz>
  */
 class Freedam_Web_Notices_i18n {
 

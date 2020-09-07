@@ -19,7 +19,7 @@
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/includes
- * @author     Aidan Dunn <aidancheyd@gmail.com>
+ * @author     Freedom Software <support@freedomsoftware.co.nz>
  */
 class Freedam_Web_Notices_Loader {
 

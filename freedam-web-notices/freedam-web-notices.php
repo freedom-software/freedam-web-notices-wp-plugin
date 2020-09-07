@@ -17,8 +17,8 @@
  * Plugin URI:        https://wordpress.org/plugins/freedam-web-notices
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
  * Version:           1.0.0
- * Author:            Aidan Dunn
- * Author URI:        https://github.com/freedom-software
+ * Author:            Freedom Software
+ * Author URI:        https://freedomsoftware.co.nz
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       freedam-web-notices
