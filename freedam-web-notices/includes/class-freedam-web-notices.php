@@ -86,8 +86,6 @@ class Freedam_Web_Notices {
 			'template' => file_get_contents(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/freedam-web-notices-template-default.html'),
 			'nulls' => false,
 			'pagesize' => 10,
-			'past' => null,
-			'future' => null,
 			'ascending' => false
 		);
 

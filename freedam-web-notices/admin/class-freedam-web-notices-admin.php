@@ -446,7 +446,7 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_template( $var ) {
-		return htmlentities(stripslashes($var));
+		return esc_html($var);
 	}
 
 	/**

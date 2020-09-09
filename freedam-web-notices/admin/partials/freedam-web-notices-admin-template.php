@@ -12,7 +12,7 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name, $this->defaults['template'] );
+  $value = html_entity_decode(get_option($option_name));
 ?>
 
 <textarea
