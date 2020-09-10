@@ -28,7 +28,7 @@ The third-party service's address is `api.freedam.co.nz` and will be making use 
 
 For information on the endpoint itself visit: https://api.freedam.co.nz/web-notices.def
 
-Our terms of use:
+Link to our terms of use:
 
 For enquires about usage of the third-party service or obtaining an API Key to gain access to the service, please contact Freedom Software via:
  * Website: https://freedomsoftware.co.nz/contact-us/
@@ -69,7 +69,24 @@ Any other elements are from your own custom template, specified in the plugin's 
  * Make sure your **FreeDAM Database is online** and available to the internet. Good way to check this is if you can access your data from the FreeDAM Online Interface (web app).
  * Make sure there are **published** web-notices in your database. Cases are not automatically available to the web-notices system. A web-notice needs to be created for a case; this is so you can customize the information that will show to the public. Finally, the web-notice needs to be "published" by enabling the checkbox on the same page you made the web-notice.
 
+= What tokens can I use in my web-notice template =
+
+The web-notice template consists of a collection of HTML and tokens.
+
+The plugin uses this template as the skeleton for constructing the individual web-notices by replacing the tokens with data returned by the API service.
+
+Tokens consist of opening characters (`{{`), a keyword (`deceased-name-title`) and closing characters (`}}`).
+
+Token keywords are in a format that is easy for the script to find your intended data. For example, `deceased-name-title` indicates to use the deceased's title in the name node.
+
+To find what keywords are available for use in the template, reference the example of the "success" exit in the endpoint's definition: https://api.freedam.co.nz/web-notices.def
+
 == Changelog ==
+
+= 1.1 =
+* Readme improvements
+* Adds ability to customize funeral date/time format
+* Adjusted the layout of settings, separating them into sections
 
 = 1.0 =
 * Initial stable version
