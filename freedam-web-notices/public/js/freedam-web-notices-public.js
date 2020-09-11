@@ -54,6 +54,11 @@ function freedamWebNoticesGetNotices(
         // Matches strings between open and close mostache
         const regexp = RegExp(`(?<=${open})(.*?)(?=${close})`,'g');
         const matches = template.matchAll(regexp);
+
+        const item = document.createElement('li');
+        item.classList.add('freedam-web-notice');
+        const toHide = [];
+
         let output = template;
 
         // Iterate over template token matches backwards as to not mess up indexes when replacing
@@ -61,11 +66,13 @@ function freedamWebNoticesGetNotices(
           /** @type {string} found token */
           const token = match[0];
           /** @type {string[]} token split into notice object path */
-          const path = token.split('.');
+          const path = token.split('-');
           /** @type {any} Value for template token from notice data */
           let value = notice;
           // update value until reached value at end of token path
           for (let i in path) value = value[path[i]];
+          // hide elements with token class
+          if ( !value && (value !== 0 && value !== false) ) toHide.push(token);
           // convert value to a string for use in HTML
           if ( path.includes('dateTime') ) value = new Date(value).toLocaleString(locale);
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
@@ -76,9 +83,10 @@ function freedamWebNoticesGetNotices(
         }
 
         // Add converted template with notice data to container
-        const item = document.createElement('li');
-        item.classList.add('freedam-web-notice');
         item.innerHTML = output;
+
+        if ( toHide.length ) toHide.forEach( token => { hideElementsByClass( item, token ) } );
+
         outputContainer.appendChild(item);
 
       } );
@@ -137,4 +145,14 @@ function freedamWebNoticesGetNotices(
     console.error('Error while retrieveing web-notices from FreeDAM | ',err);
   } );
 
+}
+
+/** Adds style to elements with a certian class */
+function hideElementsByClass( container, className ) {
+  const elements = container.querySelectorAll( '.' + className );
+  for (var i = elements.length - 1; i >= 0; i--) {
+    const element = elements[i];
+    const style = element.style;
+    if ( style.getPropertyValue('display') !== 'none' ) style.setProperty('display','none','important');
+  }
 }
