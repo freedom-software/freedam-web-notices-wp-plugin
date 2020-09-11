@@ -13,14 +13,14 @@
  */
 ?>
 
-<h5>Activating the Plugin</h5>
+<h4>Activating the Plugin</h4>
 <p>Activate the plugin. This will allow you to then configure the options.</p>
 <img style="border: 1px solid hsl(210deg 14% 89%);" src="assets/activate.png" height="148" width="994"/>
 <br><br>
 <p>Once activated go to the setting - FreeDAM Web Notices Section</p>
 <img style="border: 1px solid hsl(210deg 14% 89%);" src="assets/settings.png" height="351" width="159"/>
 <hr>
-<h5>Settings section</h5>
+<h4>Settings section</h4>
 <p>Enter the API Key that you have been allocated from Freedom Software.</p>
 <p>Enter the number of notices to display on a page.</p>
 <p>Choose when to stop showing the notice for the past and future. This is by entering the number of days. <br>
@@ -30,7 +30,7 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to stop showin
 
 
 <hr>
-<h5>Ensure there are some notices to display</h5>
+<h4>Ensure there are some notices to display</h4>
 <p>In the FreeDAM program users will have to mark some funerals as 'Publish to Website'. This is done in the 'Our website' section of FreeDAM.
     <br>Freedom Software are able to assist with this by contacting and instructiong the client, if required.</p>
 <img style="border: 1px solid hsl(210deg 14% 89%);" src="assets/freedam-our-website2.png" height="319" width="500"/>
@@ -38,7 +38,7 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to stop showin
 <p>The fields that are on this FreeDAM screen will self populate from the FreeDAM data. This allows the users to adjust the data that
 will display on their website without changing their original data.</p>
 <hr>
-<h5>Adding the plugin to a page</h5>
+<h4>Adding the plugin to a page</h4>
 <ul>
     <li>Create a page to display the web</li>
     <li>Add a block to the page to contain the web notices(1)</li>
@@ -53,9 +53,9 @@ will display on their website without changing their original data.</p>
 
 
 <hr>
-<h5>Date Format / Rules</h5>
+<h4>Date Format / Rules</h4>
 <p>Choose the date and time formats that are required for the funeral, birth and death dates.</p>
-<h5>Hiding data</h5>
+<h4>Hiding data</h4>
 <p>Not all fields that you use in the template may always be populated. The maiden name is an example of this.</p>
 <p>You are able to 'hide' elements in the template by giving that element a class name that is the same as the data name.
     <br>
@@ -65,7 +65,7 @@ If you have an element that is a label 'Maiden Name:' that would normally displa
 </p>
 
 <hr>
-<h5>Notice Template</h5>
+<h4>Notice Template</h4>
 <p>This is where you are able to construct the layout of each notice.</p>
 <p>Insert a data name inside {{double curly brackets}} to display the FreeDAM date required.</p>
 <p><strong>A list of the available fields are listed here in the documentation.</strong></p>
@@ -74,7 +74,7 @@ If you have an element that is a label 'Maiden Name:' that would normally displa
 
 
 <hr>
-<h5>Adjusting the CSS</h5>
+<h4>Adjusting the CSS</h4>
 <p>Once you have web notices displaying on a page, go to that page and choose 'Customise' from the top wordpress menu.</p>
 <img style="border: 1px solid hsl(210deg 14% 89%);" src="assets/customise.png" height="185" width="638"/>
 <br><br>
