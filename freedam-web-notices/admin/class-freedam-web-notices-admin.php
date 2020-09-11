@@ -58,6 +58,12 @@ class Freedam_Web_Notices_Admin {
 	 */
 	protected $defaults;
 
+	private $settings_section_name;
+	private $formats_section_name;
+	private $template_section_name;
+	private $instructions_section_name;
+	private $settings_page_name;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -71,6 +77,16 @@ class Freedam_Web_Notices_Admin {
 		$this->version = $version;
 		$this->defaults = $defaults;
 
+		$this->settings_section_name = $this->option_name . '_settings';
+		$this->settings_options_group = $this->option_name . '_settings_options';
+		$this->formats_section_name = $this->option_name . '_formats';
+		$this->formats_options_group = $this->option_name . '_formats_options';
+		$this->template_section_name = $this->option_name . '_template';
+		$this->template_options_group = $this->option_name . '_template_options';
+		$this->instructions_section_name = $this->option_name . '_instructions';
+		$this->instructions_options_group = $this->option_name . '_instructions_options';
+		$this->settings_page_name = $this->plugin_name;
+
 	}
 
 	/**
@@ -81,10 +97,10 @@ class Freedam_Web_Notices_Admin {
 	public function add_options_page() {
 
 		$this->plugin_screen_hook_suffix = add_options_page(
-			__( 'FreeDAM Web Notices Settings', 'freedam-web-notices' ),
-			__( 'FreeDAM Web Notices', 'freedam-web-notices' ),
+			__( 'FreeDAM Web Notices', $this->plugin_name ),
+			__( 'FreeDAM Web Notices', $this->plugin_name ),
 			'manage_options',
-			$this->plugin_name,
+			$this->settings_page_name,
 			array( $this, 'display_options_page' )
 		);
 
@@ -106,8 +122,27 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function register_settings() {
 
+		// Add a Settings section
+		add_settings_section(
+			$this->settings_section_name,
+			__( 'Settings', $this->$plugin_name ),
+			array( $this, $this->option_name . '_settings_section_cb' ),
+			$this->settings_options_group
+		);
+		// Add setting for API Key
+		add_settings_field(
+			$this->option_name . '_apikey',
+			__( 'API Key', $this->$plugin_name ),
+			array( $this, $this->option_name . '_apikey_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_apikey',
+				'title' => 'Used by the plugin to authenticate with and identify the database to retrieve the web-notices from'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_apikey',
 			array(
 				'type' => 'string',
@@ -116,8 +151,20 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for page size
+		add_settings_field(
+			$this->option_name . '_pagesize',
+			__( 'Page Size', $this->$plugin_name ),
+			array( $this, $this->option_name . '_pagesize_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_pagesize',
+				'title' => 'Number of notices to show per page'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_pagesize',
 			array(
 				'type' => 'integer',
@@ -127,30 +174,64 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for after past
+		add_settings_field(
+			$this->option_name . '_past',
+			__( 'Limit by days in the past', $this->$plugin_name ),
+			array( $this, $this->option_name . '_past_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_past',
+				'title' => 'Only show notices with funeral dates after this many days in the past'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_past',
 			array(
 				'type' => 'integer',
 				'description' => 'Limits how old web-notices can be to be included',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
-				'default' => $this->defaults['past']
 			)
 		);
 
+		// Add setting for before future
+		add_settings_field(
+			$this->option_name . '_future',
+			__( 'Limit by day in the future', $this->$plugin_name ),
+			array( $this, $this->option_name . '_future_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_future',
+				'title' => 'Only show notices with funeral dates before this many days in the future'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_future',
 			array(
 				'type' => 'integer',
 				'description' => 'Limits how new web-notices can be to be included',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
-				'default' => $this->defaults['future']
 			)
 		);
 
+		// Add setting for nulls
+		add_settings_field(
+			$this->option_name . '_nulls',
+			__( 'Include notices without date & time', $this->$plugin_name ),
+			array( $this, $this->option_name . '_nulls_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_nulls',
+				'title' => 'Whether notices that don\'t have a funeral date/time should be included in results'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_nulls',
 			array(
 				'type' => 'boolean',
@@ -160,8 +241,20 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for ascending order
+		add_settings_field(
+			$this->option_name . '_ascending',
+			__( 'Order notices ascending', $this->$plugin_name ),
+			array( $this, $this->option_name . '_ascending_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_ascending',
+				'title' => 'Whether notices results should be ordered by oldest first'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->settings_options_group,
 			$this->option_name . '_ascending',
 			array(
 				'type' => 'boolean',
@@ -171,8 +264,36 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add a Formats section
+		add_settings_section(
+			$this->formats_section_name,
+			__( 'Date Formats / Rules', $this->$plugin_name ),
+			array( $this, $this->option_name . '_formats_section_cb' ),
+			$this->formats_options_group
+		);
+
+		// Add a Template section
+		add_settings_section(
+			$this->template_section_name,
+			__( 'Notice Template', $this->$plugin_name ),
+			array( $this, $this->option_name . '_template_section_cb' ),
+			$this->template_options_group
+		);
+
+		// Add setting for template
+		add_settings_field(
+			$this->option_name . '_template',
+			__( 'Notice Template', $this->$plugin_name ),
+			array( $this, $this->option_name . '_template_cb' ),
+			$this->template_options_group,
+			$this->template_section_name,
+			array(
+				'label_for' => $this->option_name . '_template',
+				'title' => 'Customize the layout of individual notices'
+			)
+		);
 		register_setting(
-			$this->plugin_name,
+			$this->template_options_group,
 			$this->option_name . '_template',
 			array(
 				'type' => 'string',
@@ -182,121 +303,54 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
-		/**
-		 * Name of the genral section the admin setting are in
-		 *
-		 * @since  1.0.0
-		 */
-		$section_name = $this->option_name . '_general';
-
-		// Add a General section
+		// Add a Instructions section
 		add_settings_section(
-			$section_name,
-			__( 'General', $this->$plugin_name ),
-			array( $this, $this->option_name . '_general_cb' ),
-			$this->plugin_name
+			$this->instructions_section_name,
+			__( 'Instructions', $this->$plugin_name ),
+			array( $this, $this->option_name . '_instructions_section_cb' ),
+			$this->instructions_options_group
 		);
 
-		// Add setting for API Key
-		add_settings_field(
-			$this->option_name . '_apikey',
-			__( 'API Key', $this->$plugin_name ),
-			array( $this, $this->option_name . '_apikey_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_apikey',
-				'title' => 'Used by the plugin to authenticate with and identify the database to retrieve the web-notices from'
-			)
-		);
 
-		// Add setting for page size
-		add_settings_field(
-			$this->option_name . '_pagesize',
-			__( 'Page Size', $this->$plugin_name ),
-			array( $this, $this->option_name . '_pagesize_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_pagesize',
-				'title' => 'Number of notices to show per page'
-			)
-		);
 
-		// Add setting for after past
-		add_settings_field(
-			$this->option_name . '_past',
-			__( 'Limit by days in the past', $this->$plugin_name ),
-			array( $this, $this->option_name . '_past_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_past',
-				'title' => 'Only show notices with funeral dates after this many days in the past'
-			)
-		);
 
-		// Add setting for before future
-		add_settings_field(
-			$this->option_name . '_future',
-			__( 'Limit by day in the future', $this->$plugin_name ),
-			array( $this, $this->option_name . '_future_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_future',
-				'title' => 'Only show notices with funeral dates before this many days in the future'
-			)
-		);
 
-		// Add setting for nulls
-		add_settings_field(
-			$this->option_name . '_nulls',
-			__( 'Include notices without date & time', $this->$plugin_name ),
-			array( $this, $this->option_name . '_nulls_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_nulls',
-				'title' => 'Whether notices that don\'t have a funeral date/time should be included in results'
-			)
-		);
 
-		// Add setting for nulls
-		add_settings_field(
-			$this->option_name . '_ascending',
-			__( 'Order notices ascending', $this->$plugin_name ),
-			array( $this, $this->option_name . '_ascending_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_ascending',
-				'title' => 'Whether notices results should be ordered by oldest first'
-			)
-		);
 
-		// Add setting for template
-		add_settings_field(
-			$this->option_name . '_template',
-			__( 'Notice Template', $this->$plugin_name ),
-			array( $this, $this->option_name . '_template_cb' ),
-			$this->plugin_name,
-			$section_name,
-			array(
-				'label_for' => $this->option_name . '_template',
-				'title' => 'Customize the layout of individual notices'
-			)
-		);
+
+
+
 
 	}
+
+	/**
+	 * Render the text for the settings section
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_settings_section_cb() {}
+
+	/**
+	 * Render the text for the formats section
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_formats_section_cb() {}
+
+	/**
+	 * Render the text for the template section
+	 *
+	 * @since  1.0.0
+	 */
+	public function freedam_web_notices_template_section_cb() {}
 
 	/**
 	 * Render the text for the general section
 	 *
 	 * @since  1.0.0
 	 */
-	public function freedam_web_notices_general_cb() {
-		echo '<p>' . __( 'Please change the settings accordingly.', 'freedam-web-notices' ) . '</p>';
+	public function freedam_web_notices_instructions_section_cb() {
+		include_once 'partials/freedam-web-notices-admin-instructions.php';
 	}
 
 	/**

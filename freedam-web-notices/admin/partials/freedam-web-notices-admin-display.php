@@ -11,16 +11,53 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
+
+  $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'settings';
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
   <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+
+  <h3 class="nav-tab-wrapper">
+    <a
+      href="?page=<?php echo $this->settings_page_name; ?>&tab=settings"
+      class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : '' ?>"
+    >Settings</a>
+    <a
+      href="?page=<?php echo $this->settings_page_name; ?>&tab=formats"
+      class="nav-tab <?php echo $active_tab === 'formats' ? 'nav-tab-active' : '' ?>"
+    >Date Formats / Rules</a>
+    <a
+      href="?page=<?php echo $this->settings_page_name; ?>&tab=template"
+      class="nav-tab <?php echo $active_tab === 'template' ? 'nav-tab-active' : '' ?>"
+    >Notice Template</a>
+    <a
+      href="?page=<?php echo $this->settings_page_name; ?>&tab=instructions"
+      class="nav-tab <?php echo $active_tab === 'instructions' ? 'nav-tab-active' : '' ?>"
+    >Instructions</a>
+  </h3>
+
   <form action="options.php" method="post">
     <?php
-      settings_fields( $this->plugin_name );
-      do_settings_sections( $this->plugin_name );
+      switch ($active_tab) {
+        case 'instructions':
+          do_settings_sections( $this->instructions_options_group );
+          break;
+        case 'template':
+          settings_fields( $this->template_options_group );
+          do_settings_sections( $this->template_options_group );
+          break;
+        case 'formats':
+          settings_fields( $this->formats_options_group );
+          do_settings_sections( $this->formats_options_group );
+          break;
+        default:
+          settings_fields( $this->settings_options_group );
+          do_settings_sections( $this->settings_options_group );
+          break;
+      }
       submit_button();
     ?>
   </form>
