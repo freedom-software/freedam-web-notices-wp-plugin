@@ -86,7 +86,11 @@ class Freedam_Web_Notices {
 			'template' => file_get_contents(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/freedam-web-notices-template-default.html'),
 			'nulls' => false,
 			'pagesize' => 10,
-			'ascending' => false
+			'ascending' => false,
+			'funeraldate' => 'dddd, Do MMMM YYYY',
+			'funeraltime' => 'h:mm a',
+			'birthdate' => 'dddd, Do MMMM YYYY',
+			'deathdate' => 'dddd, Do MMMM YYYY',
 		);
 
 		$this->load_dependencies();

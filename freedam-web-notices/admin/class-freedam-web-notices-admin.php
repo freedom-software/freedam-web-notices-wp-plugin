@@ -272,6 +272,94 @@ class Freedam_Web_Notices_Admin {
 			$this->formats_options_group
 		);
 
+		// Add setting for funeral date
+		add_settings_field(
+			$this->option_name . '_funeral_date',
+			__( 'Funeral Date', $this->$plugin_name ),
+			array( $this, $this->option_name . '_funeral_date_cb' ),
+			$this->formats_options_group,
+			$this->formats_section_name,
+			array(
+				'label_for' => $this->option_name . '_funeral_date',
+				'title' => 'Format the funeral date should be displayed in'
+			)
+		);
+		register_setting(
+			$this->formats_options_group,
+			$this->option_name . '_funeral_date',
+			array(
+				'type' => 'string',
+				'description' => 'Format the funeral date should be displayed in',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+			)
+		);
+
+		// Add setting for funeral time
+		add_settings_field(
+			$this->option_name . '_funeral_time',
+			__( 'Funeral Time', $this->$plugin_name ),
+			array( $this, $this->option_name . '_funeral_time_cb' ),
+			$this->formats_options_group,
+			$this->formats_section_name,
+			array(
+				'label_for' => $this->option_name . '_funeral_time',
+				'title' => 'Format the funeral time should be displayed in'
+			)
+		);
+		register_setting(
+			$this->formats_options_group,
+			$this->option_name . '_funeral_time',
+			array(
+				'type' => 'string',
+				'description' => 'Format the funeral time should be displayed in',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+			)
+		);
+
+		// Add setting for birth date
+		add_settings_field(
+			$this->option_name . '_birth_date',
+			__( 'Birth Date', $this->$plugin_name ),
+			array( $this, $this->option_name . '_birth_date_cb' ),
+			$this->formats_options_group,
+			$this->formats_section_name,
+			array(
+				'label_for' => $this->option_name . '_birth_date',
+				'title' => 'Format the birth date should be displayed in'
+			)
+		);
+		register_setting(
+			$this->formats_options_group,
+			$this->option_name . '_birth_date',
+			array(
+				'type' => 'string',
+				'description' => 'Format the birth date should be displayed in',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+			)
+		);
+
+		// Add setting for death date
+		add_settings_field(
+			$this->option_name . '_death_date',
+			__( 'Death Date', $this->$plugin_name ),
+			array( $this, $this->option_name . '_death_date_cb' ),
+			$this->formats_options_group,
+			$this->formats_section_name,
+			array(
+				'label_for' => $this->option_name . '_death_date',
+				'title' => 'Format the death date should be displayed in'
+			)
+		);
+		register_setting(
+			$this->formats_options_group,
+			$this->option_name . '_death_date',
+			array(
+				'type' => 'string',
+				'description' => 'Format the death date should be displayed in',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+			)
+		);
+
 		// Add a Template section
 		add_settings_section(
 			$this->template_section_name,
@@ -407,6 +495,42 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
+	 * Render the select field for funeral date format
+	 *
+	 * @since  1.1.0
+	 */
+	public function freedam_web_notices_funeral_date_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-funeral-date.php';
+	}
+
+	/**
+	 * Render the select field for funeral time format
+	 *
+	 * @since  1.1.0
+	 */
+	public function freedam_web_notices_funeral_time_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-funeral-time.php';
+	}
+
+	/**
+	 * Render the select field for birth date format
+	 *
+	 * @since  1.1.0
+	 */
+	public function freedam_web_notices_birth_date_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-birth-date.php';
+	}
+
+	/**
+	 * Render the select field for death date format
+	 *
+	 * @since  1.1.0
+	 */
+	public function freedam_web_notices_death_date_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-death-date.php';
+	}
+
+	/**
 	 * Sanitize the api key value before being saved to database
 	 *
 	 * Checks if value is a 128 length string and only contains alpha-numerics
@@ -480,6 +604,22 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_boolean( $var ) {
 		return $this->is_true( $var );
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is a string of reasonable length
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.1.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_select_format( $var ) {
+		if ( !is_string($var) ) return null;
+		$length = strlen($var);
+		if ( $length < 1 || $length < 50 ) return null;
+		return esc_attr($var);
 	}
 
 	/**
