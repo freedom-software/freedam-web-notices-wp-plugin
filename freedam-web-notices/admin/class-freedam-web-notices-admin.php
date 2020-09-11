@@ -244,7 +244,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for ascending order
 		add_settings_field(
 			$this->option_name . '_ascending',
-			__( 'Order notices ascending', $this->$plugin_name ),
+			__( 'Oldest notices first', $this->$plugin_name ),
 			array( $this, $this->option_name . '_ascending_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -310,16 +310,6 @@ class Freedam_Web_Notices_Admin {
 			array( $this, $this->option_name . '_instructions_section_cb' ),
 			$this->instructions_options_group
 		);
-
-
-
-
-
-
-
-
-
-
 
 	}
 
