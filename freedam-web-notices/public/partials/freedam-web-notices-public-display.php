@@ -41,8 +41,8 @@
     const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
     const pageSize = <?php echo is_int($page_size) ? $page_size : $this->defaults['pagesize'] ?>;
     const template = `<?php echo strlen($template) > 0 ? $template : $this->defaults['template'] ?>`;
-    const past = <?php echo is_int($days_past) ? $days_past : 'null' ?>;
-    const future = <?php echo is_int($days_future) ? $days_future : 'null' ?>;
+    const past = <?php echo empty($days_past) ? 'null' : $days_past ?>;
+    const future = <?php echo empty($days_future) ? 'null' : $days_future ?>;
     const ascending = <?php echo $ascending ? 'true' : 'false' ?>;
     const funeralDateFormat = '<?php echo strlen($funeral_date) > 0 ? $funeral_date : $this->defaults['funeraldate'] ?>';
     const funeralTimeFormat = '<?php echo strlen($funeral_time) > 0 ? $funeral_time : $this->defaults['funeraltime'] ?>';
