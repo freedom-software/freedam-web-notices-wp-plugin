@@ -52,7 +52,7 @@ class Freedam_Web_Notices_Public {
 	/**
 	 * Address to the FreeDAM API
 	 */
-	protected $freedam_api_address = 'https://api.freedam.co.nz';
+	protected $freedam_api_address;
 
 	/**
 	 * Endpoint in FreeDAM API to retrieve web notices
@@ -66,11 +66,12 @@ class Freedam_Web_Notices_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $defaults ) {
+	public function __construct( $plugin_name, $version, $defaults, $freedam_api_address ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->defaults = $defaults;
+		$this->freedam_api_address = $freedam_api_address;
 
 	}
 

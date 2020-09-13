@@ -71,11 +71,12 @@ class Freedam_Web_Notices_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $defaults ) {
+	public function __construct( $plugin_name, $version, $defaults, $freedam_api_address ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->defaults = $defaults;
+		$this->freedam_api_address = $freedam_api_address;
 
 		$this->settings_section_name = $this->option_name . '_settings';
 		$this->settings_options_group = $this->option_name . '_settings_options';

@@ -67,6 +67,11 @@ class Freedam_Web_Notices {
 	protected $defaults;
 
 	/**
+	 * Address to the FreeDAM API
+	 */
+	protected $freedam_api_address = 'https://api.freedam.co.nz';
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -171,7 +176,7 @@ class Freedam_Web_Notices {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version(), $this->defaults );
+		$plugin_admin = new Freedam_Web_Notices_Admin( $this->get_plugin_name(), $this->get_version(), $this->defaults, $this->freedam_api_address );
 
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_options_page' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
@@ -187,7 +192,7 @@ class Freedam_Web_Notices {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Freedam_Web_Notices_Public( $this->get_plugin_name(), $this->get_version(), $this->defaults );
+		$plugin_public = new Freedam_Web_Notices_Public( $this->get_plugin_name(), $this->get_version(), $this->defaults, $this->freedam_api_address );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
