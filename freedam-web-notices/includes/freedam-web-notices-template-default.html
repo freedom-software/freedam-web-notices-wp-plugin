@@ -1,4 +1,12 @@
-<h3>{{deceased-name-last}} - {{deceased-name-first}} ({{deceased-age}})</h3>
-<p>{{tributeText}}</p>
-<p><label>Funeral: </label>{{funeral-dateTime}}</p>
-<p><label>Venue: </label>{{venue-name}}<br>{{venue-street}} {{venue-city}} {{venue-state}}</p>
+<h3>
+  <span class="deceased-name-last">{{deceased-name-last}}</span><span class="deceased-name-first"> - {{deceased-name-first}}</span>
+  <span class="deceased-name-maiden"> ({{deceased-name-maiden}})</span>
+</h3>
+<p class="deceased-deathDate"><span>{{deceased-birthDate}}</span> - <span>{{deceased-deathDate}}</span></p>
+<p class="tributeText">{{tributeText}}</p>
+<p class="funeral-dateTime"><label>Funeral: </label>{{funeral-dateTime}}</p>
+<p class="venue-street">
+  <label>Venue:</label>
+  <div class="venue-name">{{venue-name}}</div>
+  <div>{{venue-street}}<span class="venue-city"> {{venue-city}}</span><span class="venue-state"> {{venue-state}}</span></div>
+</p>
