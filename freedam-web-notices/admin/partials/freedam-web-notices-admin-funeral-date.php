@@ -12,21 +12,16 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name );
+  $value = get_option( $option_name, $this->defaults['funeraldate'] );
 ?>
 <select
   name="<?php echo esc_attr( $option_name ); ?>"
   id="<?php echo esc_attr( $option_name ); ?>"
-  value="<?php echo esc_attr( $value ); ?>"
   aria-describedby="birth-description"
 >
-  <option value="dddd, Do MMMM YYYY">Wednesday, 23th September 2020</option>
-  <option value="ddd Do MMMM YYYY">Wed 23th September 2020</option>
-  <option value="Do MMMM YYYY">23th September 2020</option>
-  <option value="Do MMM YYYY">23th Sept 2020</option>
-  <option value="D MMMM YYYY">23 Sept 2020</option>
-  <option value="D/M/YYYY">23/9/2020</option>
-  <option value="YYYY-MM-DD">2020-09-23</option>
+<?php foreach ($this->options_funeral_date as $entry) {
+  echo '<option '.selected( $value, $entry['value'], false ).' value="'.$entry['value'].'">'.$entry['label'].'</option>';
+} ?>
 </select>
 <p
   class="description"

@@ -12,17 +12,16 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name );
+  $value = get_option( $option_name, $this->defaults['funeraltime'] );
 ?>
 <select
   name="<?php echo esc_attr( $option_name ); ?>"
   id="<?php echo esc_attr( $option_name ); ?>"
-  value="<?php echo esc_attr( $value ); ?>"
   aria-describedby="birth-description"
 >
-  <option value="h:mm a">1:00 pm</option>
-  <option value="h:mm A">1:00 PM</option>
-  <option value="HH:mm">13:00</option>
+<?php foreach ($this->options_funeral_time as $entry) {
+  echo '<option '.selected( $value, $entry['value'], false ).' value="'.$entry['value'].'">'.$entry['label'].'</option>';
+} ?>
 </select>
 <p
   class="description"

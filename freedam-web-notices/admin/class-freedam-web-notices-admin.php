@@ -64,6 +64,11 @@ class Freedam_Web_Notices_Admin {
 	private $instructions_section_name;
 	private $settings_page_name;
 
+	private $options_funeral_date;
+	private $options_funeral_time;
+	private $options_brith_date;
+	private $options_death_date;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -87,6 +92,43 @@ class Freedam_Web_Notices_Admin {
 		$this->instructions_section_name = $this->option_name . '_instructions';
 		$this->instructions_options_group = $this->option_name . '_instructions_options';
 		$this->settings_page_name = $this->plugin_name;
+
+		$this->options_funeral_date = array(
+			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Wednesday, 23th September 2020' ),
+			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Wed 23th September 2020' ),
+			array( 'value' => 'Do MMMM YYYY', 'label' => '23th September 2020' ),
+			array( 'value' => 'Do MMM YYYY', 'label' => '23th Sept 2020' ),
+			array( 'value' => 'D MMMM YYYY', 'label' => '23 Sept 2020' ),
+			array( 'value' => 'D/M/YYYY', 'label' => '23/9/2020' ),
+			array( 'value' => 'YYYY-MM-DD', 'label' => '2020-09-23' ),
+		);
+		$this->options_funeral_time = array(
+			array( 'value' => 'h:mm a', 'label' => '1:00 pm' ),
+			array( 'value' => 'h:mm A', 'label' => '1:00 PM' ),
+			array( 'value' => 'HH:mm', 'label' => '13:00' ),
+		);
+		$this->options_brith_date = array(
+			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Monday, 17rd January 1972' ),
+			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Mon 17rd January 1972' ),
+			array( 'value' => 'Do MMMM YYYY', 'label' => '17rd January 1972' ),
+			array( 'value' => 'Do MMM YYYY', 'label' => '17rd Jan 1972' ),
+			array( 'value' => 'D MMMM YYYY', 'label' => '17 Sept 1972' ),
+			array( 'value' => 'D.M.YYYY', 'label' => '17.1.1972' ),
+			array( 'value' => 'D/M/YYYY', 'label' => '17/1/1972' ),
+			array( 'value' => 'YYYY-MM-DD', 'label' => '1972-1-17' ),
+			array( 'value' => 'YYYY', 'label' => '1972' ),
+		);
+		$this->options_death_date = array(
+			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Wednesday, 23th September 2020' ),
+			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Wed 23th September 2020' ),
+			array( 'value' => 'Do MMMM YYYY', 'label' => '23th September 2020' ),
+			array( 'value' => 'Do MMM YYYY', 'label' => '23th Sept 2020' ),
+			array( 'value' => 'D MMMM YYYY', 'label' => '23 Sept 2020' ),
+			array( 'value' => 'D.M.YYYY', 'label' => '23.9.2020' ),
+			array( 'value' => 'D/M/YYYY', 'label' => '23/9/2020' ),
+			array( 'value' => 'YYYY-MM-DD', 'label' => '2020-09-23' ),
+			array( 'value' => 'YYYY', 'label' => '2020' ),
+		);
 
 	}
 

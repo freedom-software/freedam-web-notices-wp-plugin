@@ -12,23 +12,16 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option( $option_name );
+  $value = get_option( $option_name, $this->defaults['birthdate'] );
 ?>
 <select
   name="<?php echo esc_attr( $option_name ); ?>"
   id="<?php echo esc_attr( $option_name ); ?>"
-  value="<?php echo esc_attr( $value ); ?>"
   aria-describedby="birth-description"
 >
-  <option value="dddd, Do MMMM YYYY">Monday, 17rd January 1972</option>
-  <option value="ddd Do MMMM YYYY">Mon 17rd January 1972</option>
-  <option value="Do MMMM YYYY">17rd January 1972</option>
-  <option value="Do MMM YYYY">17rd Jan 1972</option>
-  <option value="D MMMM YYYY">17 Sept 1972</option>
-  <option value="D.M.YYYY">17.1.1972</option>
-  <option value="D/M/YYYY">17/1/1972</option>
-  <option value="YYYY-MM-DD">1972-1-17</option>
-  <option value="YYYY">1972</option>
+<?php foreach ($this->options_brith_date as $entry) {
+  echo '<option '.selected( $value, $entry['value'], false ).' value="'.$entry['value'].'">'.$entry['label'].'</option>';
+} ?>
 </select>
 <p
   class="description"
