@@ -7,10 +7,13 @@ function freedamWebNoticesGetNotices(
 	page = 1,
 	pageSize = 10,
 	nulls = false,
-	locale = 'en-NZ',
 	past = null,
 	future = null,
-	ascending = false
+	ascending = false,
+  funeralDateFormat = 'l',
+  funeralTimeFormat = 'LT',
+  brithDateFormat = 'l',
+  deathDateFormat = 'l'
 ) {
   // Add params to address
   url.searchParams.set('apiKey', apiKey);
@@ -38,7 +41,7 @@ function freedamWebNoticesGetNotices(
     .then( response => response.status === 200 ? response.json() : [] )
     .catch( err => {
       console.error('Error while retrieveing web-notices from FreeDAM | ',err);
-    } );
+    } )
     .then( data => {
 
       // Find or create container for fetch result
@@ -77,7 +80,9 @@ function freedamWebNoticesGetNotices(
           // hide elements with token class
           if ( !value && (value !== 0 && value !== false) ) toHide.push(token);
           // convert value to a string for use in HTML
-          if ( path.includes('dateTime') ) value = new Date(value).toLocaleString(locale);
+          if ( path.includes('funeral') && path.includes('dateTime') ) value = moment(value).format( funeralDateFormat + ' ' + funeralTimeFormat );
+          else if ( path.includes('deceased') && path.includes('birthDate') ) value = moment(value).format( brithDateFormat );
+          else if ( path.includes('deceased') && path.includes('deathDate') ) value = moment(value).format( deathDateFormat );
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
           // Insert value, replacing token and encapsulating mostache ('{{'&'}}')
           const beforeToken = output.substring(0,match.index-2);
@@ -118,7 +123,7 @@ function freedamWebNoticesGetNotices(
   		previousPageElement.classList.add('previous');
   		previousPageElement.textContent = 'Previous';
   		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, locale, past, future, ascending );
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, brithDateFormat, deathDateFormat );
 			  container.scrollIntoView(true, { behavior: 'smooth' });
   		}
   		paginationContainer.appendChild(previousPageElement);
@@ -137,7 +142,7 @@ function freedamWebNoticesGetNotices(
   		previousPageElement.classList.add('next');
   		previousPageElement.textContent = 'Next';
   		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, locale, past, future, ascending );
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, brithDateFormat, deathDateFormat );
 			  container.scrollIntoView(true, { behavior: 'smooth' });
   		}
   		paginationContainer.appendChild(previousPageElement);
