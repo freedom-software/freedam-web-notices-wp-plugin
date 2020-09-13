@@ -36,6 +36,9 @@ function freedamWebNoticesGetNotices(
   // begin fetch request for web notices
   fetch( url )
     .then( response => response.status === 200 ? response.json() : [] )
+    .catch( err => {
+      console.error('Error while retrieveing web-notices from FreeDAM | ',err);
+    } );
     .then( data => {
 
       // Find or create container for fetch result
@@ -141,8 +144,8 @@ function freedamWebNoticesGetNotices(
   	}
 
   } )
-	.catch( err => {
-    console.error('Error while retrieveing web-notices from FreeDAM | ',err);
+  .catch( err => {
+    console.error('Error while displaying web-notices on page | ',err);
   } );
 
 }
