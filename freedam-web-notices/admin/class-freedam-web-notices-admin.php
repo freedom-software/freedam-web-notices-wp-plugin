@@ -661,7 +661,7 @@ class Freedam_Web_Notices_Admin {
 	public function freedam_web_notices_sanitize_select_format( $var ) {
 		if ( !is_string($var) ) return null;
 		$length = strlen($var);
-		if ( $length < 1 || $length < 50 ) return null;
+		if ( $length < 1 || $length > 50 ) return null;
 		return esc_attr($var);
 	}
 
