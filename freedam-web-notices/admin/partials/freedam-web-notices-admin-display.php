@@ -48,6 +48,7 @@
         case 'template':
           settings_fields( $this->template_options_group );
           do_settings_sections( $this->template_options_group );
+          include_once( 'freedam-web-notices-admin-template-tokens.php' );
           submit_button();
           break;
         case 'formats':
