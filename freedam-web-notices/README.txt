@@ -1,7 +1,7 @@
 === Plugin Name ===
-Contributors: aidanchey, freedomsoftware
+Contributors: freedomsoftware, aidanchey
 Donate link: https://freedomsoftware.co.nz
-Tags: FreeDAM, funeral, notices
+Tags: FreeDAM, funeral, notices, web-notices, freedomsoftware, freedom-software
 Requires at least: 3.0.1
 Tested up to: 5.4.2
 Stable tag: 1.0.10
@@ -20,26 +20,26 @@ Pick how many web notices to display on a page and create restrictions on what d
 
 == Third-Party Service Usage ==
 
-This plugin makes requests to a third-party service (Freedom Software API). This plugin will make use of a couple of the endpoints made available to the public by the service.
+This plugin makes requests to a third-party service (Freedom Software API). It use a couple of the endpoints made available to the public by the service.
 
 *This service (and by extension, the plugin) is intended for use by **Freedom Software clients only** and would not be of use to anyone that doesn't have a FreeDAM database.*
 
-The third-party service's address is `api.freedam.co.nz` and will be making use the `web-notices` endpoint via "https://api.freedam.co.nz/web-notices".
+The third-party service's address is `api.freedam.co.nz` and will be making use of the `web-notices` endpoint via "https://api.freedam.co.nz/web-notices".
 
 For information on the endpoint itself visit: https://api.freedam.co.nz/web-notices.def
 
-Link to our terms of use:
+Link to our terms of service: https://api.freedam.co.nz/terms-of-service
 
 For enquires about usage of the third-party service or obtaining an API Key to gain access to the service, please contact Freedom Software via:
- * Website: https://freedomsoftware.co.nz/contact-us/
  * Email: support@freedomsoftware.co.nz
+ * Website: https://freedomsoftware.co.nz/contact-us/
 
 == Installation ==
 
 1. Upload `freedam-web-notices` folder to the `/wp-content/plugins/` directory.
-2. Activate the plugin through the **Plugins** menu in the WordPress **Admin** section.
-3. Add your supplied FreeDAM database **API Key** to the plugin's settings page, located under the **Settings** sub-menu in the Admin section.
-4. Place `[freedam-web-notices]` in your a **Shortcode block** on a page. Should be possible to add directly to a theme by adding `<?php echo do_shortcode("[freedam-web-notices]"); ?>`.
+1. Activate the plugin through the **Plugins** menu in the WordPress **Admin** section.
+1. Add your supplied FreeDAM database **API Key** to the plugin's settings page, located under the **Settings** sub-menu in the Admin section.
+1. Place `[freedam-web-notices]` in your a **Shortcode block** on a page. Should be possible to add directly to a theme by adding `<?php echo do_shortcode("[freedam-web-notices]"); ?>`.
 
 == Frequently Asked Questions ==
 
@@ -79,7 +79,7 @@ Tokens consist of opening characters (`{{`), a keyword (`deceased-name-title`) a
 
 Token keywords are in a format that is easy for the script to find your intended data. For example, `deceased-name-title` indicates to use the deceased's title in the name node.
 
-To find what keywords are available for use in the template, reference the example of the "success" exit in the endpoint's definition: https://api.freedam.co.nz/web-notices.def
+To find what keywords are available for use in the template, reference the example of the "success" exit in the [endpoint's definition](https://api.freedam.co.nz/web-notices.def)
 
 == Changelog ==
 
