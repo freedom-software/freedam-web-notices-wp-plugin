@@ -12,7 +12,7 @@ function freedamWebNoticesGetNotices(
 	ascending = false,
   funeralDateFormat = 'l',
   funeralTimeFormat = 'LT',
-  brithDateFormat = 'l',
+  birthDateFormat = 'l',
   deathDateFormat = 'l'
 ) {
   // Add params to address
@@ -81,7 +81,7 @@ function freedamWebNoticesGetNotices(
           if ( !value && (value !== 0 && value !== false) ) toHide.push(token);
           // convert value to a string for use in HTML
           if ( path.includes('funeral') && path.includes('dateTime') ) value = moment(value).format( funeralDateFormat + ' ' + funeralTimeFormat );
-          else if ( path.includes('deceased') && path.includes('birthDate') ) value = moment(value).format( brithDateFormat );
+          else if ( path.includes('deceased') && path.includes('birthDate') ) value = moment(value).format( birthDateFormat );
           else if ( path.includes('deceased') && path.includes('deathDate') ) value = moment(value).format( deathDateFormat );
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
           // Insert value, replacing token and encapsulating mostache ('{{'&'}}')
@@ -123,7 +123,7 @@ function freedamWebNoticesGetNotices(
   		previousPageElement.classList.add('previous');
   		previousPageElement.textContent = 'Previous';
   		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, brithDateFormat, deathDateFormat );
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
 			  container.scrollIntoView(true, { behavior: 'smooth' });
   		}
   		paginationContainer.appendChild(previousPageElement);
@@ -142,7 +142,7 @@ function freedamWebNoticesGetNotices(
   		previousPageElement.classList.add('next');
   		previousPageElement.textContent = 'Next';
   		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, brithDateFormat, deathDateFormat );
+  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
 			  container.scrollIntoView(true, { behavior: 'smooth' });
   		}
   		paginationContainer.appendChild(previousPageElement);

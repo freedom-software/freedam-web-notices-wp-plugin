@@ -66,7 +66,7 @@ class Freedam_Web_Notices_Admin {
 
 	private $options_funeral_date;
 	private $options_funeral_time;
-	private $options_brith_date;
+	private $options_birth_date;
 	private $options_death_date;
 
 	/**
@@ -107,7 +107,7 @@ class Freedam_Web_Notices_Admin {
 			array( 'value' => 'h:mm A', 'label' => '1:00 PM' ),
 			array( 'value' => 'HH:mm', 'label' => '13:00' ),
 		);
-		$this->options_brith_date = array(
+		$this->options_birth_date = array(
 			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Monday, 17rd January 1972' ),
 			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Mon 17rd January 1972' ),
 			array( 'value' => 'Do MMMM YYYY', 'label' => '17rd January 1972' ),
