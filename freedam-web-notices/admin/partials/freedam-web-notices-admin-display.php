@@ -48,17 +48,19 @@
         case 'template':
           settings_fields( $this->template_options_group );
           do_settings_sections( $this->template_options_group );
+          submit_button();
           break;
         case 'formats':
           settings_fields( $this->formats_options_group );
           do_settings_sections( $this->formats_options_group );
+          submit_button();
           break;
         default:
           settings_fields( $this->settings_options_group );
           do_settings_sections( $this->settings_options_group );
+          submit_button();
           break;
       }
-      submit_button();
     ?>
   </form>
 </div>
