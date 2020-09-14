@@ -94,40 +94,40 @@ class Freedam_Web_Notices_Admin {
 		$this->settings_page_name = $this->plugin_name;
 
 		$this->options_funeral_date = array(
-			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Wednesday, 23th September 2020' ),
-			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Wed 23th September 2020' ),
-			array( 'value' => 'Do MMMM YYYY', 'label' => '23th September 2020' ),
-			array( 'value' => 'Do MMM YYYY', 'label' => '23th Sept 2020' ),
-			array( 'value' => 'D MMMM YYYY', 'label' => '23 Sept 2020' ),
-			array( 'value' => 'D/M/YYYY', 'label' => '23/9/2020' ),
-			array( 'value' => 'YYYY-MM-DD', 'label' => '2020-09-23' ),
+			'dddd, Do MMMM YYYY' => 'Wednesday, 23th September 2020',
+			'ddd Do MMMM YYYY' => 'Wed 23th September 2020',
+			'Do MMMM YYYY' => '23th September 2020',
+			'Do MMM YYYY' => '23th Sept 2020',
+			'D MMMM YYYY' => '23 Sept 2020',
+			'D/M/YYYY' => '23/9/2020',
+			'YYYY-MM-DD' => '2020-09-23',
 		);
 		$this->options_funeral_time = array(
-			array( 'value' => 'h:mm a', 'label' => '1:00 pm' ),
-			array( 'value' => 'h:mm A', 'label' => '1:00 PM' ),
-			array( 'value' => 'HH:mm', 'label' => '13:00' ),
+			'h:mm a' => '1:00 pm',
+			'h:mm A' => '1:00 PM',
+			'HH:mm' => '13:00',
 		);
 		$this->options_birth_date = array(
-			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Monday, 17rd January 1972' ),
-			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Mon 17rd January 1972' ),
-			array( 'value' => 'Do MMMM YYYY', 'label' => '17rd January 1972' ),
-			array( 'value' => 'Do MMM YYYY', 'label' => '17rd Jan 1972' ),
-			array( 'value' => 'D MMMM YYYY', 'label' => '17 Sept 1972' ),
-			array( 'value' => 'D.M.YYYY', 'label' => '17.1.1972' ),
-			array( 'value' => 'D/M/YYYY', 'label' => '17/1/1972' ),
-			array( 'value' => 'YYYY-MM-DD', 'label' => '1972-1-17' ),
-			array( 'value' => 'YYYY', 'label' => '1972' ),
+			'dddd, Do MMMM YYYY' => 'Monday, 17rd January 1972',
+			'ddd Do MMMM YYYY' => 'Mon 17rd January 1972',
+			'Do MMMM YYYY' => '17rd January 1972',
+			'Do MMM YYYY' => '17rd Jan 1972',
+			'D MMMM YYYY' => '17 Sept 1972',
+			'D.M.YYYY' => '17.1.1972',
+			'D/M/YYYY' => '17/1/1972',
+			'YYYY-MM-DD' => '1972-1-17',
+			'YYYY' => '1972',
 		);
 		$this->options_death_date = array(
-			array( 'value' => 'dddd, Do MMMM YYYY', 'label' => 'Wednesday, 23th September 2020' ),
-			array( 'value' => 'ddd Do MMMM YYYY', 'label' => 'Wed 23th September 2020' ),
-			array( 'value' => 'Do MMMM YYYY', 'label' => '23th September 2020' ),
-			array( 'value' => 'Do MMM YYYY', 'label' => '23th Sept 2020' ),
-			array( 'value' => 'D MMMM YYYY', 'label' => '23 Sept 2020' ),
-			array( 'value' => 'D.M.YYYY', 'label' => '23.9.2020' ),
-			array( 'value' => 'D/M/YYYY', 'label' => '23/9/2020' ),
-			array( 'value' => 'YYYY-MM-DD', 'label' => '2020-09-23' ),
-			array( 'value' => 'YYYY', 'label' => '2020' ),
+			'dddd, Do MMMM YYYY' => 'Wednesday, 23th September 2020',
+			'ddd Do MMMM YYYY' => 'Wed 23th September 2020',
+			'Do MMMM YYYY' => '23th September 2020',
+			'Do MMM YYYY' => '23th Sept 2020',
+			'D MMMM YYYY' => '23 Sept 2020',
+			'D.M.YYYY' => '23.9.2020',
+			'D/M/YYYY' => '23/9/2020',
+			'YYYY-MM-DD' => '2020-09-23',
+			'YYYY' => '2020',
 		);
 
 	}
@@ -333,7 +333,7 @@ class Freedam_Web_Notices_Admin {
 			array(
 				'type' => 'string',
 				'description' => 'Format the funeral date should be displayed in',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_funeral_date' ),
 			)
 		);
 
@@ -355,7 +355,7 @@ class Freedam_Web_Notices_Admin {
 			array(
 				'type' => 'string',
 				'description' => 'Format the funeral time should be displayed in',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_funeral_time' ),
 			)
 		);
 
@@ -377,7 +377,7 @@ class Freedam_Web_Notices_Admin {
 			array(
 				'type' => 'string',
 				'description' => 'Format the birth date should be displayed in',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_birth_date' ),
 			)
 		);
 
@@ -399,7 +399,7 @@ class Freedam_Web_Notices_Admin {
 			array(
 				'type' => 'string',
 				'description' => 'Format the death date should be displayed in',
-				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_select_format' ),
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_death_date' ),
 			)
 		);
 
@@ -650,18 +650,58 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
-	 * Sanitize the select format value before being saved to database
+	 * Sanitize the funeral date value before being saved to database
 	 *
-	 * Checks if value is a string of reasonable length
+	 * Checks if value is in the list of options
 	 *
 	 * @param  string $var $_POST value
 	 * @since  1.1.0
 	 * @return boolean           Sanitized value
 	 */
-	public function freedam_web_notices_sanitize_select_format( $var ) {
-		if ( !is_string($var) ) return null;
-		$length = strlen($var);
-		if ( $length < 1 || $length > 50 ) return null;
+	public function freedam_web_notices_sanitize_funeral_date( $var ) {
+		if ( !array_key_exists($var, $this->options_funeral_date) ) return null;
+		return esc_attr($var);
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is in the list of options
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.1.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_funeral_time( $var ) {
+		if ( !array_key_exists($var, $this->options_funeral_time) ) return null;
+		return esc_attr($var);
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is in the list of options
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.1.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_birth_date( $var ) {
+		if ( !array_key_exists($var, $this->options_birth_date) ) return null;
+		return esc_attr($var);
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is in the list of options
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.1.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_death_date( $var ) {
+		if ( !array_key_exists($var, $this->options_death_date) ) return null;
 		return esc_attr($var);
 	}
 

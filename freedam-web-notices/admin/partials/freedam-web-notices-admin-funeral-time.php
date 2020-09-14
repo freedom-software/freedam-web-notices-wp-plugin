@@ -19,8 +19,8 @@
   id="<?php echo esc_attr( $option_name ); ?>"
   aria-describedby="birth-description"
 >
-<?php foreach ($this->options_funeral_time as $entry) {
-  echo '<option '.selected( $value, $entry['value'], false ).' value="'.$entry['value'].'">'.$entry['label'].'</option>';
+<?php foreach ($this->options_funeral_time as $key => $example) {
+  echo '<option '.selected( $value, $key, false ).' value="'.$key.'">'.$example.'</option>';
 } ?>
 </select>
 <p
