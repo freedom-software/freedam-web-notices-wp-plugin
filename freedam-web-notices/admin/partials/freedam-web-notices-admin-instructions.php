@@ -15,10 +15,10 @@
 
 <h3>Activating the Plugin</h3>
 <p>Activate the plugin. This will allow you to then configure the options.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/activate.png'; ?>" height="148" width="994"/>
+<img loading="lazy" alt="Demonstration of how to active the plugin" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/activate.png'; ?>" height="148" width="994"/>
 <br><br>
 <p>Once activated go to the setting - FreeDAM Web Notices Section</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/settings.png'; ?>" height="351" width="159"/>
+<img loading="lazy" alt="Demonstration of where to find the plugin settings" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/settings.png'; ?>" height="351" width="159"/>
 <hr>
 <h3>Settings section</h3>
 <p>Enter the API Key that you have been allocated from Freedom Software.</p>
@@ -30,7 +30,7 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to stop showin
 <hr>
 <h3>Ensure there are some notices to display</h3>
 <p>In the FreeDAM program users will have to mark some funerals as 'Publish to Website'. This is done in the 'Our website' section of FreeDAM.<br>Freedom Software can assist with this by contacting and instructing the client, if required.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/freedam-our-website2.png'; ?>" height="319" width="500"/>
+<img loading="lazy" alt="Demonstration of how to generate notices" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/freedam-our-website2.png'; ?>" height="319" width="500"/>
 <p>The fields that are on this FreeDAM screen will self-populate from the FreeDAM data. This allows the users to adjust the data that will display on their website without changing their original data.</p>
 <hr>
 <h3>Adding the plugin to a page</h3>
@@ -40,11 +40,9 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to stop showin
   <li>Search for 'Shortcode' in the add block dialog (2)</li>
   <li>Select the 'Shortcode' block (3)</li>
 </ul>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/addtopage.png'; ?>" height="242" width="500"/>
-<br><br>
+<img loading="lazy" alt="Demonstration of how to add plugin output to a page" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/addtopage.png'; ?>" height="242" width="500"/>
 <p>Inside the shortcode block enter [freedam-web-notices] and update the page.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/shortcodeblock.png'; ?>" height="182" width="500"/>
-<br><br>
+<img loading="lazy" alt="Demonstration of the plugin shortcode" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/shortcodeblock.png'; ?>" height="182" width="500"/>
 <hr>
 <h3>Date Format / Rules</h3>
 <p>Choose the date and time formats that are required for the funeral, birth and death dates.</p>
@@ -61,14 +59,11 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to stop showin
 <hr>
 <h3>Adjusting the CSS</h3>
 <p>Once you have web notices displaying on a page, go to that page and choose 'Customise' from the top WordPress menu.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/customise.png'; ?>" height="185" width="638"/>
-<br><br>
+<img loading="lazy" alt="Demonstration of how to customize a page" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/customise.png'; ?>" height="185" width="638"/>
 <p>Choose 'Additional CSS from the menu.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/additionalcss.png'; ?>" height="187" width="296"/>
-<br><br>
+<img loading="lazy" alt="Demonstration of how to add CSS to the theme" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/additionalcss.png'; ?>" height="187" width="296"/>
 <p>Target the elements you wish and create the appropriate CSS.</p>
-<img style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/additionalcss2.png'; ?>" height="311" width="290"/>
-<br><br>
+<img loading="lazy" alt="Demonstration of what custom CSS for a web-notice may look like" style="border: 1px solid hsl(210deg 14% 89%);" src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'assets/additionalcss2.png'; ?>" height="311" width="290"/>
 <p>Click 'Publish' once you are done.</p>
 <p>Remember you can create a class in the notice template html and then use that class for targeting the required CSS.</p>
 <hr>
