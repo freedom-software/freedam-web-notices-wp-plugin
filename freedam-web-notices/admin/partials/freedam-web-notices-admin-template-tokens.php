@@ -11,9 +11,52 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
 
+  /** Loops through nested object adding keys to output array */
+  function add_keys( &$output, $input = array(), $parent = '' ) {
+    foreach ($input as $key => $value) {
+      $token = (strlen($parent) > 0 ? $parent . '-' : '') . $key;
+      if ( gettype($value) === 'object' ) add_keys( $output, $value, $token );
+      else $output[$token] = $value;
+    }
+  }
+
   $response = wp_remote_get( $this->freedam_api_address . '/web-notices.def' );
   $definition = json_decode($response['body']);
+  $example = $definition->exits->success->outputExample[0];
+  $tokens = array();
 
-  var_dump($definition->exits->success->outputExample[0]);
+  add_keys($tokens, $example);
 
 ?>
+
+<style>
+  .template-examples {
+    border-collapse: collapse;
+  }
+  .template-examples td:first-child,
+  .template-examples th:first-child {
+    white-space: nowrap; border-right: 1px solid black;
+  }
+  .template-examples tr:not(:last-child) {
+    border-bottom: 1px solid black;
+  }
+</style>
+
+<h2>Token Examples</h2>
+<p>These are tokens that can be used in the notice template that will be converted to matching data from the web-notice</p>
+<table class="template-examples">
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($tokens as $token => $value) { ?>
+    <tr>
+      <td><?php echo esc_html($token) ?></td>
+      <td><?php echo esc_html($value) ?></td>
+    </tr>
+  <?php } ?>
+  </tbody>
+</table>
