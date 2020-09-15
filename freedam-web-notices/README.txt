@@ -19,7 +19,7 @@ Enter your API Key linked to your specific database to authorize yourself agains
 Notices are paginated, giving the ability to move through the notices via next & previous buttons.
 
 = Note =
-Some level of HTML and CSS knowledge is expected inorder to customize the layout and appearance of the notices.
+Some level of HTML and CSS knowledge is expected to customize the layout and appearance of the notices.
 
 == Third-Party Service Usage ==
 This plugin makes requests to a third-party service (Freedom Software API). It uses the service to retrieve your FreeDAM web-notices from your FreeDAM database.
@@ -83,7 +83,7 @@ The notice template consists of a collection of HTML and tokens. The plugin uses
 
 Tokens consist of opening characters (`{{`), a keyword (`deceased-name-title`) and closing characters (`}}`). Token keywords are in a format that is easy for the script to find your intended data. For example, `deceased-name-title` indicates to use the deceased's title from the name node.
 
-To find what keywords are available for use in the template, reference the example of the "success" exit in the [endpoint's definition](https://api.freedam.co.nz/web-notices.def). Aditionally there is a table of accepted tokens below the notice template editing form.
+To find what keywords are available for use in the template, reference the example of the "success" exit in the [endpoint's definition](https://api.freedam.co.nz/web-notices.def). Additionally, there is a table of accepted tokens below the notice template editing form.
 
 = How can I hide sections of a notice if there is no data =
 We have built in a system to the notice generator to help with this issue. It identifies class-names in the template, matching tokens in the template, adding styles the elements to hide them if the associated token has nothing to display.
@@ -92,7 +92,7 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Select the "Notice Template" navigation tab along the top of the page.
 1. Adjust the HTML in the template textarea.
   2. Identify the element you wish to hide when the data is empty.
-  2. Identify the token in the template that the hidding action is dependant on.
+  2. Identify the token in the template that the hiding action is dependent on.
   2. Add a class name to the identified element that matches the identified token (`class="deceased-name-maiden"`).
 1. Press "Save Changes".
 
@@ -102,7 +102,7 @@ We have built in a system to the notice generator to help with this issue. It id
 * Readme improvements
 * Adds ability to customize funeral date/time format
 * Adjusted the layout of settings, separating them into tabs
-* Adds ability to hide template section based on token data avaliablility
+* Adds ability to hide template section based on token data availability
 * Adds an "Instructions" tab to settings page
 
 = 1.0 =
