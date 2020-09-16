@@ -583,9 +583,8 @@ class Freedam_Web_Notices_Admin {
 	 * @return string           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_apikey( $apikey ) {
-		$sanitizedValue = sanitize_text_field($apiKey);
-		$invalid_length = !(strlen($sanitizedValue) === 0 || strlen($sanitizedValue) === 128);
-		$invalid_content = preg_match('/[^a-z0-9]/', $sanitizedValue);
+		$invalid_length = !(strlen($apikey) === 0 || strlen($apikey) === 128);
+		$invalid_content = preg_match('/[^a-z0-9]/', $apikey);
 
 		if ( $invalid_length || $invalid_content ) {
 
@@ -608,7 +607,7 @@ class Freedam_Web_Notices_Admin {
 			return;
 	  }
 
-	  return $sanitizedValue;
+	  return $apikey;
 	}
 
 	/**
