@@ -579,12 +579,13 @@ class Freedam_Web_Notices_Admin {
 	 * Checks if value is a 128 length string and only contains alpha-numerics
 	 *
 	 * @param  string $apikey $_POST value
-	 * @since  1.0.0
+	 * @since  1.1.1
 	 * @return string           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_apikey( $apikey ) {
-		$invalid_length = !(strlen($apikey) === 0 || strlen($apikey) === 128);
-		$invalid_content = preg_match('/[^a-z0-9]/', $apikey);
+		$sanitizedValue = sanitize_text_field($apiKey);
+		$invalid_length = !(strlen($sanitizedValue) === 0 || strlen($sanitizedValue) === 128);
+		$invalid_content = preg_match('/[^a-z0-9]/', $sanitizedValue);
 
 		if ( $invalid_length || $invalid_content ) {
 
@@ -607,7 +608,7 @@ class Freedam_Web_Notices_Admin {
 			return;
 	  }
 
-	  return $apikey;
+	  return $sanitizedValue;
 	}
 
 	/**
@@ -655,12 +656,12 @@ class Freedam_Web_Notices_Admin {
 	 * Checks if value is in the list of options
 	 *
 	 * @param  string $var $_POST value
-	 * @since  1.1.0
+	 * @since  1.1.1
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_funeral_date( $var ) {
 		if ( !array_key_exists($var, $this->options_funeral_date) ) return null;
-		return esc_attr($var);
+		return sanitize_text_field($var);
 	}
 
 	/**
@@ -669,12 +670,12 @@ class Freedam_Web_Notices_Admin {
 	 * Checks if value is in the list of options
 	 *
 	 * @param  string $var $_POST value
-	 * @since  1.1.0
+	 * @since  1.1.1
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_funeral_time( $var ) {
 		if ( !array_key_exists($var, $this->options_funeral_time) ) return null;
-		return esc_attr($var);
+		return sanitize_text_field($var);
 	}
 
 	/**
@@ -683,12 +684,12 @@ class Freedam_Web_Notices_Admin {
 	 * Checks if value is in the list of options
 	 *
 	 * @param  string $var $_POST value
-	 * @since  1.1.0
+	 * @since  1.1.1
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_birth_date( $var ) {
 		if ( !array_key_exists($var, $this->options_birth_date) ) return null;
-		return esc_attr($var);
+		return sanitize_text_field($var);
 	}
 
 	/**
@@ -697,12 +698,12 @@ class Freedam_Web_Notices_Admin {
 	 * Checks if value is in the list of options
 	 *
 	 * @param  string $var $_POST value
-	 * @since  1.1.0
+	 * @since  1.1.1
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_death_date( $var ) {
 		if ( !array_key_exists($var, $this->options_death_date) ) return null;
-		return esc_attr($var);
+		return sanitize_text_field($var);
 	}
 
 	/**

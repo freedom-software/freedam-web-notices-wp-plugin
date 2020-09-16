@@ -6,13 +6,13 @@
  * This file is used to markup the admin-facing field for the notice template
  *
  * @link       https://github.com/freedom-software
- * @since      1.0.0
+ * @since      1.1.1
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = html_entity_decode(get_option($option_name));
+  $value = get_option($option_name);
 ?>
 
 <textarea
@@ -23,7 +23,7 @@
   rows="6"
   wrap="off"
   spellcheck="false"
-><?php echo (strlen($value) > 0 ? $value : $this->defaults['template']); ?></textarea>
+><?php echo (strlen($value) > 0 ? html_entity_decode($value) : $this->defaults['template']); ?></textarea>
 <p
   class="description"
   id="template-description"

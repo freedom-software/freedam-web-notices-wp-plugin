@@ -6,23 +6,23 @@
  * This file is used to markup the public-facing aspects of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.0.0
+ * @since      1.1.1
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/public/partials
  */
 
-  $api_key = get_option( 'freedam_web_notices_apikey' );
-  $nulls = get_option( 'freedam_web_notices_nulls', $this->defaults['nulls'] );
-  $page_size = get_option( 'freedam_web_notices_pagesize' );
-  $template = html_entity_decode(get_option( 'freedam_web_notices_template'));
-  $days_past = get_option( 'freedam_web_notices_past' );
-  $days_future = get_option( 'freedam_web_notices_future' );
-  $ascending = get_option( 'freedam_web_notices_ascending', $this->defaults['ascending'] );
-  $funeral_date = get_option( 'freedam_web_notices_funeral_date' );
-  $funeral_time = get_option( 'freedam_web_notices_funeral_time' );
-  $birth_date = get_option( 'freedam_web_notices_birth_date' );
-  $death_date = get_option( 'freedam_web_notices_death_date' );
+  $api_key = sanitize_text_field(get_option( 'freedam_web_notices_apikey' ));
+  $nulls = sanitize_text_field(get_option( 'freedam_web_notices_nulls', $this->defaults['nulls'] ));
+  $page_size = sanitize_text_field(get_option( 'freedam_web_notices_pagesize' ));
+  $template = sanitize_text_field(get_option( 'freedam_web_notices_template'));
+  $days_past = sanitize_text_field(get_option( 'freedam_web_notices_past' ));
+  $days_future = sanitize_text_field(get_option( 'freedam_web_notices_future' ));
+  $ascending = sanitize_text_field(get_option( 'freedam_web_notices_ascending', $this->defaults['ascending'] ));
+  $funeral_date = sanitize_text_field(get_option( 'freedam_web_notices_funeral_date' ));
+  $funeral_time = sanitize_text_field(get_option( 'freedam_web_notices_funeral_time' ));
+  $birth_date = sanitize_text_field(get_option( 'freedam_web_notices_birth_date' ));
+  $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
@@ -39,8 +39,8 @@
     const url = new URL('<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>');
     const apiKey = '<?php echo $api_key; ?>';
     const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
-    const pageSize = <?php echo is_int($page_size) ? $page_size : $this->defaults['pagesize'] ?>;
-    const template = `<?php echo strlen($template) > 0 ? $template : $this->defaults['template'] ?>`;
+    const pageSize = <?php echo empty($page_size) ? $this->defaults['pagesize'] : $page_size ?>;
+    const template = `<?php echo strlen($template) > 0 ? html_entity_decode($template) : $this->defaults['template'] ?>`;
     const past = <?php echo empty($days_past) ? 'null' : $days_past ?>;
     const future = <?php echo empty($days_future) ? 'null' : $days_future ?>;
     const ascending = <?php echo $ascending ? 'true' : 'false' ?>;

@@ -6,8 +6,7 @@
  * This file is used to markup the admin-facing field for the birth date format
  *
  * @link       https://github.com/freedom-software
- * @since      1.0.0
- *
+ * @since      1.1.1
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
@@ -20,7 +19,7 @@
   aria-describedby="birth-description"
 >
 <?php foreach ($this->options_funeral_date as $key => $example) {
-  echo '<option '.selected( $value, $key, false ).' value="'.$key.'">'.$example.'</option>';
+  echo '<option '.selected( $value, $key, false ).' value="'.esc_attr($key).'">'.esc_html($example).'</option>';
 } ?>
 </select>
 <p
