@@ -2,10 +2,10 @@
 Contributors: freedomsoftware, aidanchey
 Donate link: https://freedomsoftware.co.nz
 Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
-Requires at least: 3.0.1
-Requires PHP: 7.4
-Tested up to: 5.4.2
-Stable tag: 1.0.10
+Requires at least: 5.4.2
+Requires PHP: 7.2
+Tested up to: 5.5.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,10 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Press "Save Changes".
 
 == Changelog ==
+
+= 1.1.1 =
+* Test on WordPress 5.5.1
+* Improve sanatisation of data from user & database
 
 = 1.1 =
 * Readme improvements
