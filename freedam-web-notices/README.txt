@@ -100,7 +100,7 @@ We have built in a system to the notice generator to help with this issue. It id
 
 = 1.1.1 =
 * Test on WordPress 5.5.1
-* Improve sanatisation of data from user & database
+* Improve sanitation of data from user & database
 
 = 1.1 =
 * Readme improvements
