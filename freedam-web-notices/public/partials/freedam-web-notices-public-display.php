@@ -23,18 +23,18 @@
   $funeral_time = sanitize_text_field(get_option( 'freedam_web_notices_funeral_time' ));
   $birth_date = sanitize_text_field(get_option( 'freedam_web_notices_birth_date' ));
   $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
+
+  $unique_id = esc_attr( uniqid('freeam-web-notices-') );
+
+  // This file should primarily consist of HTML with a little bit of PHP.
 ?>
 
-<!-- This file should primarily consist of HTML with a little bit of PHP. -->
-
-<freedam-web-notices-container>
+<freedam-web-notices-container id="<?php echo $unique_id ?>">
 
   <script>
 
-    const container = document.currentScript.parentNode;
-    if ( !container ) {
-      throw new Error('Couldn\'t find container element to add FreeDAM web notices to');
-    }
+    let container = document.getElementById('<?php echo $unique_id ?>');
+    if ( !container || container.localName !== 'freedam-web-notices-container' ) throw new Error('Couldn\'t find container element to add FreeDAM web notices to');
 
     const url = new URL('<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>');
     const apiKey = '<?php echo $api_key; ?>';
@@ -49,14 +49,32 @@
     const birthDateFormat = '<?php echo strlen($birth_date) > 0 ? $birth_date : $this->defaults['birthdate'] ?>';
     const deathDateFormat = '<?php echo strlen($death_date) > 0 ? $death_date : $this->defaults['deathdate'] ?>';
 
-    function startFreedamWebnoticesGetNotices() {
-      freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
-    }
+    const loadScript = document.querySelector('#freedam-web-notices_public-js');
+    const dateScript = document.querySelector('#freedam-web-notices_moment-js');
 
-    const script = document.querySelector('#freedam-web-notices_public-js');
+    let appliedLoadListener = false;
+    let appliedDateListener = false;
+    let functionRan = false;
 
-    if ( typeof(freedamWebNoticesGetNotices) === 'function' ) startFreedamWebnoticesGetNotices();
-    else script.addEventListener('load', startFreedamWebnoticesGetNotices );
+    function freedamWebNoticesScriptsReady() {
+      if ( typeof(freedamWebNoticesGetNotices) === 'function' && typeof(moment) === 'function' ) {
+        if ( !functionRan ) {
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
+          functionRan = true;
+        }
+      } else {
+        if ( !appliedLoadListener ) {
+          loadScript.addEventListener('load', freedamWebNoticesScriptsReady, { once: true, passive: true } );
+          appliedLoadListener = true;
+        }
+        if ( !appliedDateListener ) {
+          dateScript.addEventListener('load', freedamWebNoticesScriptsReady, { once: true, passive: true } );
+          appliedDateListener = true;
+        }
+      }
+    };
+
+    freedamWebNoticesScriptsReady();
 
   </script>
 
