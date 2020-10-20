@@ -49,7 +49,14 @@
     const birthDateFormat = '<?php echo strlen($birth_date) > 0 ? $birth_date : $this->defaults['birthdate'] ?>';
     const deathDateFormat = '<?php echo strlen($death_date) > 0 ? $death_date : $this->defaults['deathdate'] ?>';
 
-    freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
+    function startFreedamWebnoticesGetNotices() {
+      freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
+    }
+
+    const script = document.querySelector('#freedam-web-notices_public-js');
+
+    if ( typeof(freedamWebNoticesGetNotices) === 'function' ) startFreedamWebnoticesGetNotices();
+    else script.addEventListener('load', startFreedamWebnoticesGetNotices );
 
   </script>
 
