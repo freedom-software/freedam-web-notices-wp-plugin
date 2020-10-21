@@ -6,12 +6,12 @@
  * This file is used to markup the admin-facing aspects of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.1.1
+ * @since      1.2.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
-  $paramTab = sanitize_text_field($_GET['tab']);
+  $paramTab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
   $active_tab = strlen($paramTab) > 0 ? $paramTab : 'settings';
 ?>
 

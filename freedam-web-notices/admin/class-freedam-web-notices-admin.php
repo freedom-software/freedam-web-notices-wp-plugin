@@ -68,6 +68,7 @@ class Freedam_Web_Notices_Admin {
 	private $options_funeral_time;
 	private $options_birth_date;
 	private $options_death_date;
+	private $options_date_type;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -129,6 +130,10 @@ class Freedam_Web_Notices_Admin {
 			'YYYY-MM-DD' => '2020-09-23',
 			'YYYY' => '2020',
 		);
+		$this->options_date_type = array(
+			'funeral' => 'Funeral',
+			'death' => 'Death',
+		);
 
 	}
 
@@ -161,21 +166,21 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
-	 * @since  1.0.0
+	 * @since  1.2.0
 	 */
 	public function register_settings() {
 
 		// Add a Settings section
 		add_settings_section(
 			$this->settings_section_name,
-			__( 'Settings', $this->$plugin_name ),
+			__( 'Settings', $this->plugin_name ),
 			array( $this, $this->option_name . '_settings_section_cb' ),
 			$this->settings_options_group
 		);
 		// Add setting for API Key
 		add_settings_field(
 			$this->option_name . '_apikey',
-			__( 'API Key', $this->$plugin_name ),
+			__( 'API Key', $this->plugin_name ),
 			array( $this, $this->option_name . '_apikey_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -197,7 +202,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for page size
 		add_settings_field(
 			$this->option_name . '_pagesize',
-			__( 'Page Size', $this->$plugin_name ),
+			__( 'Page Size', $this->plugin_name ),
 			array( $this, $this->option_name . '_pagesize_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -217,10 +222,33 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for date type
+		add_settings_field(
+			$this->option_name . '_date_type',
+			__( 'Sort by date', $this->plugin_name ),
+			array( $this, $this->option_name . '_date_type_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_date_type',
+				'title' => 'Type of date to use for sorting the web notices'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_date_type',
+			array(
+				'type' => 'string',
+				'description' => 'Type of date to use for sorting the web notices',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_date_type' ),
+				'default' => $this->defaults['date_type']
+			)
+		);
+
 		// Add setting for after past
 		add_settings_field(
 			$this->option_name . '_past',
-			__( 'Limit by days in the past', $this->$plugin_name ),
+			__( 'Limit by days in the past', $this->plugin_name ),
 			array( $this, $this->option_name . '_past_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -242,7 +270,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for before future
 		add_settings_field(
 			$this->option_name . '_future',
-			__( 'Limit by day in the future', $this->$plugin_name ),
+			__( 'Limit by day in the future', $this->plugin_name ),
 			array( $this, $this->option_name . '_future_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -264,7 +292,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for nulls
 		add_settings_field(
 			$this->option_name . '_nulls',
-			__( 'Include notices without date & time', $this->$plugin_name ),
+			__( 'Include notices without date & time', $this->plugin_name ),
 			array( $this, $this->option_name . '_nulls_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -284,10 +312,33 @@ class Freedam_Web_Notices_Admin {
 			)
 		);
 
+		// Add setting for search
+		add_settings_field(
+			$this->option_name . '_search',
+			__( 'Show search', $this->plugin_name ),
+			array( $this, $this->option_name . '_search_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_search',
+				'title' => 'Whether users should be given the option to search for web-notices'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_search',
+			array(
+				'type' => 'boolean',
+				'description' => 'Whether users should be given the option to search for web-notices',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
+				'default' => $this->defaults['search']
+			)
+		);
+
 		// Add setting for ascending order
 		add_settings_field(
 			$this->option_name . '_ascending',
-			__( 'Oldest notices first', $this->$plugin_name ),
+			__( 'Oldest notices first', $this->plugin_name ),
 			array( $this, $this->option_name . '_ascending_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
@@ -310,7 +361,7 @@ class Freedam_Web_Notices_Admin {
 		// Add a Formats section
 		add_settings_section(
 			$this->formats_section_name,
-			__( 'Date Formats / Rules', $this->$plugin_name ),
+			__( 'Date Formats / Rules', $this->plugin_name ),
 			array( $this, $this->option_name . '_formats_section_cb' ),
 			$this->formats_options_group
 		);
@@ -318,7 +369,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for funeral date
 		add_settings_field(
 			$this->option_name . '_funeral_date',
-			__( 'Funeral Date', $this->$plugin_name ),
+			__( 'Funeral Date', $this->plugin_name ),
 			array( $this, $this->option_name . '_funeral_date_cb' ),
 			$this->formats_options_group,
 			$this->formats_section_name,
@@ -340,7 +391,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for funeral time
 		add_settings_field(
 			$this->option_name . '_funeral_time',
-			__( 'Funeral Time', $this->$plugin_name ),
+			__( 'Funeral Time', $this->plugin_name ),
 			array( $this, $this->option_name . '_funeral_time_cb' ),
 			$this->formats_options_group,
 			$this->formats_section_name,
@@ -362,7 +413,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for birth date
 		add_settings_field(
 			$this->option_name . '_birth_date',
-			__( 'Birth Date', $this->$plugin_name ),
+			__( 'Birth Date', $this->plugin_name ),
 			array( $this, $this->option_name . '_birth_date_cb' ),
 			$this->formats_options_group,
 			$this->formats_section_name,
@@ -384,7 +435,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for death date
 		add_settings_field(
 			$this->option_name . '_death_date',
-			__( 'Death Date', $this->$plugin_name ),
+			__( 'Death Date', $this->plugin_name ),
 			array( $this, $this->option_name . '_death_date_cb' ),
 			$this->formats_options_group,
 			$this->formats_section_name,
@@ -406,7 +457,7 @@ class Freedam_Web_Notices_Admin {
 		// Add a Template section
 		add_settings_section(
 			$this->template_section_name,
-			__( 'Notice Template', $this->$plugin_name ),
+			__( 'Notice Template', $this->plugin_name ),
 			array( $this, $this->option_name . '_template_section_cb' ),
 			$this->template_options_group
 		);
@@ -414,7 +465,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for template
 		add_settings_field(
 			$this->option_name . '_template',
-			__( 'Notice Template', $this->$plugin_name ),
+			__( 'Notice Template', $this->plugin_name ),
 			array( $this, $this->option_name . '_template_cb' ),
 			$this->template_options_group,
 			$this->template_section_name,
@@ -437,7 +488,7 @@ class Freedam_Web_Notices_Admin {
 		// Add a Instructions section
 		add_settings_section(
 			$this->instructions_section_name,
-			__( 'Instructions', $this->$plugin_name ),
+			__( 'Instructions', $this->plugin_name ),
 			array( $this, $this->option_name . '_instructions_section_cb' ),
 			$this->instructions_options_group
 		);
@@ -499,6 +550,15 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_nulls_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-nulls.php';
+	}
+
+	/**
+	 * Render the checkbox input field for search
+	 *
+	 * @since  1.2.0
+	 */
+	public function freedam_web_notices_search_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-search.php';
 	}
 
 	/**
@@ -574,6 +634,15 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
+	 * Render the select field for date type format
+	 *
+	 * @since  1.2.0
+	 */
+	public function freedam_web_notices_date_type_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-date-type.php';
+	}
+
+	/**
 	 * Sanitize the api key value before being saved to database
 	 *
 	 * Checks if value is a 128 length string and only contains alpha-numerics
@@ -592,7 +661,7 @@ class Freedam_Web_Notices_Admin {
 		  	add_settings_error(
 		  		$this->option_name . '_apikey',
 		  		'apikey_length',
-		  		__( 'API Key must be 128 characters', $this->$plugin_name )
+		  		__( 'API Key must be 128 characters', $this->plugin_name )
 	  		);
 			}
 
@@ -600,7 +669,7 @@ class Freedam_Web_Notices_Admin {
 		  	add_settings_error(
 		  		$this->option_name . '_apikey',
 		  		'apikey_content',
-		  		__( 'API Key may only contain lowercase alpha-numeric characters', $this->$plugin_name )
+		  		__( 'API Key may only contain lowercase alpha-numeric characters', $this->plugin_name )
 	  		);
 			}
 
@@ -627,7 +696,7 @@ class Freedam_Web_Notices_Admin {
 			add_settings_error(
 	  		$this->option_name . '_pagesize',
 	  		'pagesize_content',
-	  		__( 'Page Size must between 1 and 100', $this->$plugin_name )
+	  		__( 'Page Size must between 1 and 100', $this->plugin_name )
 			);
 			return;
 		}
@@ -702,6 +771,20 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_death_date( $var ) {
 		if ( !array_key_exists($var, $this->options_death_date) ) return null;
+		return sanitize_text_field($var);
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is in the list of options
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.2.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_date_type( $var ) {
+		if ( !array_key_exists($var, $this->options_date_type) ) return null;
 		return sanitize_text_field($var);
 	}
 

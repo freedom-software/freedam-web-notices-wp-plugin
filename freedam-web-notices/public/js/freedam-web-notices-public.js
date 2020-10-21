@@ -7,42 +7,82 @@ function freedamWebNoticesGetNotices(
 	page = 1,
 	pageSize = 10,
 	nulls = false,
+  dateType = 'funeral',
 	past = null,
 	future = null,
 	ascending = false,
   funeralDateFormat = 'l',
   funeralTimeFormat = 'LT',
   birthDateFormat = 'l',
-  deathDateFormat = 'l'
+  deathDateFormat = 'l',
+  searchTerms = '',
+  searchEnabled = true,
+  scrollToTop = false
 ) {
   // Add params to address
-  url.searchParams.set('apiKey', apiKey);
-  url.searchParams.set('page', page);
-  url.searchParams.set('ascending', ascending);
-  if ( pageSize !== undefined ) url.searchParams.set('pageSize', pageSize );
-  if ( nulls !== undefined ) url.searchParams.set('nulls', nulls );
+  urlObject = new URL(url);
+  urlObject.searchParams.set('apiKey', apiKey);
+  urlObject.searchParams.set('page', page);
+  urlObject.searchParams.set('ascending', ascending);
+  if ( pageSize !== undefined ) urlObject.searchParams.set('pageSize', pageSize );
+  if ( nulls !== undefined ) urlObject.searchParams.set('nulls', nulls );
+  if ( !!dateType && typeof(dateType) === 'string' ) urlObject.searchParams.set('dateType', dateType);
+  if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) urlObject.searchParams.set('filterTerms', searchTerms );
   if ( !!past ) {
   	// Convert number of days in the past limiter to a date
   	const afterDate = new Date();
   	const afterDays = afterDate.getDate() - past;
   	afterDate.setDate(afterDays);
-  	url.searchParams.set('after', afterDate.toISOString() );
+  	urlObject.searchParams.set('after', afterDate.toISOString() );
   }
   if ( !!future ) {
   	// Convert number of days in the future limiter to a date
   	const beforeDate = new Date();
   	const beforeDays = beforeDate.getDate() + future;
   	beforeDate.setDate(beforeDays);
-  	url.searchParams.set('before', beforeDate.toISOString() );
+  	urlObject.searchParams.set('before', beforeDate.toISOString() );
   }
 
   // begin fetch request for web notices
-  fetch( url )
+  fetch( urlObject )
     .then( response => response.status === 200 ? response.json() : [] )
     .catch( err => {
       console.error('Error while retrieveing web-notices from FreeDAM | ',err);
     } )
     .then( data => {
+
+      if ( !!searchEnabled ) {
+      // Find or create container for search form
+      let searchForm = container.querySelector('ul.freedam-web-notices');
+      if ( !searchForm ) {
+        searchForm = document.createElement('form');
+        searchForm.classList.add('search-form');
+        searchForm.onsubmit = submitEvent => {
+          const form = submitEvent.srcElement;
+          const searchField = form[0];
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled, true );
+          return false;
+        }
+        container.appendChild(searchForm);
+      } else searchForm.innerHTML = ''; // clear out the container if it aleady exists
+
+        // Add the search field
+        const searchElement = document.createElement('input');
+        searchElement.classList.add('search-field');
+        searchElement.placeholder = 'smith 2017 march';
+        searchElement.type = 'search';
+        searchElement.value = searchTerms;
+        searchElement.name = 'searchTerms'
+        searchElement.title = 'Search for an entry, using their name & funeral/death date';
+        searchForm.appendChild(searchElement);
+
+        //Add the search submit
+        const searchButton = document.createElement('button');
+        searchButton.classList.add('search-submit');
+        searchButton.type = 'submit';
+        searchButton.textContent = 'Search';
+        searchForm.appendChild(searchButton);
+      }
 
       // Find or create container for fetch result
       let outputContainer = container.querySelector('ul.freedam-web-notices');
@@ -110,44 +150,41 @@ function freedamWebNoticesGetNotices(
 
     if ( !Array.isArray(data) ) data = [];
 
-    if ( page < 2 && !data.length ) {
-    	// Remove paginator if there is no data and we are on the first page
-    	paginationContainer.remove();
-    	return;
+    // More than a page of results
+    if ( data.length >= pageSize ) {
+
+      // Add the "previous" button
+      const previousPageElement = document.createElement('button');
+      previousPageElement.classList.add('previous');
+      previousPageElement.textContent = 'Previous';
+      if ( page < 2 ) previousPageElement.disabled = true;
+      previousPageElement.onclick = () => {
+        freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true );
+        container.scrollIntoView(true, { behavior: 'smooth' });
+      }
+      paginationContainer.appendChild(previousPageElement);
+
+      // Add the current page
+      const currentPageElement = document.createElement('span');
+      currentPageElement.classList.add('current');
+      currentPageElement.textContent = 'Page ' + page;
+      paginationContainer.appendChild(currentPageElement);
+
+      // Add the "next" button
+      const nextPageElement = document.createElement('button');
+      nextPageElement.classList.add('next');
+      nextPageElement.textContent = 'Next';
+      if ( data.length !== pageSize ) nextPageElement.disabled = true;
+      nextPageElement.onclick = () => {
+        freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true );
+      }
+      paginationContainer.appendChild(nextPageElement);
+
     }
 
-  	if ( page > 1 ) {
-  		// There was data before hand
-  		// Add the "previous" button
-  		const previousPageElement = document.createElement('button');
-  		previousPageElement.classList.add('previous');
-  		previousPageElement.textContent = 'Previous';
-  		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
-			  container.scrollIntoView(true, { behavior: 'smooth' });
-  		}
-  		paginationContainer.appendChild(previousPageElement);
-  	}
-
-  	// Add the current page
-  	const currentPageElement = document.createElement('span');
-  	currentPageElement.classList.add('current');
-  	currentPageElement.textContent = 'Page ' + page;
-  	paginationContainer.appendChild(currentPageElement);
-
-  	if ( data.length === pageSize ) {
-  		// Assume there is more data to show
-  		// Add the "next" button
-  		const previousPageElement = document.createElement('button');
-  		previousPageElement.classList.add('next');
-  		previousPageElement.textContent = 'Next';
-  		previousPageElement.onclick = () => {
-  			freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat );
-			  container.scrollIntoView(true, { behavior: 'smooth' });
-  		}
-  		paginationContainer.appendChild(previousPageElement);
-  	}
-
+    if ( !!scrollToTop ) {
+      setTimeout( () => { container.scrollIntoView(true, { behavior: 'smooth' }); }, 20 );
+    }
   } )
   .catch( err => {
     console.error('Error while displaying web-notices on page | ',err);

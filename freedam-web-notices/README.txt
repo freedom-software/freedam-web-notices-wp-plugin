@@ -5,7 +5,7 @@ Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
 Requires PHP: 7.2
 Tested up to: 5.5.1
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,16 +98,22 @@ We have built in a system to the notice generator to help with this issue. It id
 
 == Changelog ==
 
+= 1.2.0 =
+* Adds search capability to notice navigation
+* Adds notice ordering date type option, allows ordering by funeral or death date
+* Improves default notice styles, enabling use of carriage returns in tribute text
+* Bug fixes
+
 = 1.1.1 =
 * Test on WordPress 5.5.1
 * Improve sanitation of data from user & database
 
-= 1.1 =
+= 1.1.0 =
 * Readme improvements
 * Adds ability to customize funeral date/time format
 * Adjusted the layout of settings, separating them into tabs
 * Adds ability to hide template section based on token data availability
 * Adds an "Instructions" tab to settings page
 
-= 1.0 =
+= 1.0.0 =
 * Initial stable version

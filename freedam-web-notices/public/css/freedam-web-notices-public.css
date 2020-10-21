@@ -7,7 +7,7 @@ freedam-web-notices-container {
   display: block;
 }
 
-ul.freedam-web-notices {
+freedam-web-notices-container ul.freedam-web-notices {
   list-style: none;
   margin: 0;
 
@@ -16,34 +16,44 @@ ul.freedam-web-notices {
   justify-content: center;
 }
 
-li.freedam-web-notice {
+freedam-web-notices-container .tributeText {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+freedam-web-notices-container li.freedam-web-notice {
   flex: 0 1 auto;
   margin: 0;
 }
 
-div.paginator {
+freedam-web-notices-container div.paginator {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
 }
 
-div.paginator > * {
+freedam-web-notices-container div.paginator > * {
   margin: 0.2em 0.8em;
   flex: 0 1 auto;
 }
 
-div.paginator > button {
+freedam-web-notices-container div.paginator > button {
   width: 9em;
 }
 
-div.paginator > span.current {
+freedam-web-notices-container div.paginator > button[disabled] {
+  opacity: 40%;
+  pointer-events: none;
+}
+
+freedam-web-notices-container div.paginator > span.current {
   font-weight: bold;
   flex-basis: auto;
 }
 
 @media (min-width: 500px) {
-  div.paginator {
+  freedam-web-notices-container div.paginator {
     flex-flow: row wrap;
   }
 }
