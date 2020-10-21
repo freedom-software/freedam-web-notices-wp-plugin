@@ -225,7 +225,7 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for date type
 		add_settings_field(
 			$this->option_name . '_date_type',
-			__( 'Type of date', $this->$plugin_name ),
+			__( 'Sort by date', $this->$plugin_name ),
 			array( $this, $this->option_name . '_date_type_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
