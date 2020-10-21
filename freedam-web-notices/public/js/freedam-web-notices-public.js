@@ -19,30 +19,31 @@ function freedamWebNoticesGetNotices(
   searchEnabled = true
 ) {
   // Add params to address
-  url.searchParams.set('apiKey', apiKey);
-  url.searchParams.set('page', page);
-  url.searchParams.set('ascending', ascending);
-  if ( pageSize !== undefined ) url.searchParams.set('pageSize', pageSize );
-  if ( nulls !== undefined ) url.searchParams.set('nulls', nulls );
-  if ( !!dateType && typeof(dateType) === 'string' ) url.searchParams.set('dateType', dateType);
-  if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) url.searchParams.set('filterTerms', searchTerms );
+  urlObject = new URL(url);
+  urlObject.searchParams.set('apiKey', apiKey);
+  urlObject.searchParams.set('page', page);
+  urlObject.searchParams.set('ascending', ascending);
+  if ( pageSize !== undefined ) urlObject.searchParams.set('pageSize', pageSize );
+  if ( nulls !== undefined ) urlObject.searchParams.set('nulls', nulls );
+  if ( !!dateType && typeof(dateType) === 'string' ) urlObject.searchParams.set('dateType', dateType);
+  if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) urlObject.searchParams.set('filterTerms', searchTerms );
   if ( !!past ) {
   	// Convert number of days in the past limiter to a date
   	const afterDate = new Date();
   	const afterDays = afterDate.getDate() - past;
   	afterDate.setDate(afterDays);
-  	url.searchParams.set('after', afterDate.toISOString() );
+  	urlObject.searchParams.set('after', afterDate.toISOString() );
   }
   if ( !!future ) {
   	// Convert number of days in the future limiter to a date
   	const beforeDate = new Date();
   	const beforeDays = beforeDate.getDate() + future;
   	beforeDate.setDate(beforeDays);
-  	url.searchParams.set('before', beforeDate.toISOString() );
+  	urlObject.searchParams.set('before', beforeDate.toISOString() );
   }
 
   // begin fetch request for web notices
-  fetch( url )
+  fetch( urlObject )
     .then( response => response.status === 200 ? response.json() : [] )
     .catch( err => {
       console.error('Error while retrieveing web-notices from FreeDAM | ',err);

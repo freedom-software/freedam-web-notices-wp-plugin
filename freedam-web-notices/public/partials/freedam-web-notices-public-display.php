@@ -38,7 +38,7 @@
     let container = document.getElementById('<?php echo $unique_id ?>');
     if ( !container || container.localName !== 'freedam-web-notices-container' ) throw new Error('Couldn\'t find container element to add FreeDAM web notices to');
 
-    const url = new URL('<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>');
+    const url = '<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>';
     const apiKey = '<?php echo $api_key; ?>';
     const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
     const searchEnabled = <?php echo $search ? 'true' : 'false' ?>;
