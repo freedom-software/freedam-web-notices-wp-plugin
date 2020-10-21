@@ -69,7 +69,7 @@ class Freedam_Web_Notices {
 	/**
 	 * Address to the FreeDAM API
 	 */
-	protected $freedam_api_address = 'http://localhost:5555';
+	protected $freedam_api_address = 'https://api.freedam.co.nz';
 
 	/**
 	 * Define the core functionality of the plugin.
