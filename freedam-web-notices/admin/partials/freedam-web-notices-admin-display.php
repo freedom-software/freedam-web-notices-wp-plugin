@@ -11,7 +11,7 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
-  $paramTab = sanitize_text_field($_GET['tab']);
+  $paramTab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
   $active_tab = strlen($paramTab) > 0 ? $paramTab : 'settings';
 ?>
 

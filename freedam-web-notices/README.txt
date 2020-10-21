@@ -102,6 +102,7 @@ We have built in a system to the notice generator to help with this issue. It id
 * Adds search capability to notice navigation
 * Adds notice ordering date type option, allows ordering by funeral or death date
 * Improves default notice styles, enabling use of carriage returns in tribute text
+* Bug fixes
 
 = 1.1.1 =
 * Test on WordPress 5.5.1
