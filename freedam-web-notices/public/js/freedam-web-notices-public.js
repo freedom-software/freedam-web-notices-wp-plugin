@@ -16,7 +16,8 @@ function freedamWebNoticesGetNotices(
   birthDateFormat = 'l',
   deathDateFormat = 'l',
   searchTerms = '',
-  searchEnabled = true
+  searchEnabled = true,
+  scrollToTop = false
 ) {
   // Add params to address
   urlObject = new URL(url);
@@ -122,7 +123,7 @@ function freedamWebNoticesGetNotices(
     previousPageElement.textContent = 'Previous';
     if ( page < 2 ) previousPageElement.disabled = true;
     previousPageElement.onclick = () => {
-      freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled );
+      freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true );
       container.scrollIntoView(true, { behavior: 'smooth' });
     }
     paginationContainer.appendChild(previousPageElement);
@@ -139,8 +140,7 @@ function freedamWebNoticesGetNotices(
     nextPageElement.textContent = 'Next';
     if ( data.length !== pageSize ) nextPageElement.disabled = true;
     nextPageElement.onclick = () => {
-      freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled );
-      container.scrollIntoView(true, { behavior: 'smooth' });
+      freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true );
     }
     paginationContainer.appendChild(nextPageElement);
 
@@ -152,8 +152,7 @@ function freedamWebNoticesGetNotices(
       searchForm.onsubmit = submitEvent => {
         const form = submitEvent.srcElement;
         const searchField = form[0];
-        freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled );
-        container.scrollIntoView(true, { behavior: 'smooth' });
+        freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled, true );
         return false;
       }
       paginationContainer.appendChild(searchForm);
@@ -174,6 +173,10 @@ function freedamWebNoticesGetNotices(
       searchButton.type = 'submit';
       searchButton.textContent = 'Search';
       searchForm.appendChild(searchButton);
+
+      if ( !!scrollToTop ) {
+        setTimeout( () => { container.scrollIntoView(true, { behavior: 'smooth' }); }, 20 );
+      }
     }
   } )
   .catch( err => {

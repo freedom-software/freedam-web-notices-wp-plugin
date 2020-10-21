@@ -63,7 +63,7 @@
     function freedamWebNoticesScriptsReady() {
       if ( typeof(freedamWebNoticesGetNotices) === 'function' && typeof(moment) === 'function' ) {
         if ( !functionRan ) {
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled );
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false );
           functionRan = true;
         }
       } else {
