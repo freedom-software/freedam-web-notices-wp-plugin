@@ -5,7 +5,7 @@
  * This file is used to request the notices definition from FreeDAM API and display the accepted tokens from it
  *
  * @link       https://github.com/freedom-software
- * @since      1.1.0
+ * @since      1.2.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials

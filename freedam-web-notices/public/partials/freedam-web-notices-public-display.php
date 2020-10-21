@@ -6,7 +6,7 @@
  * This file is used to markup the public-facing aspects of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.1.1
+ * @since      1.2.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/public/partials
