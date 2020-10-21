@@ -68,6 +68,7 @@ class Freedam_Web_Notices_Admin {
 	private $options_funeral_time;
 	private $options_birth_date;
 	private $options_death_date;
+	private $options_date_type;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -129,6 +130,10 @@ class Freedam_Web_Notices_Admin {
 			'YYYY-MM-DD' => '2020-09-23',
 			'YYYY' => '2020',
 		);
+		$this->options_date_type = array(
+			'funeral' => 'Funeral',
+			'death' => 'Death',
+		);
 
 	}
 
@@ -161,7 +166,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
-	 * @since  1.0.0
+	 * @since  1.2.0
 	 */
 	public function register_settings() {
 
@@ -214,6 +219,29 @@ class Freedam_Web_Notices_Admin {
 				'description' => 'Number of notices to show per page',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_pagesize' ),
 				'default' => $this->defaults['pagesize']
+			)
+		);
+
+		// Add setting for date type
+		add_settings_field(
+			$this->option_name . '_date_type',
+			__( 'Type of date', $this->$plugin_name ),
+			array( $this, $this->option_name . '_date_type_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_date_type',
+				'title' => 'Type of date to use for sorting the web notices'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_date_type',
+			array(
+				'type' => 'string',
+				'description' => 'Type of date to use for sorting the web notices',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_date_type' ),
+				'default' => $this->defaults['date_type']
 			)
 		);
 
@@ -281,6 +309,29 @@ class Freedam_Web_Notices_Admin {
 				'description' => 'Whether notices that don\'t have a funeral date/time should be included in results',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
 				'default' => $this->defaults['nulls']
+			)
+		);
+
+		// Add setting for search
+		add_settings_field(
+			$this->option_name . '_search',
+			__( 'Show search', $this->$plugin_name ),
+			array( $this, $this->option_name . '_search_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_search',
+				'title' => 'Whether users should be given the option to search for web-notices'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_search',
+			array(
+				'type' => 'boolean',
+				'description' => 'Whether users should be given the option to search for web-notices',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
+				'default' => $this->defaults['search']
 			)
 		);
 
@@ -502,6 +553,15 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
+	 * Render the checkbox input field for search
+	 *
+	 * @since  1.2.0
+	 */
+	public function freedam_web_notices_search_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-search.php';
+	}
+
+	/**
 	 * Render the textarea field for template
 	 *
 	 * @since  1.0.0
@@ -571,6 +631,15 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_death_date_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-death-date.php';
+	}
+
+	/**
+	 * Render the select field for date type format
+	 *
+	 * @since  1.2.0
+	 */
+	public function freedam_web_notices_date_type_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-date-type.php';
 	}
 
 	/**
@@ -702,6 +771,20 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_death_date( $var ) {
 		if ( !array_key_exists($var, $this->options_death_date) ) return null;
+		return sanitize_text_field($var);
+	}
+
+	/**
+	 * Sanitize the select format value before being saved to database
+	 *
+	 * Checks if value is in the list of options
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.2.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_date_type( $var ) {
+		if ( !array_key_exists($var, $this->options_date_type) ) return null;
 		return sanitize_text_field($var);
 	}
 

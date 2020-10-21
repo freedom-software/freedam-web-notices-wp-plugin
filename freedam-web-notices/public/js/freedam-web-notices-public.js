@@ -7,6 +7,7 @@ function freedamWebNoticesGetNotices(
 	page = 1,
 	pageSize = 10,
 	nulls = false,
+  dateType = 'funeral',
 	past = null,
 	future = null,
 	ascending = false,
@@ -14,7 +15,8 @@ function freedamWebNoticesGetNotices(
   funeralTimeFormat = 'LT',
   birthDateFormat = 'l',
   deathDateFormat = 'l',
-  searchTerms = ''
+  searchTerms = '',
+  searchEnabled = true
 ) {
   // Add params to address
   url.searchParams.set('apiKey', apiKey);
@@ -22,6 +24,8 @@ function freedamWebNoticesGetNotices(
   url.searchParams.set('ascending', ascending);
   if ( pageSize !== undefined ) url.searchParams.set('pageSize', pageSize );
   if ( nulls !== undefined ) url.searchParams.set('nulls', nulls );
+  if ( !!dateType && typeof(dateType) === 'string' ) url.searchParams.set('dateType', dateType);
+  if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) url.searchParams.set('filterTerms', searchTerms );
   if ( !!past ) {
   	// Convert number of days in the past limiter to a date
   	const afterDate = new Date();
@@ -117,7 +121,7 @@ function freedamWebNoticesGetNotices(
     previousPageElement.textContent = 'Previous';
     if ( page < 2 ) previousPageElement.disabled = true;
     previousPageElement.onclick = () => {
-      freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, search );
+      freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled );
       container.scrollIntoView(true, { behavior: 'smooth' });
     }
     paginationContainer.appendChild(previousPageElement);
@@ -134,36 +138,42 @@ function freedamWebNoticesGetNotices(
     nextPageElement.textContent = 'Next';
     if ( data.length !== pageSize ) nextPageElement.disabled = true;
     nextPageElement.onclick = () => {
-      freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, search );
+      freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled );
       container.scrollIntoView(true, { behavior: 'smooth' });
     }
     paginationContainer.appendChild(nextPageElement);
 
-    // Add search form
-    const searchForm = document.createElement('form');
-    searchForm.classList.add('search-form');
-    searchForm.onsubmit = value => {
-      console.log('search value:',value);
-      freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, search );
-      container.scrollIntoView(true, { behavior: 'smooth' });
+    if ( !!searchEnabled ) {
+      // Add search form
+      const searchForm = document.createElement('form');
+      searchForm.classList.add('search-form');
+      // searchForm.setAttribute('onSubmit',);
+      searchForm.onsubmit = submitEvent => {
+        const form = submitEvent.srcElement;
+        const searchField = form[0];
+        freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled );
+        container.scrollIntoView(true, { behavior: 'smooth' });
+        return false;
+      }
+      paginationContainer.appendChild(searchForm);
+
+      // Add the search field
+      const searchElement = document.createElement('input');
+      searchElement.classList.add('search-field');
+      searchElement.placeholder = 'smith 2017 march';
+      searchElement.type = 'search';
+      searchElement.value = searchTerms;
+      searchElement.name = 'searchTerms'
+      searchElement.title = 'Search for an entry, using their name & funeral/death date';
+      searchForm.appendChild(searchElement);
+
+      //Add the search submit
+      const searchButton = document.createElement('button');
+      searchButton.classList.add('search-submit');
+      searchButton.type = 'submit';
+      searchButton.textContent = 'Search';
+      searchForm.appendChild(searchButton);
     }
-    paginationContainer.appendChild(searchForm);
-
-    // Add the search field
-    const searchElement = document.createElement('input');
-    searchElement.classList.add('search-field');
-    searchElement.placeholder = 'smith 2017 march';
-    searchElement.type = 'search';
-    searchElement.value = searchTerms;
-    searchElement.title = 'Search for an entry, using their name & funeral/death date';
-    searchForm.appendChild(searchElement);
-
-    //Add the search submit
-    const searchButton = document.createElement('button');
-    searchButton.classList.add('search-submit');
-    searchButton.type = 'submit';
-    searchButton.textContent = 'Search';
-    searchForm.appendChild(searchButton);
   } )
   .catch( err => {
     console.error('Error while displaying web-notices on page | ',err);
