@@ -16,6 +16,11 @@ freedam-web-notices-container ul.freedam-web-notices {
   justify-content: center;
 }
 
+freedam-web-notices-container .tributeText {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 freedam-web-notices-container li.freedam-web-notice {
   flex: 0 1 auto;
   margin: 0;
