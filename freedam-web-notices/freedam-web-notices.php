@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://github.com/freedom-software
- * @since             1.1.1
+ * @since             1.2.0
  * @package           Freedam_Web_Notices
  *
  * @wordpress-plugin
  * Plugin Name:       FreeDAM Web Notices
  * Plugin URI:        https://wordpress.org/plugins/freedam-web-notices
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            Freedom Software
  * Author URI:        https://freedomsoftware.co.nz
  * License:           GPL-2.0+
