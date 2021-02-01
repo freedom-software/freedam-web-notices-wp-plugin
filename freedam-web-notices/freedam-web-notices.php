@@ -9,7 +9,7 @@
  * that starts the plugin.
  *
  * @link              https://github.com/freedom-software
- * @since             1.2.0
+ * @since             1.2.1
  * @package           Freedam_Web_Notices
  *
  * @wordpress-plugin
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FREEDAM_WEB_NOTICES_VERSION', '1.2.0' );
+define( 'FREEDAM_WEB_NOTICES_VERSION', '1.2.1' );
 
 /**
  * The code that runs during plugin activation.
