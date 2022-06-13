@@ -4,7 +4,7 @@
  * The admin-specific functionality of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.0.0
+ * @since      1.3.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin
@@ -73,7 +73,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.0.0
+	 * @since    1.3.0
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
@@ -133,6 +133,7 @@ class Freedam_Web_Notices_Admin {
 		$this->options_date_type = array(
 			'funeral' => 'Funeral',
 			'death' => 'Death',
+			'disposition' => 'Disposition',
 		);
 
 	}
