@@ -4,8 +4,8 @@ Donate link: https://freedomsoftware.co.nz
 Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
 Requires PHP: 7.2
-Tested up to: 5.6.0
-Stable tag: 1.2.1
+Tested up to: 6.0.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,7 +40,7 @@ For enquires about usage of the third-party service or obtaining an API Key to g
 1. Upload `freedam-web-notices` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the **Plugins** menu in the WordPress **Admin** section.
 1. Add your supplied FreeDAM database **API Key** to the plugin's settings page, located under the **Settings** sub-menu in the Admin section.
-1. Place `[freedam-web-notices]` in your a **Shortcode block** on a page. Should be possible to add directly to a theme by adding `<?php echo do_shortcode("[freedam-web-notices]"); ?>`.
+1. Place `[freedam-web-notices]` in a **Shortcode block** on a page. Should be possible to add directly to a theme by adding `<?php echo do_shortcode("[freedam-web-notices]"); ?>`.
 
 == Frequently Asked Questions ==
 
@@ -97,6 +97,12 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Press "Save Changes".
 
 == Changelog ==
+
+= 1.3.0 =
+* Test on WordPress 6.0.0
+* Adds Disposition as a filterable date type
+* Adds disposition details for each notice
+* Adds stream address & note for each notice
 
 = 1.2.1 =
 * Test on WordPress 5.6.0

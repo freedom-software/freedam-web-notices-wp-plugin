@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://github.com/freedom-software
- * @since             1.2.1
+ * @since             1.3.0
  * @package           Freedam_Web_Notices
  *
  * @wordpress-plugin
  * Plugin Name:       FreeDAM Web Notices
  * Plugin URI:        https://wordpress.org/plugins/freedam-web-notices
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            Freedom Software
  * Author URI:        https://freedomsoftware.co.nz
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FREEDAM_WEB_NOTICES_VERSION', '1.2.1' );
+define( 'FREEDAM_WEB_NOTICES_VERSION', '1.3.0' );
 
 /**
  * The code that runs during plugin activation.
