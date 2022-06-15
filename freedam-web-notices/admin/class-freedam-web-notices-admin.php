@@ -816,7 +816,7 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
-	 * Determines the truithyness of $val
+	 * Determines the truthiness of $val
 	 *
 	 * @param  any  $val         Value to test
 	 * @param  boolean $return_null The value nulls should return

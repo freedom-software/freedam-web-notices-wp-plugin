@@ -47,7 +47,7 @@ function freedamWebNoticesGetNotices(
   fetch( urlObject )
     .then( response => response.status === 200 ? response.json() : [] )
     .catch( err => {
-      console.error('Error while retrieveing web-notices from FreeDAM | ',err);
+      console.error('Error while retrieving web-notices from FreeDAM | ',err);
     } )
     .then( data => {
 
@@ -64,7 +64,7 @@ function freedamWebNoticesGetNotices(
           return false;
         }
         container.appendChild(searchForm);
-      } else searchForm.innerHTML = ''; // clear out the container if it aleady exists
+      } else searchForm.innerHTML = ''; // clear out the container if it already exists
 
         // Add the search field
         const searchElement = document.createElement('input');
@@ -90,14 +90,14 @@ function freedamWebNoticesGetNotices(
         outputContainer = document.createElement('ul');
         outputContainer.classList.add('freedam-web-notices');
         container.appendChild(outputContainer);
-      } else outputContainer.innerHTML = ''; // clear out the container if it aleady exists
+      } else outputContainer.innerHTML = ''; // clear out the container if it already exists
 
       // loop through notices, replacing template tokens and adding resulting HTML to DOM
       if ( Array.isArray(data) && !!data.length ) data.forEach( notice => {
 
         const open = '{{';
         const close = '}}';
-        // Matches strings between open and close mostache
+        // Matches strings between open and close moustache
         const regexp = RegExp(`(?<=${open})(.*?)(?=${close})`,'g');
         const matches = template.matchAll(regexp);
 
@@ -124,7 +124,7 @@ function freedamWebNoticesGetNotices(
           else if ( path.includes('deceased') && path.includes('birthDate') ) value = moment(value).format( birthDateFormat );
           else if ( path.includes('deceased') && path.includes('deathDate') ) value = moment(value).format( deathDateFormat );
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
-          // Insert value, replacing token and encapsulating mostache ('{{'&'}}')
+          // Insert value, replacing token and encapsulating moustache ('{{'&'}}')
           const beforeToken = output.substring(0,match.index-2);
           const afterToken = output.substring(match.index + token.length + 2);
           output = beforeToken + value + afterToken;
@@ -146,7 +146,7 @@ function freedamWebNoticesGetNotices(
       paginationContainer = document.createElement('div');
       paginationContainer.classList.add('paginator');
       container.appendChild(paginationContainer);
-    } else paginationContainer.innerHTML = ''; // clear out the paginator if it aleady exists
+    } else paginationContainer.innerHTML = ''; // clear out the paginator if it already exists
 
     if ( !Array.isArray(data) ) data = [];
 
@@ -192,7 +192,7 @@ function freedamWebNoticesGetNotices(
 
 }
 
-/** Adds style to elements with a certian class */
+/** Adds style to elements with a certain class */
 function hideElementsByClass( container, className ) {
   const elements = container.querySelectorAll( '.' + className );
   for (var i = elements.length - 1; i >= 0; i--) {
