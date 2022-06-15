@@ -26,7 +26,7 @@
   $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
   $search = sanitize_text_field(get_option( 'freedam_web_notices_search', $this->defaults['search'] ));
 
-  $unique_id = esc_attr( uniqid('freeam-web-notices-') );
+  $unique_id = esc_attr( uniqid('freedam-web-notices-') );
 
   // This file should primarily consist of HTML with a little bit of PHP.
 ?>
@@ -83,4 +83,3 @@
   </script>
 
 </freedam-web-notices-container>
-
