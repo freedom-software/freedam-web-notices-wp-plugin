@@ -133,7 +133,7 @@ class Freedam_Web_Notices_Admin {
 		$this->options_date_type = array(
 			'funeral' => 'Funeral',
 			'death' => 'Death',
-			'disposition' => 'Disposition',
+			'publish' => 'Publish',
 		);
 
 	}
