@@ -155,7 +155,7 @@ function freedamWebNoticesGetNotices(
     if ( !Array.isArray(data) ) data = [];
 
     // More than a page of results
-    if ( data.length >= pageSize ) {
+    if ( (page === 1 && data.length >= pageSize) || page > 1 ) {
 
       // Add the "previous" button
       const previousPageElement = document.createElement('button');
@@ -178,7 +178,7 @@ function freedamWebNoticesGetNotices(
       const nextPageElement = document.createElement('button');
       nextPageElement.classList.add('next');
       nextPageElement.textContent = 'Next';
-      if ( data.length !== pageSize ) nextPageElement.disabled = true;
+      if ( data.length < pageSize ) nextPageElement.disabled = true;
       nextPageElement.onclick = () => {
         freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled );
       }
