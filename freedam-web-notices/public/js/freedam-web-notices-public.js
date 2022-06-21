@@ -33,14 +33,16 @@ function freedamWebNoticesGetNotices(
   	const afterDate = new Date();
   	const afterDays = afterDate.getDate() - past;
   	afterDate.setDate(afterDays);
-  	urlObject.searchParams.set('after', afterDate.toISOString() );
+    if ( afterDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'past' limit date (${past}). Value too large?`);
+  	else urlObject.searchParams.set('after', afterDate.toISOString() );
   }
   if ( !!future ) {
   	// Convert number of days in the future limiter to a date
   	const beforeDate = new Date();
   	const beforeDays = beforeDate.getDate() + future;
   	beforeDate.setDate(beforeDays);
-  	urlObject.searchParams.set('before', beforeDate.toISOString() );
+    if ( afterDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'future' limit date (${future}). Value too large?`);
+  	else urlObject.searchParams.set('before', beforeDate.toISOString() );
   }
 
   // begin fetch request for web notices
