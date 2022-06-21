@@ -167,7 +167,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
-	 * @since  1.2.0
+	 * @since  1.3.0
 	 */
 	public function register_settings() {
 
@@ -333,6 +333,29 @@ class Freedam_Web_Notices_Admin {
 				'description' => 'Whether users should be given the option to search for web-notices',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
 				'default' => $this->defaults['search']
+			)
+		);
+
+		// Add setting for image
+		add_settings_field(
+			$this->option_name . '_image',
+			__( 'Show image', $this->plugin_name ),
+			array( $this, $this->option_name . '_image_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_image',
+				'title' => 'Whether notices with an image included should show the thumbnail'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_image',
+			array(
+				'type' => 'boolean',
+				'description' => 'Whether notices with an image included should show the thumbnail',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
+				'default' => $this->defaults['image']
 			)
 		);
 
@@ -560,6 +583,15 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_search_cb( $args ) {
 		include_once 'partials/freedam-web-notices-admin-search.php';
+	}
+
+	/**
+	 * Render the checkbox input field for image
+	 *
+	 * @since  1.3.0
+	 */
+	public function freedam_web_notices_image_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-image.php';
 	}
 
 	/**

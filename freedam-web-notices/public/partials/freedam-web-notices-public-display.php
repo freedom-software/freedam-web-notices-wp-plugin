@@ -6,7 +6,7 @@
  * This file is used to markup the public-facing aspects of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.2.0
+ * @since      1.3.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/public/partials
@@ -25,6 +25,7 @@
   $birth_date = sanitize_text_field(get_option( 'freedam_web_notices_birth_date' ));
   $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
   $search = sanitize_text_field(get_option( 'freedam_web_notices_search', $this->defaults['search'] ));
+  $image = sanitize_text_field(get_option( 'freedam_web_notices_image', $this->defaults['image'] ));
 
   $unique_id = esc_attr( uniqid('freedam-web-notices-') );
 
@@ -42,6 +43,7 @@
     const apiKey = '<?php echo $api_key; ?>';
     const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
     const searchEnabled = <?php echo $search ? 'true' : 'false' ?>;
+    const imageEnabled = <?php echo $image ? 'true' : 'false' ?>;
     const pageSize = <?php echo empty($page_size) ? $this->defaults['pagesize'] : $page_size ?>;
     const template = `<?php echo strlen($template) > 0 ? html_entity_decode($template) : $this->defaults['template'] ?>`;
     const past = <?php echo empty($days_past) ? 'null' : $days_past ?>;
@@ -63,7 +65,7 @@
     function freedamWebNoticesScriptsReady() {
       if ( typeof(freedamWebNoticesGetNotices) === 'function' && typeof(moment) === 'function' ) {
         if ( !functionRan ) {
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false );
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false, imageEnabled );
           functionRan = true;
         }
       } else {

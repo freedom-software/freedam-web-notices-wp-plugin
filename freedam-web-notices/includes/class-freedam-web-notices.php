@@ -78,7 +78,7 @@ class Freedam_Web_Notices {
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
 	 * the public-facing side of the site.
 	 *
-	 * @since    1.2.0
+	 * @since    1.3.0
 	 */
 	public function __construct() {
 		if ( defined( 'FREEDAM_WEB_NOTICES_VERSION' ) ) {
@@ -98,6 +98,7 @@ class Freedam_Web_Notices {
 			'birthdate' => 'dddd, Do MMMM YYYY',
 			'deathdate' => 'dddd, Do MMMM YYYY',
 			'search' => true,
+			'image' => false,
 		);
 
 		$this->load_dependencies();
