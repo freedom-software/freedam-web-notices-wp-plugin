@@ -43,7 +43,7 @@ function freedamWebNoticesGetNotices(
   	const beforeDate = new Date();
   	const beforeDays = beforeDate.getDate() + future;
   	beforeDate.setDate(beforeDays);
-    if ( afterDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'future' limit date (${future}). Value too large?`);
+    if ( beforeDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'future' limit date (${future}). Value too large?`);
   	else urlObject.searchParams.set('before', beforeDate.toISOString() );
   }
 
