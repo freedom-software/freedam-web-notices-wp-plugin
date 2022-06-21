@@ -142,6 +142,16 @@ function freedamWebNoticesGetNotices(
         outputContainer.appendChild(item);
 
       } );
+      else if ( page > 1 ) {
+        const message = document.createElement('li');
+        message.innerHTML = 'No further notices available';
+        outputContainer.appendChild(message);
+      }
+      else if ( !!searchTerms ) {
+        const message = document.createElement('li');
+        message.innerHTML = 'No notices match search query';
+        outputContainer.appendChild(message);
+      }
 
     // Add pagination
     // Find or create container for result pagination
