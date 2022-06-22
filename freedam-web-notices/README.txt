@@ -100,9 +100,14 @@ We have built in a system to the notice generator to help with this issue. It id
 
 = 1.3.0 =
 * Test on WordPress 6.0.0
-* Adds Disposition as a filterable date type
-* Adds disposition details for each notice
+* Adds ability to display the thumbnail of notice's assigned image
 * Adds stream address & note for each notice
+* Fixes issue with pagination so it displays the pagination under more circumstances
+* Fixes issue with pagination that did not disable 'next' button incorrectly
+* Adds messages that displays when no results and on a page greater than 1
+* Adds messages that displays when no results and is searching (filtering by terms) for a notice
+* Notice searches now ignore time limits (except for publish_from) to make it more useful
+* Improves the default notice template so the venue displays better
 
 = 1.2.1 =
 * Test on WordPress 5.6.0
