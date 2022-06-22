@@ -101,7 +101,7 @@ We have built in a system to the notice generator to help with this issue. It id
 = 1.3.0 =
 * Test on WordPress 6.0.0
 * Adds ability to display the thumbnail of notice's assigned image
-* Adds stream address & note for each notice
+* Adds stream url & note for each notice
 * Fixes issue with pagination so it displays the pagination under more circumstances
 * Fixes issue with pagination that did not disable 'next' button incorrectly
 * Adds messages that displays when no results and on a page greater than 1
