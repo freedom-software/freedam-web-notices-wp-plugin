@@ -5,7 +5,7 @@ Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
 Requires PHP: 7.2
 Tested up to: 6.0.0
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,9 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Press "Save Changes".
 
 == Changelog ==
+
+= 1.4.0 =
+* Adds ability to limit retrieved notices by office
 
 = 1.3.0 =
 * Test on WordPress 6.0.0
