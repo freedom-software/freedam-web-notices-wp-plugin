@@ -6,7 +6,7 @@
  * This file is used to markup the public-facing aspects of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.3.0
+ * @since      1.4.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/public/partials
@@ -26,6 +26,7 @@
   $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
   $search = sanitize_text_field(get_option( 'freedam_web_notices_search', $this->defaults['search'] ));
   $image = sanitize_text_field(get_option( 'freedam_web_notices_image', $this->defaults['image'] ));
+  $offices = sanitize_text_field(get_option( 'freedam_web_notices_offices' ));
 
   $unique_id = esc_attr( uniqid('freedam-web-notices-') );
 
@@ -41,6 +42,7 @@
 
     const url = '<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>';
     const apiKey = '<?php echo $api_key; ?>';
+    const offices = '<?php echo $offices; ?>';
     const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
     const searchEnabled = <?php echo $search ? 'true' : 'false' ?>;
     const imageEnabled = <?php echo $image ? 'true' : 'false' ?>;
@@ -65,7 +67,7 @@
     function freedamWebNoticesScriptsReady() {
       if ( typeof(freedamWebNoticesGetNotices) === 'function' && typeof(moment) === 'function' ) {
         if ( !functionRan ) {
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false, imageEnabled );
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false, imageEnabled, offices );
           functionRan = true;
         }
       } else {

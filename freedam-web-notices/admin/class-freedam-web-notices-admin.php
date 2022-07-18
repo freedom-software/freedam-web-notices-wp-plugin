@@ -167,7 +167,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
-	 * @since  1.3.0
+	 * @since  1.4.0
 	 */
 	public function register_settings() {
 
@@ -356,6 +356,28 @@ class Freedam_Web_Notices_Admin {
 				'description' => 'Whether notices with an image included should show the thumbnail',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_boolean' ),
 				'default' => $this->defaults['image']
+			)
+		);
+
+		// Add setting for offices
+		add_settings_field(
+			$this->option_name . '_offices',
+			__( 'Office limiter', $this->plugin_name ),
+			array( $this, $this->option_name . '_offices_cb' ),
+			$this->settings_options_group,
+			$this->settings_section_name,
+			array(
+				'label_for' => $this->option_name . '_offices',
+				'title' => 'Limit retrieved notices by office, enter in CSV format (eg. 11,21,31); feel free to contact FreeDAM for your office ID numbers'
+			)
+		);
+		register_setting(
+			$this->settings_options_group,
+			$this->option_name . '_offices',
+			array(
+				'type' => 'string',
+				'description' => 'Limit retrieved notices by office, enter in CSV format (eg. 11,21,31); feel free to contact FreeDAM for your office ID numbers',
+				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_offices' )
 			)
 		);
 
@@ -595,6 +617,15 @@ class Freedam_Web_Notices_Admin {
 	}
 
 	/**
+	 * Render the string input field for offices
+	 *
+	 * @since  1.4.0
+	 */
+	public function freedam_web_notices_offices_cb( $args ) {
+		include_once 'partials/freedam-web-notices-admin-offices.php';
+	}
+
+	/**
 	 * Render the textarea field for template
 	 *
 	 * @since  1.0.0
@@ -750,6 +781,34 @@ class Freedam_Web_Notices_Admin {
 	public function freedam_web_notices_sanitize_boolean( $var ) {
 		return $this->is_true( $var );
 	}
+
+	/**
+	 * Sanitize the string value for the list of offices
+	 *
+	 * Separates the string by comma and parses each entry to an integer, then piecing back together
+	 *
+	 * @param  string $var $_POST value
+	 * @since  1.4.0
+	 * @return boolean           Sanitized value
+	 */
+	public function freedam_web_notices_sanitize_offices( $var ) {
+		return implode(
+			',',
+			array_reduce(
+				explode(
+					',',
+					sanitize_text_field($var)
+				),
+				function($stack, $item){
+					$num = intval($item);
+					if ( is_numeric($num) && $num > 0 ) array_push( $stack, $num );
+					return $stack;
+				},
+				[]
+			)
+		);
+	}
+
 
 	/**
 	 * Sanitize the funeral date value before being saved to database

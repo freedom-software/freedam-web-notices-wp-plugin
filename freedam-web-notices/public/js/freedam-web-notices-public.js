@@ -18,7 +18,8 @@ function freedamWebNoticesGetNotices(
   searchTerms = '',
   searchEnabled = true,
   scrollToTop = false,
-  imageEnabled = false
+  imageEnabled = false,
+  offices = ''
 ) {
   // Add params to address
   urlObject = new URL(url);
@@ -30,6 +31,7 @@ function freedamWebNoticesGetNotices(
   if ( !!dateType && typeof(dateType) === 'string' ) urlObject.searchParams.set('dateType', dateType);
   if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) urlObject.searchParams.set('filterTerms', searchTerms );
   if ( !!imageEnabled ) urlObject.searchParams.set('includeImage', true );
+  if ( !!offices ) urlObject.searchParams.set('office', JSON.stringify(offices.split(',')));
   if ( !!past ) {
   	// Convert number of days in the past limiter to a date
   	const afterDate = new Date();
@@ -64,7 +66,7 @@ function freedamWebNoticesGetNotices(
         searchForm.onsubmit = submitEvent => {
           const form = submitEvent.srcElement;
           const searchField = form[0];
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled, true, imageEnabled );
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled, true, imageEnabled, offices );
           return false;
         }
         container.appendChild(searchForm);
@@ -173,7 +175,7 @@ function freedamWebNoticesGetNotices(
       previousPageElement.textContent = 'Previous';
       if ( page < 2 ) previousPageElement.disabled = true;
       previousPageElement.onclick = () => {
-        freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled );
+        freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
         container.scrollIntoView(true, { behavior: 'smooth' });
       }
       paginationContainer.appendChild(previousPageElement);
@@ -190,7 +192,7 @@ function freedamWebNoticesGetNotices(
       nextPageElement.textContent = 'Next';
       if ( data.length < pageSize ) nextPageElement.disabled = true;
       nextPageElement.onclick = () => {
-        freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled );
+        freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
       }
       paginationContainer.appendChild(nextPageElement);
 
