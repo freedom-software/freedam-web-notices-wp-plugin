@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring page size
+ * Provide a field for entering page size
  *
  * This file is used to markup the admin-facing field for the page size
  *

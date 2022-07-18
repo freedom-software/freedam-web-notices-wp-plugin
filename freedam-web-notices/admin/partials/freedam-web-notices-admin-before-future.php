@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring future days
+ * Provide a field for entering future days
  *
  * This file is used to markup the admin-facing field for the future days
  *

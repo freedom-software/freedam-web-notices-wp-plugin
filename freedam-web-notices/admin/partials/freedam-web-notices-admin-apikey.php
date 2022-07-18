@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring api key
+ * Provide a field for entering api key
  *
  * This file is used to markup the admin-facing field for the api key
  *

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring birth date format
+ * Provide a field for entering birth date format
  *
  * This file is used to markup the admin-facing field for the birth date format
  *

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring past days
+ * Provide a field for entering past days
  *
  * This file is used to markup the admin-facing field for the past days
  *

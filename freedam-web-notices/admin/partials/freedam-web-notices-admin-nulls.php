@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring nulls
+ * Provide a field for entering nulls
  *
  * This file is used to markup the admin-facing field for the nulls
  *

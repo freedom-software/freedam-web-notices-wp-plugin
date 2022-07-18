@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring ascending
+ * Provide a field for entering ascending
  *
  * This file is used to markup the admin-facing field for the ascending
  *

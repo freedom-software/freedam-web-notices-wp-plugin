@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provide a field for entring a notice template
+ * Provide a field for entering a notice template
  *
  * This file is used to markup the admin-facing field for the notice template
  *
