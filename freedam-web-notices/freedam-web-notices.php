@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://github.com/freedom-software
- * @since             1.3.0
+ * @since             1.5.0
  * @package           Freedam_Web_Notices
  *
  * @wordpress-plugin
  * Plugin Name:       FreeDAM Web Notices
  * Plugin URI:        https://wordpress.org/plugins/freedam-web-notices
  * Description:       Retrieves your web notices from your FreeDAM database for displaying on your website.
- * Version:           1.3.0
+ * Version:           1.5.0
  * Author:            Freedom Software
  * Author URI:        https://freedomsoftware.co.nz
  * License:           GPL-2.0+
@@ -31,15 +31,19 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Currently plugin version.
+ * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
+ *
+ * @since    1.5.0
  */
-define( 'FREEDAM_WEB_NOTICES_VERSION', '1.3.0' );
+define( 'FREEDAM_WEB_NOTICES_VERSION', '1.5.0' );
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-freedam-web-notices-activator.php
+ *
+ * @since    1.0.0
  */
 function activate_freedam_web_notices() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-freedam-web-notices-activator.php';
@@ -49,18 +53,23 @@ function activate_freedam_web_notices() {
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-freedam-web-notices-deactivator.php
+ *
+ * @since    1.0.0
  */
 function deactivate_freedam_web_notices() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-freedam-web-notices-deactivator.php';
 	Freedam_Web_Notices_Deactivator::deactivate();
 }
 
+// Register the hooks with wordpress so they are run
 register_activation_hook( __FILE__, 'activate_freedam_web_notices' );
 register_deactivation_hook( __FILE__, 'deactivate_freedam_web_notices' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
+ *
+ * @since    1.0.0
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-freedam-web-notices.php';
 

@@ -3,9 +3,9 @@ Contributors: freedomsoftware, aidanchey
 Donate link: https://freedomsoftware.co.nz
 Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
-Requires PHP: 7.2
-Tested up to: 6.0.0
-Stable tag: 1.4.0
+Requires PHP: 8.2
+Tested up to: 6.1.1
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,12 +45,22 @@ For enquires about usage of the third-party service or obtaining an API Key to g
 == Frequently Asked Questions ==
 
 = How do I change the appearance of notices (add style) =
-Add the custom CSS to your theme's "Additional CSS".
+1. Create a child theme for the styles
+1. Use a custom css plugin
+1. Add the custom CSS to your theme's "Additional CSS". https://wordpress.com/support/editing-css/#access-the-css-editor
+  1. From the "Admin" section, navigate to Appearance > Customize.
+  1. Navigate to a page where you have added a Shortcode block for the plugin. (helps with previewing the style changes).
+  1. Select "Additional CSS" on the left-hand panel.
+  1. Write your styles.
+1. Edit the plugin CSS files (Warning! changes will be lost when plugin is updated or refreshed)
+  1. From the "Admin" section, navigate to Tools > Plugin File Editor
+  1. Select "FreeDAM Web Notices" as the plugin to edit
+  1. Open file public > css > freedam-web-notices.css
+  1. Either adjust the existing styles or add to them
 
-1. From the "Admin" section, navigate to Appearance > Customize.
-1. Navigate to a page where you have added a Shortcode block for the plugin. (helps with previewing the style changes).
-1. Select "Additional CSS" on the left-hand panel.
-1. Write your styles. The main elements that can be targeted are:
+https://wordpress.com/support/editing-css/
+
+The main elements that can be targeted are:
   * `freedam-web-notices-container`: Main container for plugin output.
   * `ul.freedam-web-notices`: Container for the list of web-notices.
   * `li.freedam-web-notice`: Container for individual web-notices.
@@ -61,6 +71,7 @@ Any other elements are from your own custom template, specified in the plugin's 
 * Make sure your Freedom Software supplied **API Key** has been added to the plugin's settings. This API Key is how our API can authorize your access and identify which of our clients to pull the data from.
 * Make sure your **FreeDAM Database is online** and available to the internet. Good way to check this is if you can access your data from the FreeDAM Online Interface (web app).
 * Make sure there are **published** web-notices in your database. Cases are not automatically available to the web-notices system. A web-notice needs to be created for a case; this is so you can customize the information that will show to the public. Finally, the web-notice needs to be "published" by enabling the checkbox on the same page you made the web-notice.
+* It could be that none of the published web-notices match your limiting criteria from the settings page. Try increasing the limits if using funeral/death based filtering or adjust a cases 'publish from' / 'feature until' dates to include today.
 
 = How can I change the format of dates & times =
 The plugin's settings page has a section called "Date Formats / Rules" which allows picking from a selection of formats.
@@ -97,6 +108,12 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Press "Save Changes".
 
 == Changelog ==
+
+= 1.5.0 =
+* Test on WordPress 6.1.1
+* Updates required PHP version to 8.2 (7.2 is out of support)
+* Hides the 'After' date input for notice filtering if the date type is publish date as it's not used in that mode
+* Corrects ordinal used by the date format selectors
 
 = 1.4.0 =
 * Adds ability to limit retrieved notices by office

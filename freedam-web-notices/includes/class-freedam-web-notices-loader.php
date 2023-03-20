@@ -4,7 +4,7 @@
  * Register all actions and filters for the plugin
  *
  * @link       https://github.com/freedom-software
- * @since      1.0.0
+ * @since      1.5.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/includes
@@ -22,6 +22,8 @@
  * @author     Freedom Software <support@freedomsoftware.co.nz>
  */
 class Freedam_Web_Notices_Loader {
+
+	public $shortcodes;
 
 	/**
 	 * The array of actions registered with WordPress.

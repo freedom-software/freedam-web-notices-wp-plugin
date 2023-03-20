@@ -4,7 +4,7 @@
  * The admin-specific functionality of the plugin.
  *
  * @link       https://github.com/freedom-software
- * @since      1.3.0
+ * @since      1.5.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin
@@ -21,6 +21,41 @@
  * @author     Freedom Software <support@freedomsoftware.co.nz>
  */
 class Freedam_Web_Notices_Admin {
+
+	/**
+	 *  Address to the freedam API
+	 *  @since  	1.5.0
+	 *  @access 	public
+	 */
+	public $freedam_api_address;
+
+	/**
+	 *  Name of the settings page's formats tab
+	 *  @since  	1.5.0
+	 *  @access 	public
+	 */
+	public $formats_options_group;
+
+	/**
+	 *  Name of the settings page's template tab
+	 *  @since  	1.5.0
+	 *  @access 	public
+	 */
+	public $template_options_group;
+
+	/**
+	 *  Name of the settings page's instructions tab
+	 *  @since  	1.5.0
+	 *  @access 	public
+	 */
+	public $instructions_options_group;
+
+	/**
+	 *  Name of the settings page's settings tab
+	 *  @since  	1.5.0
+	 *  @access 	public
+	 */
+	public $settings_options_group;
 
 	/**
 	 * The options name to be used in this plugin
@@ -73,9 +108,11 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.3.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @since    1.5.0
+	 * @param      string    $plugin_name       	The name of this plugin.
+	 * @param      string    $version    					The version of this plugin.
+	 * @param      array     $defaults    				Object of default values.
+	 * @param      string    $freedam_api_address Address to the freedam API.
 	 */
 	public function __construct( $plugin_name, $version, $defaults, $freedam_api_address ) {
 
@@ -141,11 +178,11 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Add an options page under the Settings submenu
 	 *
-	 * @since  1.0.0
+	 * @since  1.5.0
 	 */
 	public function add_options_page() {
 
-		$this->plugin_screen_hook_suffix = add_options_page(
+		add_options_page(
 			__( 'FreeDAM Web Notices', $this->plugin_name ),
 			__( 'FreeDAM Web Notices', $this->plugin_name ),
 			'manage_options',
