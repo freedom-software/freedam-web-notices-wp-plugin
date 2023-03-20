@@ -132,10 +132,10 @@ class Freedam_Web_Notices_Admin {
 		$this->settings_page_name = $this->plugin_name;
 
 		$this->options_funeral_date = array(
-			'dddd, Do MMMM YYYY' => 'Wednesday, 23th September 2020',
-			'ddd Do MMMM YYYY' => 'Wed 23th September 2020',
-			'Do MMMM YYYY' => '23th September 2020',
-			'Do MMM YYYY' => '23th Sept 2020',
+			'dddd, Do MMMM YYYY' => 'Wednesday, 23rd September 2020',
+			'ddd Do MMMM YYYY' => 'Wed 23rd September 2020',
+			'Do MMMM YYYY' => '23rd September 2020',
+			'Do MMM YYYY' => '23rd Sept 2020',
 			'D MMMM YYYY' => '23 Sept 2020',
 			'D/M/YYYY' => '23/9/2020',
 			'YYYY-MM-DD' => '2020-09-23',
@@ -146,10 +146,10 @@ class Freedam_Web_Notices_Admin {
 			'HH:mm' => '13:00',
 		);
 		$this->options_birth_date = array(
-			'dddd, Do MMMM YYYY' => 'Monday, 17rd January 1972',
-			'ddd Do MMMM YYYY' => 'Mon 17rd January 1972',
-			'Do MMMM YYYY' => '17rd January 1972',
-			'Do MMM YYYY' => '17rd Jan 1972',
+			'dddd, Do MMMM YYYY' => 'Monday, 17th January 1972',
+			'ddd Do MMMM YYYY' => 'Mon 17th January 1972',
+			'Do MMMM YYYY' => '17th January 1972',
+			'Do MMM YYYY' => '17th Jan 1972',
 			'D MMMM YYYY' => '17 Sept 1972',
 			'D.M.YYYY' => '17.1.1972',
 			'D/M/YYYY' => '17/1/1972',
@@ -157,10 +157,10 @@ class Freedam_Web_Notices_Admin {
 			'YYYY' => '1972',
 		);
 		$this->options_death_date = array(
-			'dddd, Do MMMM YYYY' => 'Wednesday, 23th September 2020',
-			'ddd Do MMMM YYYY' => 'Wed 23th September 2020',
-			'Do MMMM YYYY' => '23th September 2020',
-			'Do MMM YYYY' => '23th Sept 2020',
+			'dddd, Do MMMM YYYY' => 'Wednesday, 23rd September 2020',
+			'ddd Do MMMM YYYY' => 'Wed 23rd September 2020',
+			'Do MMMM YYYY' => '23rd September 2020',
+			'Do MMM YYYY' => '23rd Sept 2020',
 			'D MMMM YYYY' => '23 Sept 2020',
 			'D.M.YYYY' => '23.9.2020',
 			'D/M/YYYY' => '23/9/2020',
