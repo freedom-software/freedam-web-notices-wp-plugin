@@ -6,7 +6,7 @@
  * This file is used to markup the admin-facing section for instructions
  *
  * @link       https://github.com/freedom-software
- * @since      1.1
+ * @since      1.5.0
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
@@ -23,8 +23,8 @@
 <h3>Settings section</h3>
 <p>Enter the API Key that you have been allocated from Freedom Software.</p>
 <p>Enter the number of notices to display on a page.</p>
-<p>Choose when to stop showing the notice for the past and future. This is by entering the number of days. <br>
-e.g. enter 7 in the 'limit by days in the past' if you would like to stop showing any notices that have been marked as published in FreeDAM 1 week after the funeral.</p>
+<p>Choose when to stop showing the notice for the past and future. This is by entering the number of days relative to today. <br>
+e.g. enter 7 in the 'limit by days in the past' if you would like to not show notices that have been marked as published 1 week before the sort by date.</p>
 <p>Choose if you would like notices that do not have a funeral date and time to be displayed.</p>
 <p>Choose the order that the notices will be displayed.</p>
 <hr>

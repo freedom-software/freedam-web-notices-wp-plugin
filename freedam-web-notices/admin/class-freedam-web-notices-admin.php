@@ -204,7 +204,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
-	 * @since  1.4.0
+	 * @since  1.5.0
 	 */
 	public function register_settings() {
 
@@ -269,7 +269,7 @@ class Freedam_Web_Notices_Admin {
 			$this->settings_section_name,
 			array(
 				'label_for' => $this->option_name . '_date_type',
-				'title' => 'Type of date to use for sorting the web notices'
+				'title' => 'Type of date to use for sorting the web notices (When set to \'Publish\' changes date used for filtering also)'
 			)
 		);
 		register_setting(
@@ -292,7 +292,7 @@ class Freedam_Web_Notices_Admin {
 			$this->settings_section_name,
 			array(
 				'label_for' => $this->option_name . '_past',
-				'title' => 'Only show notices with funeral dates after this many days in the past'
+				'title' => 'Only show notices with funeral dates after this many days in the past (Not valid for \'Publish\' sort dates)'
 			)
 		);
 		register_setting(
@@ -300,7 +300,7 @@ class Freedam_Web_Notices_Admin {
 			$this->option_name . '_past',
 			array(
 				'type' => 'integer',
-				'description' => 'Limits how old web-notices can be to be included',
+				'description' => 'Limits which old web-notices would be included',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
 			)
 		);
@@ -308,13 +308,13 @@ class Freedam_Web_Notices_Admin {
 		// Add setting for before future
 		add_settings_field(
 			$this->option_name . '_future',
-			__( 'Limit by day in the future', $this->plugin_name ),
+			__( 'Limit by days in the future', $this->plugin_name ),
 			array( $this, $this->option_name . '_future_cb' ),
 			$this->settings_options_group,
 			$this->settings_section_name,
 			array(
 				'label_for' => $this->option_name . '_future',
-				'title' => 'Only show notices with funeral dates before this many days in the future'
+				'title' => 'Only show notices with funeral dates before this many days in the future (Acts as fallback for \'Publish\' sort dates if no \'feature until\' date set)'
 			)
 		);
 		register_setting(
@@ -322,7 +322,7 @@ class Freedam_Web_Notices_Admin {
 			$this->option_name . '_future',
 			array(
 				'type' => 'integer',
-				'description' => 'Limits how new web-notices can be to be included',
+				'description' => 'Limits which up-coming web-notices would be included',
 				'sanitize_callback' => array( $this, $this->option_name . '_sanitize_days' ),
 			)
 		);
