@@ -67,3 +67,14 @@ e.g. enter 7 in the 'limit by days in the past' if you would like to not show no
 <p>Click 'Publish' once you are done.</p>
 <p>Remember you can create a class in the notice template html and then use that class for targeting the required CSS.</p>
 <hr>
+<h3>Conditionally hiding elements</h3>
+<p>Users have expressed a desire to hide elements of a notice's template depending on if the notice contains a particular piece of data. An example would be to only show the image of the deceased if the notice contains the URL to an image.</p>
+<p>This can be achieved simply through a CSS styling.</p>
+<pre>img.portrait[src=""] {display: none;}</pre>
+<p>This will hide an image if there is nothing in it's src attribute value.</p>
+<pre>a.stream[href=""] {display: none;}</pre>
+<p>This will hide a anchor link to a stream if there is no URL.</p>
+<pre>element[data-value=""] {display: none}</pre>
+<p>This is a generic style to hide 'element' elements that have a 'data-x' attribute with an empty value.</p>
+<p>Here is a website that can be used as reference to find how an attribute selector can be used to target elements for hiding: <a href="https://css-tricks.com/almanac/selectors/a/attribute/">CSS-Tricks attribute selectors</a></p>
+<hr>

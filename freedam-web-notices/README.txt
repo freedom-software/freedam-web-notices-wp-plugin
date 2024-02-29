@@ -109,6 +109,9 @@ We have built in a system to the notice generator to help with this issue. It id
 
 == Changelog ==
 
+= 1.5.2 = (Not released yet)
+* Expands instructions page to include direction on conditionally hiding notice template elements
+
 = 1.5.1 =
 * Test on Wordpress 6.4.2
 
