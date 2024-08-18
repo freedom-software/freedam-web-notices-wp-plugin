@@ -5,7 +5,7 @@
  * This file is used to request the notices definition from FreeDAM API and display the accepted tokens from it
  *
  * @link       https://github.com/freedom-software
- * @since      1.2.0
+ * @since      1.5.2
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
@@ -15,8 +15,11 @@
   function add_keys( &$output, $input = array(), $parent = '' ) {
     foreach ($input as $key => $value) {
       $token = (strlen($parent) > 0 ? $parent . '-' : '') . $key;
-      if ( gettype($value) === 'object' ) add_keys( $output, $value, $token );
-      else $output[$token] = $value;
+      if ( gettype($value) === 'object' ) {
+        add_keys( $output, $value, $token );
+      } else {
+        $output[$token] = $value;
+      }
     }
   }
 
@@ -24,12 +27,12 @@
   $response = wp_remote_get( $this->freedam_api_address . '/web-notices.def' );
   if ( !is_wp_error($response) ) {
     $definition = json_decode($response['body']);
-    $example = $definition->exits->success->outputExample[0];
+    $example = json_decode($definition->exits->success->outputExample)[0];
 
     add_keys($tokens, $example);
   } else {
     $errors = json_encode($response->errors);
-    echo "Error occured while retrieving list of potential tokens from '/web-notices.def'";
+    echo "Error occurred while retrieving list of potential tokens from '/web-notices.def'";
     echo '<br>';
     echo $errors;
   }

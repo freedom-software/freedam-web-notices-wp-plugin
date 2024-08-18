@@ -6,7 +6,7 @@
  * This file is used to markup the admin-facing section for instructions
  *
  * @link       https://github.com/freedom-software
- * @since      1.5.0
+ * @since      1.5.2
  *
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials

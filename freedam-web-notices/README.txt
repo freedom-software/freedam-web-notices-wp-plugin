@@ -4,8 +4,8 @@ Donate link: https://freedomsoftware.co.nz
 Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
 Requires PHP: 8.2
-Tested up to: 6.4.2
-Stable tag: 1.5.1
+Tested up to: 6.6.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,8 +109,11 @@ We have built in a system to the notice generator to help with this issue. It id
 
 == Changelog ==
 
-= 1.5.2 = (Not released yet)
-* Expands instructions page to include direction on conditionally hiding notice template elements
+= 1.5.2 =
+* Test on WordPress 6.6.1
+* Expands instructions page to include direction on conditionally hiding notice template elements using css display style
+* Allows older versions of IOS to display web-notices (simplifies REGEX expression for token replacement, please notify of notices appearing odd after update)
+* Fixes parsing of example web-notice so notice properties can be seen when writing the template
 
 = 1.5.1 =
 * Test on Wordpress 6.4.2

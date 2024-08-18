@@ -1,4 +1,9 @@
-
+/**
+ * @param {HTMLElement} container
+ * @param {string} template
+ * @param {string} url
+ * @param {string} apiKey
+ */
 function freedamWebNoticesGetNotices(
 	container,
 	template,
@@ -22,15 +27,15 @@ function freedamWebNoticesGetNotices(
   offices = ''
 ) {
   // Add params to address
-  urlObject = new URL(url);
+  const urlObject = new URL(url);
   urlObject.searchParams.set('apiKey', apiKey);
-  urlObject.searchParams.set('page', page);
-  urlObject.searchParams.set('ascending', ascending);
-  if ( pageSize !== undefined ) urlObject.searchParams.set('pageSize', pageSize );
-  if ( nulls !== undefined ) urlObject.searchParams.set('nulls', nulls );
+  urlObject.searchParams.set('page', page.toString());
+  urlObject.searchParams.set('ascending', ascending.toString());
+  if ( pageSize !== undefined ) urlObject.searchParams.set('pageSize', pageSize.toString() );
+  if ( nulls !== undefined ) urlObject.searchParams.set('nulls', nulls.toString() );
   if ( !!dateType && typeof(dateType) === 'string' ) urlObject.searchParams.set('dateType', dateType);
   if ( !!searchEnabled && typeof(searchTerms) === 'string' && !!searchTerms.length ) urlObject.searchParams.set('filterTerms', searchTerms );
-  if ( !!imageEnabled ) urlObject.searchParams.set('includeImage', true );
+  if ( !!imageEnabled ) urlObject.searchParams.set('includeImage', 'true' );
   if ( !!offices ) urlObject.searchParams.set('office', JSON.stringify(offices.split(',')));
   if ( !!past ) {
   	// Convert number of days in the past limiter to a date
@@ -55,18 +60,22 @@ function freedamWebNoticesGetNotices(
     .catch( err => {
       console.error('Error while retrieving web-notices from FreeDAM | ',err);
     } )
-    .then( data => {
+    .then(
+      /** @param {WebNotice[]} data */
+      data => {
 
       if ( !!searchEnabled ) {
       // Find or create container for search form
+      /** @type {HTMLFormElement | null} */
       let searchForm = container.querySelector('ul.freedam-web-notices');
       if ( !searchForm ) {
         searchForm = document.createElement('form');
         searchForm.classList.add('search-form');
         searchForm.onsubmit = submitEvent => {
-          const form = submitEvent.srcElement;
-          const searchField = form[0];
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField.value, searchEnabled, true, imageEnabled, offices );
+          const form = submitEvent.target;
+          /** @type {HTMLInputElement} */
+          const searchField = form?.[0];
+          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField?.value, searchEnabled, true, imageEnabled, offices );
           return false;
         }
         container.appendChild(searchForm);
@@ -104,8 +113,8 @@ function freedamWebNoticesGetNotices(
         const open = '{{';
         const close = '}}';
         // Matches strings between open and close moustache
-        const regexp = RegExp(`(?<=${open})(.*?)(?=${close})`,'g');
-        const matches = template.matchAll(regexp);
+        const regexp = RegExp(`${open}(.*?)${close}`,'g');
+        const matches = template.matchAll(regexp);;
 
         const item = document.createElement('li');
         item.classList.add('freedam-web-notice');
@@ -116,7 +125,7 @@ function freedamWebNoticesGetNotices(
         // Iterate over template token matches backwards as to not mess up indexes when replacing
         for ( const match of Array.from(matches).reverse() ) {
           /** @type {string} found token */
-          const token = match[0];
+          const token = match[1];
           /** @type {string[]} token split into notice object path */
           const path = token.split('-');
           /** @type {any} Value for template token from notice data */
@@ -131,8 +140,8 @@ function freedamWebNoticesGetNotices(
           else if ( path.includes('deceased') && path.includes('deathDate') ) value = moment(value).format( deathDateFormat );
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
           // Insert value, replacing token and encapsulating moustache ('{{'&'}}')
-          const beforeToken = output.substring(0,match.index-2);
-          const afterToken = output.substring(match.index + token.length + 2);
+          const beforeToken = output.substring(0,match.index);
+          const afterToken = output.substring(match.index + match[0].length);
           output = beforeToken + value + afterToken;
         }
 
@@ -176,7 +185,7 @@ function freedamWebNoticesGetNotices(
       if ( page < 2 ) previousPageElement.disabled = true;
       previousPageElement.onclick = () => {
         freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
-        container.scrollIntoView(true, { behavior: 'smooth' });
+        container.scrollIntoView({ behavior: 'smooth' });
       }
       paginationContainer.appendChild(previousPageElement);
 
@@ -199,7 +208,7 @@ function freedamWebNoticesGetNotices(
     }
 
     if ( !!scrollToTop ) {
-      setTimeout( () => { container.scrollIntoView(true, { behavior: 'smooth' }); }, 20 );
+      setTimeout( () => { container.scrollIntoView({ behavior: 'smooth' }); }, 20 );
     }
   } )
   .catch( err => {
@@ -217,3 +226,68 @@ function hideElementsByClass( container, className ) {
     if ( style.getPropertyValue('display') !== 'none' ) style.setProperty('display','none','important');
   }
 }
+
+/**
+* @typedef {Object} WebNotice
+* @property {number} case
+* @property {string} tributeText
+* @property {string} publish_from
+* @property {string} publish_until
+* @property {object} stream_url
+* @property {object} stream_note
+* @property {number} caseImage
+* @property {string} lastUpdated
+* @property {Funeral} funeral
+* @property {Venue} venue
+* @property {Rsa} rsa
+* @property {Deceased} deceased
+* @property {Office} office
+* @property {string} thumbnail
+* @property {string} image
+*/
+/**
+* @typedef {Object} Funeral
+* @property {string} dateTime
+* @property {string} serviceType
+*/
+/**
+* @typedef {Object} Venue
+* @property {string} name
+* @property {string} street
+* @property {string} suburb
+* @property {string} city
+* @property {string} postCode
+* @property {object} state
+*/
+/**
+* @typedef {Object} Rsa
+* @property {object} decorations
+* @property {object} serviceNumber
+* @property {object} war
+* @property {object} serviceBranch
+* @property {object} highestRank
+* @property {object} unit
+*/
+/**
+* @typedef {Object} Deceased
+* @property {string} birthDate
+* @property {string} deathDate
+* @property {string} age
+* @property {Name} name
+*/
+/**
+* @typedef {Object} Name
+* @property {string} title
+* @property {string} first
+* @property {string} last
+* @property {string} preferred
+* @property {string} maiden
+* @property {string} internal
+* @property {string} trading
+*/
+/**
+* @typedef {Object} Office
+* @property {number} id
+* @property {number} branch
+* @property {Name} name
+*/
