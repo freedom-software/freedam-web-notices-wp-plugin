@@ -12,7 +12,16 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
   $option_name = $args['label_for'];
-  $value = get_option($option_name);
+  $value = get_option( $option_name );
+
+  // Legacy values were stored entity-encoded via esc_html(). Decode for display
+  // so the user sees real HTML in the textarea; esc_textarea() then re-encodes
+  // safely for embedding inside <textarea>.
+  if ( is_string( $value ) && strlen( $value ) > 0 ) {
+    $display_value = html_entity_decode( $value );
+  } else {
+    $display_value = $this->defaults['template'];
+  }
 ?>
 
 <textarea
@@ -23,7 +32,7 @@
   rows="6"
   wrap="off"
   spellcheck="false"
-><?php echo (strlen($value) > 0 ? html_entity_decode($value) : $this->defaults['template']); ?></textarea>
+><?php echo esc_textarea( $display_value ); ?></textarea>
 <p
   class="description"
   id="template-description"

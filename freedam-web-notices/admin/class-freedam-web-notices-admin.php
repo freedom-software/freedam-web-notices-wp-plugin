@@ -925,7 +925,13 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_template( $var ) {
-		return esc_html($var);
+		if ( ! is_string( $var ) ) {
+			return '';
+		}
+		// Store the template as the actual HTML the site owner intends to render.
+		// wp_kses_post() strips scripts, event handlers, and other unsafe markup
+		// while leaving post-grade HTML and our {{token}} placeholders intact.
+		return wp_kses_post( $var );
 	}
 
 	/**

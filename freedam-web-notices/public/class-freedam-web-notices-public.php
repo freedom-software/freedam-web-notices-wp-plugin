@@ -122,7 +122,7 @@ class Freedam_Web_Notices_Public {
 
 	}
 
-	public function register_shortcode( $atts = [], $content = '', $shortcode_tag ) {
+	public function register_shortcode( $atts = [], $content = '', $shortcode_tag = '' ) {
 		// do something to $content
 		ob_start(); // begin collecting output
 
@@ -130,6 +130,108 @@ class Freedam_Web_Notices_Public {
 
 		// always return
 		return ob_get_clean(); // retrieve output from myfile.php, stop buffering
+	}
+
+	/**
+	 * REST API namespace used by the notice proxy endpoint.
+	 */
+	const REST_NAMESPACE = 'freedam-web-notices/v1';
+
+	/**
+	 * REST API route used by the notice proxy endpoint.
+	 */
+	const REST_ROUTE = '/notices';
+
+	/**
+	 * Register REST routes for proxying requests to the FreeDAM API.
+	 *
+	 * The API key is kept server-side; the browser only talks to this proxy.
+	 *
+	 * @since 1.6.0
+	 */
+	public function register_rest_routes() {
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ROUTE,
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_get_notices' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	/**
+	 * Proxy a notices request to the FreeDAM API, attaching the stored API key server-side.
+	 *
+	 * @since 1.6.0
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function rest_get_notices( $request ) {
+		$api_key = trim( (string) get_option( 'freedam_web_notices_apikey', '' ) );
+		if ( '' === $api_key ) {
+			return new WP_Error(
+				'freedam_web_notices_no_api_key',
+				__( 'FreeDAM Web Notices API key is not configured.', 'freedam-web-notices' ),
+				array( 'status' => 503 )
+			);
+		}
+
+		// Whitelist params we forward to FreeDAM. Anything else is dropped.
+		$forward_keys = array(
+			'page', 'pageSize', 'ascending', 'nulls', 'dateType',
+			'after', 'before', 'filterTerms', 'includeImage', 'office',
+		);
+
+		$query = array( 'apiKey' => $api_key );
+		foreach ( $forward_keys as $key ) {
+			$value = $request->get_param( $key );
+			if ( null === $value || '' === $value ) {
+				continue;
+			}
+			$query[ $key ] = is_scalar( $value ) ? (string) $value : wp_json_encode( $value );
+		}
+
+		$url = $this->freedam_api_address . $this->freedam_api_endpoint . '?' . http_build_query( $query );
+
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout' => 15,
+				'headers' => array( 'Accept' => 'application/json' ),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error(
+				'freedam_web_notices_upstream_error',
+				$response->get_error_message(),
+				array( 'status' => 502 )
+			);
+		}
+
+		$status = (int) wp_remote_retrieve_response_code( $response );
+		$body   = wp_remote_retrieve_body( $response );
+		$data   = json_decode( $body, true );
+
+		if ( $status < 200 || $status >= 300 ) {
+			return new WP_Error(
+				'freedam_web_notices_upstream_status',
+				sprintf( /* translators: %d: HTTP status code from upstream */ __( 'FreeDAM API returned status %d.', 'freedam-web-notices' ), $status ),
+				array( 'status' => 502 )
+			);
+		}
+
+		if ( null === $data && JSON_ERROR_NONE !== json_last_error() ) {
+			return new WP_Error(
+				'freedam_web_notices_upstream_decode',
+				__( 'FreeDAM API returned an invalid response.', 'freedam-web-notices' ),
+				array( 'status' => 502 )
+			);
+		}
+
+		return rest_ensure_response( $data );
 	}
 
 }

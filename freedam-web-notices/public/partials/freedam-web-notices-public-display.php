@@ -12,78 +12,98 @@
  * @subpackage Freedam_Web_Notices/public/partials
  */
 
-  $api_key = sanitize_text_field(get_option( 'freedam_web_notices_apikey' ));
-  $nulls = sanitize_text_field(get_option( 'freedam_web_notices_nulls', $this->defaults['nulls'] ));
-  $page_size = sanitize_text_field(get_option( 'freedam_web_notices_pagesize' ));
-  $template = sanitize_text_field(get_option( 'freedam_web_notices_template'));
-  $days_past = sanitize_text_field(get_option( 'freedam_web_notices_past' ));
-  $days_future = sanitize_text_field(get_option( 'freedam_web_notices_future' ));
-  $ascending = sanitize_text_field(get_option( 'freedam_web_notices_ascending', $this->defaults['ascending'] ));
-  $funeral_date = sanitize_text_field(get_option( 'freedam_web_notices_funeral_date' ));
-  $funeral_time = sanitize_text_field(get_option( 'freedam_web_notices_funeral_time' ));
-  $date_type = sanitize_text_field(get_option( 'freedam_web_notices_date_type' ));
-  $birth_date = sanitize_text_field(get_option( 'freedam_web_notices_birth_date' ));
-  $death_date = sanitize_text_field(get_option( 'freedam_web_notices_death_date' ));
-  $search = sanitize_text_field(get_option( 'freedam_web_notices_search', $this->defaults['search'] ));
-  $image = sanitize_text_field(get_option( 'freedam_web_notices_image', $this->defaults['image'] ));
-  $offices = sanitize_text_field(get_option( 'freedam_web_notices_offices' ));
+defined( 'ABSPATH' ) || exit;
 
-  $unique_id = esc_attr( uniqid('freedam-web-notices-') );
+  $nulls        = sanitize_text_field( get_option( 'freedam_web_notices_nulls', $this->defaults['nulls'] ) );
+  $page_size    = sanitize_text_field( get_option( 'freedam_web_notices_pagesize' ) );
+  $days_past    = sanitize_text_field( get_option( 'freedam_web_notices_past' ) );
+  $days_future  = sanitize_text_field( get_option( 'freedam_web_notices_future' ) );
+  $ascending    = sanitize_text_field( get_option( 'freedam_web_notices_ascending', $this->defaults['ascending'] ) );
+  $funeral_date = sanitize_text_field( get_option( 'freedam_web_notices_funeral_date' ) );
+  $funeral_time = sanitize_text_field( get_option( 'freedam_web_notices_funeral_time' ) );
+  $date_type    = sanitize_text_field( get_option( 'freedam_web_notices_date_type' ) );
+  $birth_date   = sanitize_text_field( get_option( 'freedam_web_notices_birth_date' ) );
+  $death_date   = sanitize_text_field( get_option( 'freedam_web_notices_death_date' ) );
+  $search       = sanitize_text_field( get_option( 'freedam_web_notices_search', $this->defaults['search'] ) );
+  $image        = sanitize_text_field( get_option( 'freedam_web_notices_image', $this->defaults['image'] ) );
+  $offices      = sanitize_text_field( get_option( 'freedam_web_notices_offices' ) );
 
-  // This file should primarily consist of HTML with a little bit of PHP.
+  // Legacy templates were stored via esc_html() in older plugin versions, so they
+  // may contain entity-encoded markup. Decode first, then run wp_kses_post() to
+  // strip anything unsafe regardless of how it was stored.
+  $stored_template = get_option( 'freedam_web_notices_template' );
+  if ( is_string( $stored_template ) && strlen( $stored_template ) > 0 ) {
+    $template = wp_kses_post( html_entity_decode( $stored_template ) );
+  } else {
+    $template = $this->defaults['template'];
+  }
+
+  $config = array(
+    'url'                => esc_url_raw( rest_url( Freedam_Web_Notices_Public::REST_NAMESPACE . Freedam_Web_Notices_Public::REST_ROUTE ) ),
+    'template'           => $template,
+    'pageSize'           => empty( $page_size ) ? (int) $this->defaults['pagesize'] : (int) $page_size,
+    'nulls'              => (bool) $nulls,
+    'searchEnabled'      => (bool) $search,
+    'imageEnabled'       => (bool) $image,
+    'ascending'          => (bool) $ascending,
+    'past'               => '' === $days_past ? null : (int) $days_past,
+    'future'             => '' === $days_future ? null : (int) $days_future,
+    'funeralDateFormat'  => strlen( $funeral_date ) > 0 ? $funeral_date : $this->defaults['funeraldate'],
+    'funeralTimeFormat'  => strlen( $funeral_time ) > 0 ? $funeral_time : $this->defaults['funeraltime'],
+    'dateType'           => strlen( $date_type )    > 0 ? $date_type    : $this->defaults['date_type'],
+    'birthDateFormat'    => strlen( $birth_date )   > 0 ? $birth_date   : $this->defaults['birthdate'],
+    'deathDateFormat'    => strlen( $death_date )   > 0 ? $death_date   : $this->defaults['deathdate'],
+    'offices'            => $offices,
+  );
+
+  $unique_id     = esc_attr( uniqid( 'freedam-web-notices-' ) );
+  $config_json   = wp_json_encode( $config );
 ?>
 
-<freedam-web-notices-container id="<?php echo $unique_id ?>">
+<freedam-web-notices-container id="<?php echo $unique_id; ?>">
 
   <script>
+  (function () {
+    var container = document.getElementById('<?php echo $unique_id; ?>');
+    if ( !container || container.localName !== 'freedam-web-notices-container' ) {
+      throw new Error("Couldn't find container element to add FreeDAM web notices to");
+    }
 
-    let container = document.getElementById('<?php echo $unique_id ?>');
-    if ( !container || container.localName !== 'freedam-web-notices-container' ) throw new Error('Couldn\'t find container element to add FreeDAM web notices to');
+    var cfg = <?php echo $config_json; ?>;
 
-    const url = '<?php echo $this->freedam_api_address . $this->freedam_api_endpoint; ?>';
-    const apiKey = '<?php echo $api_key; ?>';
-    const offices = '<?php echo $offices; ?>';
-    const nulls = <?php echo $nulls ? 'true' : 'false' ?>;
-    const searchEnabled = <?php echo $search ? 'true' : 'false' ?>;
-    const imageEnabled = <?php echo $image ? 'true' : 'false' ?>;
-    const pageSize = <?php echo empty($page_size) ? $this->defaults['pagesize'] : $page_size ?>;
-    const template = `<?php echo strlen($template) > 0 ? html_entity_decode($template) : $this->defaults['template'] ?>`;
-    const past = <?php echo empty($days_past) ? 'null' : $days_past ?>;
-    const future = <?php echo empty($days_future) ? 'null' : $days_future ?>;
-    const ascending = <?php echo $ascending ? 'true' : 'false' ?>;
-    const funeralDateFormat = '<?php echo strlen($funeral_date) > 0 ? $funeral_date : $this->defaults['funeraldate'] ?>';
-    const funeralTimeFormat = '<?php echo strlen($funeral_time) > 0 ? $funeral_time : $this->defaults['funeraltime'] ?>';
-    const dateType = '<?php echo strlen($date_type) > 0 ? $date_type : $this->defaults['date_type'] ?>';
-    const birthDateFormat = '<?php echo strlen($birth_date) > 0 ? $birth_date : $this->defaults['birthdate'] ?>';
-    const deathDateFormat = '<?php echo strlen($death_date) > 0 ? $death_date : $this->defaults['deathdate'] ?>';
+    var loadScript = document.querySelector('#freedam-web-notices_public-js');
+    var dateScript = document.querySelector('#freedam-web-notices_moment-js');
+    var appliedLoadListener = false;
+    var appliedDateListener = false;
+    var functionRan = false;
 
-    const loadScript = document.querySelector('#freedam-web-notices_public-js');
-    const dateScript = document.querySelector('#freedam-web-notices_moment-js');
-
-    let appliedLoadListener = false;
-    let appliedDateListener = false;
-    let functionRan = false;
-
-    function freedamWebNoticesScriptsReady() {
-      if ( typeof(freedamWebNoticesGetNotices) === 'function' && typeof(moment) === 'function' ) {
+    function ready() {
+      if ( typeof freedamWebNoticesGetNotices === 'function' && typeof moment === 'function' ) {
         if ( !functionRan ) {
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, '', searchEnabled, false, imageEnabled, offices );
+          freedamWebNoticesGetNotices(
+            container, cfg.template, cfg.url,
+            1, cfg.pageSize, cfg.nulls, cfg.dateType,
+            cfg.past, cfg.future, cfg.ascending,
+            cfg.funeralDateFormat, cfg.funeralTimeFormat,
+            cfg.birthDateFormat, cfg.deathDateFormat,
+            '', cfg.searchEnabled, false, cfg.imageEnabled, cfg.offices
+          );
           functionRan = true;
         }
       } else {
-        if ( !appliedLoadListener ) {
-          loadScript.addEventListener('load', freedamWebNoticesScriptsReady, { once: true, passive: true } );
+        if ( loadScript && !appliedLoadListener ) {
+          loadScript.addEventListener('load', ready, { once: true, passive: true });
           appliedLoadListener = true;
         }
-        if ( !appliedDateListener ) {
-          dateScript.addEventListener('load', freedamWebNoticesScriptsReady, { once: true, passive: true } );
+        if ( dateScript && !appliedDateListener ) {
+          dateScript.addEventListener('load', ready, { once: true, passive: true });
           appliedDateListener = true;
         }
       }
-    };
+    }
 
-    freedamWebNoticesScriptsReady();
-
+    ready();
+  })();
   </script>
 
 </freedam-web-notices-container>

@@ -1,14 +1,12 @@
 /**
  * @param {HTMLElement} container
  * @param {string} template
- * @param {string} url
- * @param {string} apiKey
+ * @param {string} url URL of the server-side proxy endpoint. The API key is attached server-side; never pass it from the browser.
  */
 function freedamWebNoticesGetNotices(
 	container,
 	template,
 	url,
-	apiKey,
 	page = 1,
 	pageSize = 10,
 	nulls = false,
@@ -27,8 +25,7 @@ function freedamWebNoticesGetNotices(
   offices = ''
 ) {
   // Add params to address
-  const urlObject = new URL(url);
-  urlObject.searchParams.set('apiKey', apiKey);
+  const urlObject = new URL(url, window.location.origin);
   urlObject.searchParams.set('page', page.toString());
   urlObject.searchParams.set('ascending', ascending.toString());
   if ( pageSize !== undefined ) urlObject.searchParams.set('pageSize', pageSize.toString() );
@@ -75,7 +72,7 @@ function freedamWebNoticesGetNotices(
           const form = submitEvent.target;
           /** @type {HTMLInputElement} */
           const searchField = form?.[0];
-          freedamWebNoticesGetNotices( container, template, url, apiKey, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField?.value, searchEnabled, true, imageEnabled, offices );
+          freedamWebNoticesGetNotices( container, template, url, 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchField?.value, searchEnabled, true, imageEnabled, offices );
           return false;
         }
         container.appendChild(searchForm);
@@ -184,7 +181,7 @@ function freedamWebNoticesGetNotices(
       previousPageElement.textContent = 'Previous';
       if ( page < 2 ) previousPageElement.disabled = true;
       previousPageElement.onclick = () => {
-        freedamWebNoticesGetNotices( container, template, url, apiKey, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
+        freedamWebNoticesGetNotices( container, template, url, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
         container.scrollIntoView({ behavior: 'smooth' });
       }
       paginationContainer.appendChild(previousPageElement);
@@ -201,7 +198,7 @@ function freedamWebNoticesGetNotices(
       nextPageElement.textContent = 'Next';
       if ( data.length < pageSize ) nextPageElement.disabled = true;
       nextPageElement.onclick = () => {
-        freedamWebNoticesGetNotices( container, template, url, apiKey, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
+        freedamWebNoticesGetNotices( container, template, url, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
       }
       paginationContainer.appendChild(nextPageElement);
 
