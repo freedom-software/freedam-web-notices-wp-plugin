@@ -143,6 +143,12 @@ class Freedam_Web_Notices_Public {
 	const REST_ROUTE = '/notices';
 
 	/**
+	 * REST API route used by the binary asset proxy endpoint
+	 * (e.g. images embedded in notice responses).
+	 */
+	const REST_ASSET_ROUTE = '/asset';
+
+	/**
 	 * Register REST routes for proxying requests to the FreeDAM API.
 	 *
 	 * The API key is kept server-side; the browser only talks to this proxy.
@@ -157,6 +163,25 @@ class Freedam_Web_Notices_Public {
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'rest_get_notices' ),
 				'permission_callback' => '__return_true',
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			self::REST_ASSET_ROUTE,
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_proxy_asset' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'path' => array(
+						'required'          => true,
+						'type'              => 'string',
+						'validate_callback' => function ( $value ) {
+							return is_string( $value ) && strlen( $value ) > 0 && '/' === $value[0];
+						},
+					),
+				),
 			)
 		);
 	}
@@ -231,7 +256,137 @@ class Freedam_Web_Notices_Public {
 			);
 		}
 
+		// FreeDAM embeds absolute URLs (with the apiKey query param baked in) for
+		// images and similar assets. Rewrite every such URL so it points at the
+		// local asset proxy below; that way the key never leaves the server.
+		$data = $this->rewrite_upstream_urls( $data );
+
 		return rest_ensure_response( $data );
+	}
+
+	/**
+	 * Recursively walk a decoded API response and rewrite any absolute FreeDAM URL
+	 * to point at this plugin's asset proxy, stripping the upstream apiKey.
+	 *
+	 * @since 1.6.0
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	private function rewrite_upstream_urls( $data ) {
+		if ( is_array( $data ) ) {
+			foreach ( $data as $key => $value ) {
+				$data[ $key ] = $this->rewrite_upstream_urls( $value );
+			}
+			return $data;
+		}
+
+		if ( ! is_string( $data ) ) {
+			return $data;
+		}
+
+		$prefix = rtrim( $this->freedam_api_address, '/' );
+		if ( 0 !== strpos( $data, $prefix . '/' ) ) {
+			return $data;
+		}
+
+		$remainder = substr( $data, strlen( $prefix ) ); // e.g. /web-notices/365/image?apiKey=...
+		$parts     = wp_parse_url( $remainder );
+		$path      = isset( $parts['path'] ) ? $parts['path'] : '';
+		if ( '' === $path ) {
+			return $data;
+		}
+
+		$query = array();
+		if ( ! empty( $parts['query'] ) ) {
+			parse_str( $parts['query'], $query );
+			unset( $query['apiKey'] );
+		}
+
+		$proxy_url = rest_url( self::REST_NAMESPACE . self::REST_ASSET_ROUTE );
+		return add_query_arg( array_merge( array( 'path' => $path ), $query ), $proxy_url );
+	}
+
+	/**
+	 * Proxy a binary asset (image, etc.) from FreeDAM, attaching the stored API
+	 * key server-side. The browser passes only the upstream path; this endpoint
+	 * concatenates it onto the configured API base, so callers cannot pivot to
+	 * arbitrary hosts.
+	 *
+	 * @since 1.6.0
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|void Streams the upstream body on success.
+	 */
+	public function rest_proxy_asset( $request ) {
+		$api_key = trim( (string) get_option( 'freedam_web_notices_apikey', '' ) );
+		if ( '' === $api_key ) {
+			return new WP_Error(
+				'freedam_web_notices_no_api_key',
+				__( 'FreeDAM Web Notices API key is not configured.', 'freedam-web-notices' ),
+				array( 'status' => 503 )
+			);
+		}
+
+		$path = (string) $request->get_param( 'path' );
+		// Reject anything that isn't a clean absolute path on the API host.
+		if ( '' === $path || '/' !== $path[0] || false !== strpos( $path, '..' ) || false !== strpos( $path, '://' ) ) {
+			return new WP_Error(
+				'freedam_web_notices_bad_path',
+				__( 'Invalid asset path.', 'freedam-web-notices' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		// Forward any extra query params the caller supplied (other than apiKey,
+		// which we attach ourselves).
+		$extra = $request->get_query_params();
+		unset( $extra['path'], $extra['apiKey'], $extra['rest_route'] );
+		$extra['apiKey'] = $api_key;
+
+		$url = rtrim( $this->freedam_api_address, '/' ) . $path;
+		$url = add_query_arg( $extra, $url );
+
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout' => 15,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error(
+				'freedam_web_notices_upstream_error',
+				$response->get_error_message(),
+				array( 'status' => 502 )
+			);
+		}
+
+		$status = (int) wp_remote_retrieve_response_code( $response );
+		if ( $status < 200 || $status >= 300 ) {
+			return new WP_Error(
+				'freedam_web_notices_upstream_status',
+				sprintf( /* translators: %d: HTTP status code from upstream */ __( 'FreeDAM API returned status %d.', 'freedam-web-notices' ), $status ),
+				array( 'status' => 502 )
+			);
+		}
+
+		$body          = wp_remote_retrieve_body( $response );
+		$content_type  = wp_remote_retrieve_header( $response, 'content-type' );
+		$cache_control = wp_remote_retrieve_header( $response, 'cache-control' );
+
+		if ( ! $content_type ) {
+			$content_type = 'application/octet-stream';
+		}
+
+		// Stream the binary body verbatim. The REST framework would otherwise
+		// JSON-encode it; bypass that by sending the response ourselves.
+		if ( ! headers_sent() ) {
+			status_header( 200 );
+			header( 'Content-Type: ' . $content_type );
+			header( 'Cache-Control: ' . ( $cache_control ? $cache_control : 'public, max-age=300' ) );
+			header( 'X-Content-Type-Options: nosniff' );
+		}
+		echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary body
+		exit;
 	}
 
 }
