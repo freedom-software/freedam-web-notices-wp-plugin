@@ -373,16 +373,30 @@ class Freedam_Web_Notices_Public {
 		$content_type  = wp_remote_retrieve_header( $response, 'content-type' );
 		$cache_control = wp_remote_retrieve_header( $response, 'cache-control' );
 
-		if ( ! $content_type ) {
+		// Some upstream responses send the same header multiple times, in which
+		// case wp_remote_retrieve_header() returns an array. Collapse to a single
+		// string so header() doesn't trigger an Array-to-string warning (which
+		// would itself be emitted as body output and corrupt the binary).
+		if ( is_array( $content_type ) ) {
+			$content_type = reset( $content_type );
+		}
+		if ( is_array( $cache_control ) ) {
+			$cache_control = implode( ', ', $cache_control );
+		}
+		if ( ! is_string( $content_type ) || '' === $content_type ) {
 			$content_type = 'application/octet-stream';
 		}
+		if ( ! is_string( $cache_control ) || '' === $cache_control ) {
+			$cache_control = 'public, max-age=300';
+		}
+
 
 		// Stream the binary body verbatim. The REST framework would otherwise
 		// JSON-encode it; bypass that by sending the response ourselves.
 		if ( ! headers_sent() ) {
 			status_header( 200 );
 			header( 'Content-Type: ' . $content_type );
-			header( 'Cache-Control: ' . ( $cache_control ? $cache_control : 'public, max-age=300' ) );
+			header( 'Cache-Control: ' . $cache_control );
 			header( 'X-Content-Type-Options: nosniff' );
 		}
 		echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary body
