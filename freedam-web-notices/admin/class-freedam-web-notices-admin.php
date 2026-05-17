@@ -204,6 +204,9 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Register the settings with WP
 	 *
+	 * NOTE: when adding a new option here via register_setting(), also add its
+	 * name to the list in uninstall.php so it is removed on uninstall.
+	 *
 	 * @since  1.5.0
 	 */
 	public function register_settings() {
