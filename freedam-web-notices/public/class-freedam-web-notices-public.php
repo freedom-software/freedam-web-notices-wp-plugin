@@ -387,7 +387,10 @@ class Freedam_Web_Notices_Public {
 			$content_type = 'application/octet-stream';
 		}
 		if ( ! is_string( $cache_control ) || '' === $cache_control ) {
-			$cache_control = 'public, max-age=300';
+			// Fallback when upstream omits the header. Matches the FreeDAM API's
+			// own policy (public, 3-day max-age) so caching behaviour is
+			// consistent regardless of which response set it.
+			$cache_control = 'public, max-age=259200';
 		}
 
 
