@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "freedam-web-notices/notices",
+	"title": "FreeDAM Web Notices",
+	"category": "widgets",
+	"icon": "list-view",
+	"description": "Displays web notices fetched from the FreeDAM API on the page. Output is controlled by the plugin's Settings page.",
+	"keywords": [ "freedam", "notices", "funeral", "tributes" ],
+	"textdomain": "freedam-web-notices",
+	"editorScript": "freedam-web-notices-block-editor",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"multiple": true
+	}
+}

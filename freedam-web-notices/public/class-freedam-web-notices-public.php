@@ -122,14 +122,64 @@ class Freedam_Web_Notices_Public {
 
 	}
 
+	/**
+	 * Render the notices markup. Shared between the shortcode and the block
+	 * so both produce identical output.
+	 *
+	 * All three signature variants (shortcode and block render_callback) ignore
+	 * the passed arguments today — output is driven entirely by the saved
+	 * plugin options — but the parameters are accepted so this method can be
+	 * used directly as a callback for either WordPress entry point.
+	 *
+	 * @since 1.6.0
+	 * @param array|string $attributes Block attributes or shortcode atts.
+	 * @param string       $content    Inner content (unused).
+	 * @param mixed        $context    Shortcode tag string or WP_Block instance (unused).
+	 * @return string Rendered HTML.
+	 */
+	public function render_notices( $attributes = array(), $content = '', $context = null ) {
+		ob_start();
+		include __DIR__ . '/partials/freedam-web-notices-public-display.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Shortcode callback. Kept as a thin wrapper so existing pages using
+	 * [freedam-web-notices] continue to work; the block uses the same renderer.
+	 */
 	public function register_shortcode( $atts = [], $content = '', $shortcode_tag = '' ) {
-		// do something to $content
-		ob_start(); // begin collecting output
+		return $this->render_notices( $atts, $content, $shortcode_tag );
+	}
 
-		include 'partials/freedam-web-notices-public-display.php';
+	/**
+	 * Register the editor JS handle and the FreeDAM Web Notices block. The
+	 * block's frontend output comes from {@see render_notices()} via PHP, so
+	 * no save() function or build pipeline is required.
+	 *
+	 * @since 1.6.0
+	 */
+	public function register_block() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+			return; // WP < 5.0 — block editor unavailable.
+		}
 
-		// always return
-		return ob_get_clean(); // retrieve output from myfile.php, stop buffering
+		$plugin_root = plugin_dir_path( dirname( __FILE__ ) );
+		$plugin_url  = plugin_dir_url( dirname( __FILE__ ) );
+
+		wp_register_script(
+			'freedam-web-notices-block-editor',
+			$plugin_url . 'blocks/notices/edit.js',
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n' ),
+			$this->version,
+			true
+		);
+
+		register_block_type(
+			$plugin_root . 'blocks/notices',
+			array(
+				'render_callback' => array( $this, 'render_notices' ),
+			)
+		);
 	}
 
 	/**
