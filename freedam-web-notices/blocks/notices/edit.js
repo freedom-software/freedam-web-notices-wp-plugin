@@ -140,10 +140,36 @@
 			dangerouslySetInnerHTML: { __html: combinedHtml }
 		} );
 
+		// Mirror the search form the frontend JS builds when search is enabled,
+		// but disable inputs so it's clearly a preview and can't be interacted with.
+		var searchForm = null;
+		if ( settings.searchEnabled ) {
+			searchForm = el(
+				'form',
+				{
+					className: 'search-form',
+					onSubmit:  function ( e ) { e.preventDefault(); }
+				},
+				el( 'input', {
+					className:   'search-field',
+					type:        'search',
+					placeholder: 'smith 2017 march',
+					title:       __( 'Search for an entry, using their name & funeral/death date', 'freedam-web-notices' ),
+					disabled:    true,
+					readOnly:    true
+				} ),
+				el( 'button', {
+					className: 'search-submit',
+					type:      'submit',
+					disabled:  true
+				}, __( 'Search', 'freedam-web-notices' ) )
+			);
+		}
+
 		// Use the same custom element tag the frontend partial emits, so the
 		// public stylesheet (which scopes every rule under the
 		// `freedam-web-notices-container` element selector) actually matches.
-		var wrapper = el( 'freedam-web-notices-container', null, previewList );
+		var wrapper = el( 'freedam-web-notices-container', null, searchForm, previewList );
 
 		return el( 'div', blockProps, infoBar, wrapper );
 	}
