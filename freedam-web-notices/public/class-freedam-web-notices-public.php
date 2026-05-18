@@ -166,12 +166,41 @@ class Freedam_Web_Notices_Public {
 		$plugin_root = plugin_dir_path( dirname( __FILE__ ) );
 		$plugin_url  = plugin_dir_url( dirname( __FILE__ ) );
 
+		// Register the public stylesheet so block.json's `editorStyle: freedam-web-notices`
+		// can load it inside the editor. The frontend enqueue in enqueue_styles()
+		// will re-register with the same args, which is a no-op in effect.
+		wp_register_style(
+			$this->plugin_name,
+			$plugin_url . 'public/css/freedam-web-notices-public.css',
+			array(),
+			$this->version
+		);
+
+		// Register moment so the editor preview can format dates the same way
+		// as the frontend. enqueue_scripts() will re-register for the frontend.
+		wp_register_script(
+			$this->plugin_name . '_moment',
+			$plugin_url . 'public/js/freedam-web-notices-moment.js',
+			array(),
+			$this->version,
+			true
+		);
+
 		wp_register_script(
 			'freedam-web-notices-block-editor',
 			$plugin_url . 'blocks/notices/edit.js',
-			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n' ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n', $this->plugin_name . '_moment' ),
 			$this->version,
 			true
+		);
+
+		// Make plugin settings + a few placeholder notices available to the
+		// editor JS so the preview reflects the user's saved template, formats,
+		// and toggles — without ever calling the FreeDAM API.
+		wp_localize_script(
+			'freedam-web-notices-block-editor',
+			'freedamWebNoticesEditorData',
+			$this->get_editor_preview_data()
 		);
 
 		register_block_type(
@@ -179,6 +208,133 @@ class Freedam_Web_Notices_Public {
 			array(
 				'render_callback' => array( $this, 'render_notices' ),
 			)
+		);
+	}
+
+	/**
+	 * Build the data passed to the block editor for a faithful, API-free preview.
+	 *
+	 * Reads the same options the public display partial reads, applies the same
+	 * template legacy-decode-then-kses, and builds a small set of fake notices
+	 * shaped like the real FreeDAM response. Image fields use an inline SVG
+	 * data URI so no upstream request is ever made from the editor.
+	 *
+	 * @since 1.6.0
+	 * @return array
+	 */
+	private function get_editor_preview_data() {
+		$stored_template = get_option( 'freedam_web_notices_template' );
+		if ( is_string( $stored_template ) && strlen( $stored_template ) > 0 ) {
+			$template = wp_kses_post( html_entity_decode( $stored_template ) );
+		} else {
+			$template = $this->defaults['template'];
+		}
+
+		$page_size    = sanitize_text_field( get_option( 'freedam_web_notices_pagesize' ) );
+		$funeral_date = sanitize_text_field( get_option( 'freedam_web_notices_funeral_date' ) );
+		$funeral_time = sanitize_text_field( get_option( 'freedam_web_notices_funeral_time' ) );
+		$date_type    = sanitize_text_field( get_option( 'freedam_web_notices_date_type' ) );
+		$birth_date   = sanitize_text_field( get_option( 'freedam_web_notices_birth_date' ) );
+		$death_date   = sanitize_text_field( get_option( 'freedam_web_notices_death_date' ) );
+		$search       = sanitize_text_field( get_option( 'freedam_web_notices_search', $this->defaults['search'] ) );
+		$image        = sanitize_text_field( get_option( 'freedam_web_notices_image', $this->defaults['image'] ) );
+		$nulls        = sanitize_text_field( get_option( 'freedam_web_notices_nulls', $this->defaults['nulls'] ) );
+
+		$image_enabled = (bool) $image;
+
+		// Inline SVG used wherever the real API would return an image URL,
+		// so the editor preview never reaches out to the FreeDAM API.
+		$placeholder_image = 'data:image/svg+xml;base64,' . base64_encode(
+			'<svg xmlns="http://www.w3.org/2000/svg" width="120" height="160" viewBox="0 0 120 160">'
+			. '<rect width="120" height="160" fill="#d1d5d9"/>'
+			. '<text x="60" y="85" font-family="sans-serif" font-size="14" fill="#50575e" text-anchor="middle">Sample</text>'
+			. '</svg>'
+		);
+
+		$build_sample = function ( $case_id, $title, $first, $last, $preferred, $maiden, $birth, $death, $age, $funeral_dt, $service_type, $tribute ) use ( $placeholder_image, $image_enabled ) {
+			return array(
+				'case'          => $case_id,
+				'tributeText'   => $tribute,
+				'publish_from'  => gmdate( 'Y-m-d\TH:i:s.000\Z', strtotime( $death ) ),
+				'publish_until' => gmdate( 'Y-m-d\TH:i:s.000\Z', strtotime( '+90 days', strtotime( $death ) ) ),
+				'stream_url'    => null,
+				'stream_note'   => null,
+				'caseImage'     => $case_id,
+				'lastUpdated'   => gmdate( 'Y-m-d\TH:i:s.000\Z' ),
+				'funeral'       => array(
+					'dateTime'    => $funeral_dt,
+					'serviceType' => $service_type,
+				),
+				'venue'         => array(
+					'name'     => 'Sample Chapel',
+					'street'   => '1 Main Street',
+					'suburb'   => 'Central',
+					'city'     => 'Sampletown',
+					'postCode' => '1234',
+					'state'    => null,
+				),
+				'rsa'           => array(
+					'decorations'   => null,
+					'serviceNumber' => null,
+					'war'           => null,
+					'serviceBranch' => null,
+					'highestRank'   => null,
+					'unit'          => null,
+				),
+				'deceased'      => array(
+					'birthDate' => $birth,
+					'deathDate' => $death,
+					'age'       => $age,
+					'name'      => array(
+						'title'     => $title,
+						'first'     => $first,
+						'last'      => $last,
+						'preferred' => $preferred,
+						'maiden'    => $maiden,
+					),
+				),
+				'office'        => array(
+					'id'     => 1,
+					'branch' => 1,
+					'name'   => array(
+						'internal' => 'Sample Office',
+						'trading'  => 'Sample Funeral Services',
+					),
+				),
+				'thumbnail'     => $placeholder_image,
+				'image'         => $image_enabled ? $placeholder_image : null,
+			);
+		};
+
+		return array(
+			'settings'      => array(
+				'template'          => $template,
+				'pageSize'          => empty( $page_size ) ? (int) $this->defaults['pagesize'] : (int) $page_size,
+				'searchEnabled'     => (bool) $search,
+				'imageEnabled'      => $image_enabled,
+				'nulls'             => (bool) $nulls,
+				'dateType'          => strlen( $date_type ) > 0 ? $date_type : $this->defaults['date_type'],
+				'funeralDateFormat' => strlen( $funeral_date ) > 0 ? $funeral_date : $this->defaults['funeraldate'],
+				'funeralTimeFormat' => strlen( $funeral_time ) > 0 ? $funeral_time : $this->defaults['funeraltime'],
+				'birthDateFormat'   => strlen( $birth_date ) > 0 ? $birth_date : $this->defaults['birthdate'],
+				'deathDateFormat'   => strlen( $death_date ) > 0 ? $death_date : $this->defaults['deathdate'],
+			),
+			'sampleNotices' => array(
+				$build_sample(
+					1001,
+					'Mrs', 'Jane', 'Smith', 'Jane', 'Brown',
+					'1950-03-12', '2025-06-10', '75 years',
+					'2025-06-15T10:00:00+13:00', 'Funeral Service',
+					"SMITH Jane\nOn the 10th of June 2025. Aged 75 years.\nA service to celebrate Jane's life will be held at Sample Chapel, 1 Main Street, Sampletown on Sunday, 15th June at 10:00 AM."
+				),
+				$build_sample(
+					1002,
+					'Mr', 'Robert', 'Jones', 'Bob', null,
+					'1943-01-20', '2025-06-05', '82 years',
+					'2025-06-12T14:00:00+13:00', 'Memorial Service',
+					"JONES Robert (Bob)\nOn the 5th of June 2025. Aged 82 years.\nA private cremation has taken place."
+				),
+			),
 		);
 	}
 

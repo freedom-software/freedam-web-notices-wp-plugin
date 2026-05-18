@@ -9,6 +9,7 @@
 	"keywords": [ "freedam", "notices", "funeral", "tributes" ],
 	"textdomain": "freedam-web-notices",
 	"editorScript": "freedam-web-notices-block-editor",
+	"editorStyle": "freedam-web-notices",
 	"supports": {
 		"html": false,
 		"align": [ "wide", "full" ],
