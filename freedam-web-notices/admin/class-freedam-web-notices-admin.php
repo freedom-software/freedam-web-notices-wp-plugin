@@ -836,21 +836,37 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_offices( $var ) {
-		return implode(
-			',',
-			array_reduce(
-				explode(
-					',',
-					sanitize_text_field($var)
-				),
-				function($stack, $item){
-					$num = intval($item);
-					if ( is_numeric($num) && $num > 0 ) array_push( $stack, $num );
-					return $stack;
-				},
-				[]
-			)
-		);
+		$raw_items = explode( ',', sanitize_text_field( $var ) );
+		$valid     = array();
+		$invalid   = array();
+
+		foreach ( $raw_items as $item ) {
+			$trimmed = trim( $item );
+			if ( '' === $trimmed ) {
+				// Tolerate empty entries (e.g. leading/trailing commas, "11,,21") silently.
+				continue;
+			}
+			// ctype_digit rejects negatives, decimals, and any non-digit garbage.
+			if ( ! ctype_digit( $trimmed ) || (int) $trimmed < 1 ) {
+				$invalid[] = $trimmed;
+				continue;
+			}
+			$valid[] = (int) $trimmed;
+		}
+
+		if ( ! empty( $invalid ) ) {
+			add_settings_error(
+				$this->option_name . '_offices',
+				'offices_invalid',
+				sprintf(
+					/* translators: %s: comma-separated list of rejected office values */
+					__( 'Office limiter ignored unrecognised entries: %s. Each entry must be a positive integer.', 'freedam-web-notices' ),
+					esc_html( implode( ', ', $invalid ) )
+				)
+			);
+		}
+
+		return implode( ',', $valid );
 	}
 
 
