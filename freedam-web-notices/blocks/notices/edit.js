@@ -140,11 +140,10 @@
 			dangerouslySetInnerHTML: { __html: combinedHtml }
 		} );
 
-		var wrapper = el(
-			'div',
-			{ className: 'freedam-web-notices-container' },
-			previewList
-		);
+		// Use the same custom element tag the frontend partial emits, so the
+		// public stylesheet (which scopes every rule under the
+		// `freedam-web-notices-container` element selector) actually matches.
+		var wrapper = el( 'freedam-web-notices-container', null, previewList );
 
 		return el( 'div', blockProps, infoBar, wrapper );
 	}
