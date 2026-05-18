@@ -70,9 +70,6 @@ defined( 'ABSPATH' ) || exit;
     }
 
     var cfg = <?php echo $config_json; ?>;
-
-    var loadScript = document.querySelector('#freedam-web-notices-public-js');
-    var appliedLoadListener = false;
     var functionRan = false;
 
     function ready() {
@@ -88,9 +85,16 @@ defined( 'ABSPATH' ) || exit;
           );
           functionRan = true;
         }
-      } else if ( loadScript && !appliedLoadListener ) {
-        loadScript.addEventListener('load', ready, { once: true, passive: true });
-        appliedLoadListener = true;
+        return;
+      }
+      // The plugin script is enqueued in the footer, so it hasn't loaded yet
+      // when this inline script runs mid-body. Wait for the parser to finish:
+      // DOMContentLoaded fires after every blocking footer script has executed.
+      // If the script is deferred/async (some themes), fall back to window.load.
+      if ( document.readyState === 'loading' ) {
+        document.addEventListener( 'DOMContentLoaded', ready, { once: true, passive: true } );
+      } else {
+        window.addEventListener( 'load', ready, { once: true, passive: true } );
       }
     }
 
