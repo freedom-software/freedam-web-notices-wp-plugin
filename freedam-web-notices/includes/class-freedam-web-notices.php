@@ -199,10 +199,12 @@ class Freedam_Web_Notices {
 
 		$plugin_public = new Freedam_Web_Notices_Public( $this->get_plugin_name(), $this->get_version(), $this->defaults, $this->freedam_api_address );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		// register_assets() registers scripts/styles + the block on `init`. The
+		// frontend CSS/JS is then enqueued only when render_notices() actually
+		// runs (shortcode) or when the block is rendered (via block.json's
+		// `style`/`viewScript`), so pages that don't use the plugin pay nothing.
+		$this->loader->add_action( 'init', $plugin_public, 'register_assets' );
 		$this->loader->add_action( 'rest_api_init', $plugin_public, 'register_rest_routes' );
-		$this->loader->add_action( 'init', $plugin_public, 'register_block' );
 
 		$this->loader->add_shortcode( $this->get_plugin_name(), $plugin_public, 'register_shortcode' );
 

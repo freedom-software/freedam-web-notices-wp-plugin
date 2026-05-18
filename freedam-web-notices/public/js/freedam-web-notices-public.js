@@ -132,9 +132,9 @@ function freedamWebNoticesGetNotices(
           // hide elements with token class
           if ( !value && (value !== 0 && value !== false) ) toHide.push(token);
           // convert value to a string for use in HTML
-          if ( path.includes('funeral') && path.includes('dateTime') ) value = moment(value).format( funeralDateFormat + ' ' + funeralTimeFormat );
-          else if ( path.includes('deceased') && path.includes('birthDate') ) value = moment(value).format( birthDateFormat );
-          else if ( path.includes('deceased') && path.includes('deathDate') ) value = moment(value).format( deathDateFormat );
+          if ( path.includes('funeral') && path.includes('dateTime') ) value = freedamWebNoticesFormatDate( value, funeralDateFormat + ' ' + funeralTimeFormat );
+          else if ( path.includes('deceased') && path.includes('birthDate') ) value = freedamWebNoticesFormatDate( value, birthDateFormat );
+          else if ( path.includes('deceased') && path.includes('deathDate') ) value = freedamWebNoticesFormatDate( value, deathDateFormat );
           else value = typeof(value) === 'string' ? value : (value ?? '').toString();
           // Insert value, replacing token and encapsulating moustache ('{{'&'}}')
           const beforeToken = output.substring(0,match.index);

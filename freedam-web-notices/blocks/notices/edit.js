@@ -67,13 +67,13 @@
 				toHide.push( token );
 			}
 
-			var hasMoment = ( typeof window.moment === 'function' );
-			if ( path.indexOf( 'funeral' ) !== -1 && path.indexOf( 'dateTime' ) !== -1 && hasMoment ) {
-				value = window.moment( value ).format( ( settings.funeralDateFormat || '' ) + ' ' + ( settings.funeralTimeFormat || '' ) );
-			} else if ( path.indexOf( 'deceased' ) !== -1 && path.indexOf( 'birthDate' ) !== -1 && hasMoment ) {
-				value = window.moment( value ).format( settings.birthDateFormat || '' );
-			} else if ( path.indexOf( 'deceased' ) !== -1 && path.indexOf( 'deathDate' ) !== -1 && hasMoment ) {
-				value = window.moment( value ).format( settings.deathDateFormat || '' );
+			var fmt = window.freedamWebNoticesFormatDate;
+			if ( typeof fmt === 'function' && path.indexOf( 'funeral' ) !== -1 && path.indexOf( 'dateTime' ) !== -1 ) {
+				value = fmt( value, ( settings.funeralDateFormat || '' ) + ' ' + ( settings.funeralTimeFormat || '' ) );
+			} else if ( typeof fmt === 'function' && path.indexOf( 'deceased' ) !== -1 && path.indexOf( 'birthDate' ) !== -1 ) {
+				value = fmt( value, settings.birthDateFormat || '' );
+			} else if ( typeof fmt === 'function' && path.indexOf( 'deceased' ) !== -1 && path.indexOf( 'deathDate' ) !== -1 ) {
+				value = fmt( value, settings.deathDateFormat || '' );
 			} else {
 				value = ( typeof value === 'string' ) ? value : ( value == null ? '' : String( value ) );
 			}

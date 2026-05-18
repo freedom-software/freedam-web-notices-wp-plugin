@@ -71,14 +71,12 @@ defined( 'ABSPATH' ) || exit;
 
     var cfg = <?php echo $config_json; ?>;
 
-    var loadScript = document.querySelector('#freedam-web-notices_public-js');
-    var dateScript = document.querySelector('#freedam-web-notices_moment-js');
+    var loadScript = document.querySelector('#freedam-web-notices-public-js');
     var appliedLoadListener = false;
-    var appliedDateListener = false;
     var functionRan = false;
 
     function ready() {
-      if ( typeof freedamWebNoticesGetNotices === 'function' && typeof moment === 'function' ) {
+      if ( typeof freedamWebNoticesGetNotices === 'function' && typeof freedamWebNoticesFormatDate === 'function' ) {
         if ( !functionRan ) {
           freedamWebNoticesGetNotices(
             container, cfg.template, cfg.url,
@@ -90,15 +88,9 @@ defined( 'ABSPATH' ) || exit;
           );
           functionRan = true;
         }
-      } else {
-        if ( loadScript && !appliedLoadListener ) {
-          loadScript.addEventListener('load', ready, { once: true, passive: true });
-          appliedLoadListener = true;
-        }
-        if ( dateScript && !appliedDateListener ) {
-          dateScript.addEventListener('load', ready, { once: true, passive: true });
-          appliedDateListener = true;
-        }
+      } else if ( loadScript && !appliedLoadListener ) {
+        loadScript.addEventListener('load', ready, { once: true, passive: true });
+        appliedLoadListener = true;
       }
     }
 

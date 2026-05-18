@@ -78,139 +78,109 @@ class Freedam_Web_Notices_Public {
 	}
 
 	/**
-	 * Register the stylesheets for the public-facing side of the site.
+	 * Register the plugin's scripts, styles, and the block on `init`.
 	 *
-	 * @since    1.0.0
+	 * Nothing is enqueued here — registration only. The frontend assets are
+	 * enqueued lazily by {@see render_notices()} (for shortcode placements)
+	 * and automatically by the block API (via block.json's `style` and
+	 * `viewScript` fields, for block placements). The result: pages that
+	 * don't use this plugin pay zero CSS/JS cost.
+	 *
+	 * @since 1.6.0
 	 */
-	public function enqueue_styles() {
+	public function register_assets() {
+		$plugin_url = plugin_dir_url( dirname( __FILE__ ) );
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Freedam_Web_Notices_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Freedam_Web_Notices_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		wp_register_style(
+			'freedam-web-notices',
+			$plugin_url . 'public/css/freedam-web-notices-public.css',
+			array(),
+			$this->version
+		);
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/freedam-web-notices-public.css', array(), $this->version, 'all' );
+		// Tiny date formatter that replaces moment.js. Shared between the
+		// frontend renderer and the editor preview, so it's loaded by both.
+		wp_register_script(
+			'freedam-web-notices-format',
+			$plugin_url . 'public/js/freedam-web-notices-format.js',
+			array(),
+			$this->version,
+			true
+		);
 
+		wp_register_script(
+			'freedam-web-notices-public',
+			$plugin_url . 'public/js/freedam-web-notices-public.js',
+			array( 'freedam-web-notices-format' ),
+			$this->version,
+			true
+		);
+
+		if ( function_exists( 'register_block_type' ) ) {
+			wp_register_script(
+				'freedam-web-notices-block-editor',
+				$plugin_url . 'blocks/notices/edit.js',
+				array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n', 'freedam-web-notices-format' ),
+				$this->version,
+				true
+			);
+
+			// Plugin settings + placeholder notices for the editor preview.
+			// The editor preview never calls the FreeDAM API.
+			wp_localize_script(
+				'freedam-web-notices-block-editor',
+				'freedamWebNoticesEditorData',
+				$this->get_editor_preview_data()
+			);
+
+			register_block_type(
+				plugin_dir_path( dirname( __FILE__ ) ) . 'blocks/notices',
+				array(
+					'render_callback' => array( $this, 'render_notices' ),
+				)
+			);
+		}
 	}
 
 	/**
-	 * Register the JavaScript for the public-facing side of the site.
+	 * Enqueue the frontend assets. Called from the shortcode/block render
+	 * path so the CSS/JS only load on pages that actually use them.
 	 *
-	 * @since    1.0.0
+	 * Block placements also trigger asset enqueueing automatically via
+	 * block.json's `style` and `viewScript`; calling these here as well is
+	 * harmless (`wp_enqueue_*` is idempotent for an already-enqueued handle)
+	 * and ensures shortcode placements get the same treatment.
+	 *
+	 * @since 1.6.0
 	 */
-	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Freedam_Web_Notices_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Freedam_Web_Notices_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name . '_moment', plugin_dir_url( __FILE__ ) . 'js/freedam-web-notices-moment.js', array(), $this->version, false );
-		wp_enqueue_script( $this->plugin_name . '_public', plugin_dir_url( __FILE__ ) . 'js/freedam-web-notices-public.js', array( $this->plugin_name . '_moment' ), $this->version, false );
-
+	private function enqueue_frontend_assets() {
+		wp_enqueue_style( 'freedam-web-notices' );
+		wp_enqueue_script( 'freedam-web-notices-public' );
 	}
 
 	/**
 	 * Render the notices markup. Shared between the shortcode and the block
 	 * so both produce identical output.
 	 *
-	 * All three signature variants (shortcode and block render_callback) ignore
-	 * the passed arguments today — output is driven entirely by the saved
-	 * plugin options — but the parameters are accepted so this method can be
-	 * used directly as a callback for either WordPress entry point.
-	 *
 	 * @since 1.6.0
-	 * @param array|string $attributes Block attributes or shortcode atts.
+	 * @param array|string $attributes Block attributes or shortcode atts (unused).
 	 * @param string       $content    Inner content (unused).
 	 * @param mixed        $context    Shortcode tag string or WP_Block instance (unused).
 	 * @return string Rendered HTML.
 	 */
 	public function render_notices( $attributes = array(), $content = '', $context = null ) {
+		$this->enqueue_frontend_assets();
 		ob_start();
 		include __DIR__ . '/partials/freedam-web-notices-public-display.php';
 		return ob_get_clean();
 	}
 
 	/**
-	 * Shortcode callback. Kept as a thin wrapper so existing pages using
-	 * [freedam-web-notices] continue to work; the block uses the same renderer.
+	 * Shortcode callback. Thin wrapper so existing [freedam-web-notices]
+	 * placements continue to work; the block uses the same renderer.
 	 */
 	public function register_shortcode( $atts = [], $content = '', $shortcode_tag = '' ) {
 		return $this->render_notices( $atts, $content, $shortcode_tag );
-	}
-
-	/**
-	 * Register the editor JS handle and the FreeDAM Web Notices block. The
-	 * block's frontend output comes from {@see render_notices()} via PHP, so
-	 * no save() function or build pipeline is required.
-	 *
-	 * @since 1.6.0
-	 */
-	public function register_block() {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			return; // WP < 5.0 — block editor unavailable.
-		}
-
-		$plugin_root = plugin_dir_path( dirname( __FILE__ ) );
-		$plugin_url  = plugin_dir_url( dirname( __FILE__ ) );
-
-		// Register the public stylesheet so block.json's `editorStyle: freedam-web-notices`
-		// can load it inside the editor. The frontend enqueue in enqueue_styles()
-		// will re-register with the same args, which is a no-op in effect.
-		wp_register_style(
-			$this->plugin_name,
-			$plugin_url . 'public/css/freedam-web-notices-public.css',
-			array(),
-			$this->version
-		);
-
-		// Register moment so the editor preview can format dates the same way
-		// as the frontend. enqueue_scripts() will re-register for the frontend.
-		wp_register_script(
-			$this->plugin_name . '_moment',
-			$plugin_url . 'public/js/freedam-web-notices-moment.js',
-			array(),
-			$this->version,
-			true
-		);
-
-		wp_register_script(
-			'freedam-web-notices-block-editor',
-			$plugin_url . 'blocks/notices/edit.js',
-			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n', $this->plugin_name . '_moment' ),
-			$this->version,
-			true
-		);
-
-		// Make plugin settings + a few placeholder notices available to the
-		// editor JS so the preview reflects the user's saved template, formats,
-		// and toggles — without ever calling the FreeDAM API.
-		wp_localize_script(
-			'freedam-web-notices-block-editor',
-			'freedamWebNoticesEditorData',
-			$this->get_editor_preview_data()
-		);
-
-		register_block_type(
-			$plugin_root . 'blocks/notices',
-			array(
-				'render_callback' => array( $this, 'render_notices' ),
-			)
-		);
 	}
 
 	/**
