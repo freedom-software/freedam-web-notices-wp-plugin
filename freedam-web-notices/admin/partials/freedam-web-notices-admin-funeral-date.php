@@ -10,6 +10,8 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
+
+defined( 'ABSPATH' ) || exit;
   $option_name = $args['label_for'];
   $value = get_option( $option_name, $this->defaults['funeraldate'] );
 ?>

@@ -10,6 +10,8 @@
  * @subpackage Freedam_Web_Notices/includes
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Register all actions and filters for the plugin.
  *

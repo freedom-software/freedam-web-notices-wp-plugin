@@ -11,6 +11,8 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
+
+defined( 'ABSPATH' ) || exit;
   $paramTab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
   $active_tab = strlen($paramTab) > 0 ? $paramTab : 'settings';
 ?>

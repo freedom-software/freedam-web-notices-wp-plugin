@@ -11,6 +11,8 @@
  * @subpackage Freedam_Web_Notices/admin/partials
  */
 
+defined( 'ABSPATH' ) || exit;
+
   /** Loops through nested object adding keys to output array */
   function add_keys( &$output, $input = array(), $parent = '' ) {
     foreach ($input as $key => $value) {

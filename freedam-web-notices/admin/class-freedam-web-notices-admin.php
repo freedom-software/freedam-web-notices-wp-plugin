@@ -10,6 +10,8 @@
  * @subpackage Freedam_Web_Notices/admin
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * The admin-specific functionality of the plugin.
  *

@@ -11,6 +11,8 @@
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin/partials
  */
+
+defined( 'ABSPATH' ) || exit;
 ?>
 
 <h3>Activating the Plugin</h3>

@@ -13,6 +13,8 @@
  * @subpackage Freedam_Web_Notices/includes
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * The core plugin class.
  *
