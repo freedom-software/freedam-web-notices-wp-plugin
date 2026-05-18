@@ -51,6 +51,19 @@ function freedamWebNoticesGetNotices(
   	else urlObject.searchParams.set('before', beforeDate.toISOString() );
   }
 
+  // Ensure a loading indicator is visible during the fetch. On the first call
+  // it was emitted by the PHP partial; on pagination/search calls we recreate
+  // it so the same UX applies. It's removed in the .then() below before
+  // rendering the response.
+  if ( !container.querySelector('.loading-indicator') ) {
+    const indicator = document.createElement('div');
+    indicator.className = 'loading-indicator';
+    indicator.setAttribute('role', 'status');
+    indicator.setAttribute('aria-live', 'polite');
+    indicator.textContent = 'Loading…';
+    container.appendChild(indicator);
+  }
+
   // begin fetch request for web notices
   fetch( urlObject )
     .then( response => response.status === 200 ? response.json() : [] )
@@ -60,6 +73,11 @@ function freedamWebNoticesGetNotices(
     .then(
       /** @param {WebNotice[]} data */
       data => {
+
+      // Remove the loading indicator (emitted by the partial for first paint,
+      // or appended below for pagination/search) now that we have a response.
+      const loadingIndicator = container.querySelector('.loading-indicator');
+      if ( loadingIndicator ) loadingIndicator.remove();
 
       if ( !!searchEnabled ) {
       // Find or create container for search form

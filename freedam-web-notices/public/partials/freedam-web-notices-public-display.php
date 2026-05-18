@@ -62,6 +62,8 @@ defined( 'ABSPATH' ) || exit;
 
 <freedam-web-notices-container id="<?php echo $unique_id; ?>">
 
+  <div class="loading-indicator" role="status" aria-live="polite"><?php esc_html_e( 'Loading…', 'freedam-web-notices' ); ?></div>
+
   <script>
   (function () {
     var container = document.getElementById('<?php echo $unique_id; ?>');
