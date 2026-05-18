@@ -779,7 +779,8 @@ class Freedam_Web_Notices_Admin {
 	  		);
 			}
 
-			return;
+			// Preserve the previously-saved key on validation failure so doesn't silently break every page on the site.
+			return get_option( $this->option_name . '_apikey', '' );
 	  }
 
 	  return $apikey;
@@ -804,7 +805,8 @@ class Freedam_Web_Notices_Admin {
 	  		'pagesize_content',
 	  		__( 'Page Size must between 1 and 100', 'freedam-web-notices' )
 			);
-			return;
+			// Preserve the previously-saved size rather than wiping it.
+			return get_option( $this->option_name . '_pagesize', $this->defaults['pagesize'] );
 		}
 
 		return $value;
@@ -862,7 +864,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_funeral_date( $var ) {
-		if ( !array_key_exists($var, $this->options_funeral_date) ) return null;
+		if ( !array_key_exists($var, $this->options_funeral_date) ) {
+			return get_option( $this->option_name . '_funeral_date', '' );
+		}
 		return sanitize_text_field($var);
 	}
 
@@ -876,7 +880,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_funeral_time( $var ) {
-		if ( !array_key_exists($var, $this->options_funeral_time) ) return null;
+		if ( !array_key_exists($var, $this->options_funeral_time) ) {
+			return get_option( $this->option_name . '_funeral_time', '' );
+		}
 		return sanitize_text_field($var);
 	}
 
@@ -890,7 +896,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_birth_date( $var ) {
-		if ( !array_key_exists($var, $this->options_birth_date) ) return null;
+		if ( !array_key_exists($var, $this->options_birth_date) ) {
+			return get_option( $this->option_name . '_birth_date', '' );
+		}
 		return sanitize_text_field($var);
 	}
 
@@ -904,7 +912,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_death_date( $var ) {
-		if ( !array_key_exists($var, $this->options_death_date) ) return null;
+		if ( !array_key_exists($var, $this->options_death_date) ) {
+			return get_option( $this->option_name . '_death_date', '' );
+		}
 		return sanitize_text_field($var);
 	}
 
@@ -918,7 +928,9 @@ class Freedam_Web_Notices_Admin {
 	 * @return boolean           Sanitized value
 	 */
 	public function freedam_web_notices_sanitize_date_type( $var ) {
-		if ( !array_key_exists($var, $this->options_date_type) ) return null;
+		if ( !array_key_exists($var, $this->options_date_type) ) {
+			return get_option( $this->option_name . '_date_type', '' );
+		}
 		return sanitize_text_field($var);
 	}
 
@@ -931,7 +943,9 @@ class Freedam_Web_Notices_Admin {
 	 */
 	public function freedam_web_notices_sanitize_template( $var ) {
 		if ( ! is_string( $var ) ) {
-			return '';
+			// Defensive: form submissions are always strings. If something else
+			// arrives, preserve whatever was previously saved rather than wipe.
+			return get_option( $this->option_name . '_template', '' );
 		}
 		// Store the template as the actual HTML the site owner intends to render.
 		// wp_kses_post() strips scripts, event handlers, and other unsafe markup
