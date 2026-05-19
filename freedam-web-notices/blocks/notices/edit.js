@@ -151,12 +151,13 @@
 					onSubmit:  function ( e ) { e.preventDefault(); }
 				},
 				el( 'input', {
-					className:   'search-field',
-					type:        'search',
-					placeholder: 'smith 2017 march',
-					title:       __( 'Search for an entry, using their name & funeral/death date', 'freedam-web-notices' ),
-					disabled:    true,
-					readOnly:    true
+					className:    'search-field',
+					type:         'search',
+					placeholder:  'smith 2017 march',
+					title:        __( 'Search for an entry, using their name & funeral/death date', 'freedam-web-notices' ),
+					'aria-label': __( 'Search notices', 'freedam-web-notices' ),
+					disabled:     true,
+					readOnly:     true
 				} ),
 				el( 'button', {
 					className: 'search-submit',

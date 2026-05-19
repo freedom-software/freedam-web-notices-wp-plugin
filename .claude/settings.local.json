@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php -l \"D:\\\\Projects\\\\freedam-web-notices-wp-plugin*\")"
+      "Bash(php -l \"D:\\\\Projects\\\\freedam-web-notices-wp-plugin*\")",
+      "Bash(node --check \"D:\\\\Projects\\\\freedam-web-notices-wp-plugin\\\\*\")"
     ]
   }
 }

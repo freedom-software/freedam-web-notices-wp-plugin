@@ -102,6 +102,7 @@ function freedamWebNoticesGetNotices(
         searchElement.value = searchTerms;
         searchElement.name = 'searchTerms'
         searchElement.title = 'Search for an entry, using their name & funeral/death date';
+        searchElement.setAttribute('aria-label', 'Search notices');
         searchForm.appendChild(searchElement);
 
         //Add the search submit
@@ -195,6 +196,7 @@ function freedamWebNoticesGetNotices(
       const previousPageElement = document.createElement('button');
       previousPageElement.classList.add('previous');
       previousPageElement.textContent = 'Previous';
+      previousPageElement.setAttribute('aria-label', 'Previous page of notices');
       if ( page < 2 ) previousPageElement.disabled = true;
       previousPageElement.onclick = () => {
         freedamWebNoticesGetNotices( container, template, url, page - 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
@@ -205,6 +207,7 @@ function freedamWebNoticesGetNotices(
       // Add the current page
       const currentPageElement = document.createElement('span');
       currentPageElement.classList.add('current');
+      currentPageElement.setAttribute('role', 'status');
       currentPageElement.textContent = 'Page ' + page;
       paginationContainer.appendChild(currentPageElement);
 
@@ -212,6 +215,7 @@ function freedamWebNoticesGetNotices(
       const nextPageElement = document.createElement('button');
       nextPageElement.classList.add('next');
       nextPageElement.textContent = 'Next';
+      nextPageElement.setAttribute('aria-label', 'Next page of notices');
       if ( data.length < pageSize ) nextPageElement.disabled = true;
       nextPageElement.onclick = () => {
         freedamWebNoticesGetNotices( container, template, url, page + 1, pageSize, nulls, dateType, past, future, ascending, funeralDateFormat, funeralTimeFormat, birthDateFormat, deathDateFormat, searchTerms, searchEnabled, true, imageEnabled, offices );
