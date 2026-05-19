@@ -35,20 +35,18 @@ function freedamWebNoticesGetNotices(
   if ( !!imageEnabled ) urlObject.searchParams.set('includeImage', 'true' );
   if ( !!offices ) urlObject.searchParams.set('office', JSON.stringify(offices.split(',')));
   if ( !!past ) {
-  	// Convert number of days in the past limiter to a date
-  	const afterDate = new Date();
-  	const afterDays = afterDate.getDate() - past;
-  	afterDate.setDate(afterDays);
-    if ( afterDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'past' limit date (${past}). Value too large?`);
-  	else urlObject.searchParams.set('after', afterDate.toISOString() );
+    // Convert number of days in the past limiter to a date.
+    const afterDate = new Date();
+    afterDate.setDate( afterDate.getDate() - past );
+    if ( Number.isNaN( afterDate.getTime() ) ) console.error( `Could not determine appropriate 'past' limit date (${ past }). Value too large?` );
+    else urlObject.searchParams.set( 'after', afterDate.toISOString() );
   }
   if ( !!future ) {
-  	// Convert number of days in the future limiter to a date
-  	const beforeDate = new Date();
-  	const beforeDays = beforeDate.getDate() + future;
-  	beforeDate.setDate(beforeDays);
-    if ( beforeDate.toString() === 'Invalid Date' ) console.error(`Could not determine appropriate 'future' limit date (${future}). Value too large?`);
-  	else urlObject.searchParams.set('before', beforeDate.toISOString() );
+    // Convert number of days in the future limiter to a date.
+    const beforeDate = new Date();
+    beforeDate.setDate( beforeDate.getDate() + future );
+    if ( Number.isNaN( beforeDate.getTime() ) ) console.error( `Could not determine appropriate 'future' limit date (${ future }). Value too large?` );
+    else urlObject.searchParams.set( 'before', beforeDate.toISOString() );
   }
 
   // Ensure a loading indicator is visible during the fetch. On the first call
