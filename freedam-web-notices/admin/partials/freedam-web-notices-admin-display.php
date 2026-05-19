@@ -13,8 +13,24 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-  $paramTab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
-  $active_tab = strlen($paramTab) > 0 ? $paramTab : 'settings';
+
+  // Allow-list valid tab values; anything else falls back to 'settings'. The
+  // $_GET value is read for navigation only — no nonce required for a GET that
+  // doesn't change state — but we explicitly validate to remove any reflected
+  // XSS surface, and unslash before sanitize per WP standards.
+  $valid_tabs  = array( 'settings', 'formats', 'template', 'instructions' );
+  $param_tab   = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
+  $active_tab  = in_array( $param_tab, $valid_tabs, true ) ? $param_tab : 'settings';
+
+  $tab_url = function ( $tab ) {
+    return esc_url( add_query_arg(
+      array(
+        'page' => $this->settings_page_name,
+        'tab'  => $tab,
+      ),
+      admin_url( 'options-general.php' )
+    ) );
+  };
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
@@ -24,20 +40,20 @@ defined( 'ABSPATH' ) || exit;
 
   <h3 class="nav-tab-wrapper">
     <a
-      href="?page=<?php echo $this->settings_page_name; ?>&tab=settings"
-      class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : '' ?>"
+      href="<?php echo $tab_url( 'settings' ); ?>"
+      class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>"
     >Settings</a>
     <a
-      href="?page=<?php echo $this->settings_page_name; ?>&tab=formats"
-      class="nav-tab <?php echo $active_tab === 'formats' ? 'nav-tab-active' : '' ?>"
+      href="<?php echo $tab_url( 'formats' ); ?>"
+      class="nav-tab <?php echo $active_tab === 'formats' ? 'nav-tab-active' : ''; ?>"
     >Date Formats / Rules</a>
     <a
-      href="?page=<?php echo $this->settings_page_name; ?>&tab=template"
-      class="nav-tab <?php echo $active_tab === 'template' ? 'nav-tab-active' : '' ?>"
+      href="<?php echo $tab_url( 'template' ); ?>"
+      class="nav-tab <?php echo $active_tab === 'template' ? 'nav-tab-active' : ''; ?>"
     >Notice Template</a>
     <a
-      href="?page=<?php echo $this->settings_page_name; ?>&tab=instructions"
-      class="nav-tab <?php echo $active_tab === 'instructions' ? 'nav-tab-active' : '' ?>"
+      href="<?php echo $tab_url( 'instructions' ); ?>"
+      class="nav-tab <?php echo $active_tab === 'instructions' ? 'nav-tab-active' : ''; ?>"
     >Instructions</a>
   </h3>
 
