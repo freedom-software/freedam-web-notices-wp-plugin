@@ -200,6 +200,17 @@ class Freedam_Web_Notices_Admin {
 	 * @since  1.0.0
 	 */
 	public function display_options_page() {
+		// add_options_page() already restricts the menu entry to users with
+		// manage_options, but re-check here as defence-in-depth in case the
+		// method is ever invoked outside that path (e.g. via a misconfigured
+		// custom action or a future hook change).
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You do not have sufficient permissions to access this page.', 'freedam-web-notices' ),
+				'',
+				array( 'response' => 403 )
+			);
+		}
 		include_once 'partials/freedam-web-notices-admin-display.php';
 	}
 
