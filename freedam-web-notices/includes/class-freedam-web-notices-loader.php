@@ -19,12 +19,20 @@ defined( 'ABSPATH' ) || exit;
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
+ * @since      1.0.0
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/includes
  * @author     Freedom Software <support@freedomsoftware.co.nz>
  */
 class Freedam_Web_Notices_Loader {
 
+	/**
+	 * The array of shortcodes registered with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @var      array    $shortcodes    The shortcodes registered with WordPress to fire when the plugin loads.
+	 */
 	public $shortcodes;
 
 	/**

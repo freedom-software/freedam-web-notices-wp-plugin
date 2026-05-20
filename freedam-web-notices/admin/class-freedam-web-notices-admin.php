@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
+ * @since      1.0.0
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/admin
  * @author     Freedom Software <support@freedomsoftware.co.nz>
@@ -95,16 +96,94 @@ class Freedam_Web_Notices_Admin {
 	 */
 	protected $defaults;
 
+	/**
+	 * Slug of the settings tab's settings section.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $settings_section_name
+	 */
 	private $settings_section_name;
+
+	/**
+	 * Slug of the date formats tab's section.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $formats_section_name
+	 */
 	private $formats_section_name;
+
+	/**
+	 * Slug of the notice template tab's section.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $template_section_name
+	 */
 	private $template_section_name;
+
+	/**
+	 * Slug of the instructions tab's section.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $instructions_section_name
+	 */
 	private $instructions_section_name;
+
+	/**
+	 * Slug of the plugin's settings page.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $settings_page_name
+	 */
 	private $settings_page_name;
 
+	/**
+	 * Funeral date format options (moment.js format string => example output).
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $options_funeral_date
+	 */
 	private $options_funeral_date;
+
+	/**
+	 * Funeral time format options (moment.js format string => example output).
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $options_funeral_time
+	 */
 	private $options_funeral_time;
+
+	/**
+	 * Birth date format options (moment.js format string => example output).
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $options_birth_date
+	 */
 	private $options_birth_date;
+
+	/**
+	 * Death date format options (moment.js format string => example output).
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $options_death_date
+	 */
 	private $options_death_date;
+
+	/**
+	 * Date type options (value => label).
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $options_date_type
+	 */
 	private $options_date_type;
 
 	/**
@@ -998,6 +1077,7 @@ class Freedam_Web_Notices_Admin {
 	/**
 	 * Determines the truthiness of $val
 	 *
+	 * @since  1.0.0
 	 * @param  any  $val         Value to test
 	 * @param  boolean $return_null The value nulls should return
 	 * @return boolean              The boolean result

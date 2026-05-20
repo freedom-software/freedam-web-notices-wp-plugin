@@ -69,7 +69,11 @@ class Freedam_Web_Notices {
 	protected $defaults;
 
 	/**
-	 * Address to the FreeDAM API
+	 * Address to the FreeDAM API.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $freedam_api_address    Base URL of the FreeDAM API.
 	 */
 	protected $freedam_api_address = 'https://api.freedam.co.nz';
 

@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
+ * @since      1.0.0
  * @package    Freedam_Web_Notices
  * @subpackage Freedam_Web_Notices/public
  * @author     Freedom Software <support@freedomsoftware.co.nz>
@@ -52,12 +53,20 @@ class Freedam_Web_Notices_Public {
 	protected $defaults;
 
 	/**
-	 * Address to the FreeDAM API
+	 * Address to the FreeDAM API.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $freedam_api_address    Base URL of the FreeDAM API.
 	 */
 	protected $freedam_api_address;
 
 	/**
-	 * Endpoint in FreeDAM API to retrieve web notices
+	 * Endpoint in the FreeDAM API to retrieve web notices.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string    $freedam_api_endpoint    Path of the web-notices endpoint.
 	 */
 	protected $freedam_api_endpoint = '/web-notices';
 
@@ -178,6 +187,8 @@ class Freedam_Web_Notices_Public {
 	/**
 	 * Shortcode callback. Thin wrapper so existing [freedam-web-notices]
 	 * placements continue to work; the block uses the same renderer.
+	 *
+	 * @since 1.0.0
 	 */
 	public function register_shortcode( $atts = [], $content = '', $shortcode_tag = '' ) {
 		return $this->render_notices( $atts, $content, $shortcode_tag );
@@ -312,17 +323,23 @@ class Freedam_Web_Notices_Public {
 
 	/**
 	 * REST API namespace used by the notice proxy endpoint.
+	 *
+	 * @since 1.6.0
 	 */
 	const REST_NAMESPACE = 'freedam-web-notices/v1';
 
 	/**
 	 * REST API route used by the notice proxy endpoint.
+	 *
+	 * @since 1.6.0
 	 */
 	const REST_ROUTE = '/notices';
 
 	/**
 	 * REST API route used by the binary asset proxy endpoint
 	 * (e.g. images embedded in notice responses).
+	 *
+	 * @since 1.6.0
 	 */
 	const REST_ASSET_ROUTE = '/asset';
 

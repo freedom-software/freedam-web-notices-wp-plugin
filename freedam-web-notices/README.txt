@@ -4,8 +4,8 @@ Donate link: https://freedomsoftware.co.nz
 Tags: FreeDAM, funeral, notice, web-notice, freedomsoftware, freedom-software
 Requires at least: 5.4.2
 Requires PHP: 8.2
-Tested up to: 6.6.1
-Stable tag: 1.5.2
+Tested up to: 6.9
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,19 @@ We have built in a system to the notice generator to help with this issue. It id
 1. Press "Save Changes".
 
 == Changelog ==
+
+= 1.6.0 =
+* Test on WordPress 6.9
+* Security: the API key is no longer sent to the visitor's browser; notice and image requests are proxied server-side
+* Security: hardens the notice template against stored HTML/script injection (uses wp_kses_post on save, JSON-encodes values on output)
+* Adds a "FreeDAM Web Notices" block for the block editor, with an editor preview rendered against sample data (no FreeDAM API call from the editor)
+* Plugin CSS and JavaScript now only load on pages that actually use the shortcode or block
+* Removes the bundled moment.js dependency in favour of a small built-in date formatter (~70 KB lighter per page)
+* Adds a loading indicator while notices are being fetched
+* Invalid input on the settings page no longer wipes the previously-saved value (API key, page size, date formats, template)
+* Uninstall now removes every plugin option, including the API key
+* Accessibility: search input and pagination buttons gain explicit ARIA labels; the current page number announces changes to screen readers
+* Internal: capability check on the settings page render, ABSPATH guards on every PHP file, literal text domains so translation tooling can extract strings
 
 = 1.5.2 =
 * Test on WordPress 6.6.1
